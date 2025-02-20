@@ -3,9 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Luis es gordo</title>
+    <title>Hola papus</title>
 </head>
 <body>
-    <h1>Hola papus</h1>
+    <button id="btn">Clickame para dejar el LOL</button>
+    <h1>Es broma, nunca podrás dejarlo :(</h1>
 </body>
+<script>
+    const titulo = document.querySelector('h1');
+    titulo.style.display = 'none';
+    const btn = document.getElementById('btn');
+    btn.addEventListener('click', () => {
+        titulo.style.display = 'block';
+    });
+</script>
 </html>
