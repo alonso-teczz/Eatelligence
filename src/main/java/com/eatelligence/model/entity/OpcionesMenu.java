@@ -16,19 +16,20 @@ public class OpcionesMenu {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "id_rol", nullable = false)
-    private Rol rol;
-
     @Column(nullable = false, length = 100)
-    private String nombreOpcion;
+    private String nombre;
 
     @Column(nullable = false, length = 255)
-    private String rutaOpcion;
+    private String url;
 
     @Column(nullable = false, length = 50)
     private String seccion;
 
     @Column(nullable = false)
-    private Boolean activo;
+    @Builder.Default
+    private Boolean activo = true;
+
+    @ManyToOne
+    @JoinColumn(name = "id_rol", nullable = false)
+    private Rol rol;
 }

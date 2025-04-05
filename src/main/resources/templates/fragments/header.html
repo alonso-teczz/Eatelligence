@@ -1,0 +1,31 @@
+<header th:fragment="header">
+    <nav class="navbar navbar-expand-lg navbar-light header-nav">
+      <a class="navbar-brand">
+        <img th:src="@{/img/logo.png}" alt="Logo de Eatelligence" height="80">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav me-3">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle d-flex align-items-center rounded profile-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-person-fill me-2"></i> Mi Cuenta
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end p-0" aria-labelledby="profileDropdown">
+              <li>
+                <a class="dropdown-item d-flex align-items-center rounded-top settings-link" href="">
+                  <i class="bi bi-gear me-2"></i> Ajustes
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center rounded-bottom logout-link" href="">
+                  <i class="bi bi-box-arrow-right me-2"></i> Cerrar sesión
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </nav>
+</header>

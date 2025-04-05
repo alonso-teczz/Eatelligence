@@ -15,6 +15,13 @@ public class PedidoPlato {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    @Column(nullable = false)
+    private Integer cantidad;
+
+    //+ Para poder hacer cálculos históricos
+    @Column(nullable = false)
+    private Double precioUnitario;
 
     @ManyToOne
     @JoinColumn(name = "pedido_id", nullable = false)
@@ -23,7 +30,5 @@ public class PedidoPlato {
     @ManyToOne
     @JoinColumn(name = "plato_id", nullable = false)
     private Plato plato;
-
-    @Column(nullable = false)
-    private Integer cantidad;
+    
 }

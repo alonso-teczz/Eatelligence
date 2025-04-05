@@ -2,6 +2,8 @@ package com.eatelligence.model.entity;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -16,17 +18,20 @@ public class RutaEntrega {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "pedido_id", unique = true, nullable = false)
-    private Pedido pedido;
-
-    @ManyToOne
-    @JoinColumn(name = "repartidor_id", nullable = false)
-    private Usuario repartidor;
-
-    private String ubicacionActual;
-
+    @Column(name = "tiempo_estimado_entrega", nullable = false)
     private Integer tiempoEstimadoEntrega;
+
+    @Column(name = "latitud")
+    private Double latitud;
+
+    @Column(name = "longitud")
+    private Double longitud;
+
+    @Column(name = "hora_inicio_ruta")
+    private LocalDateTime horaInicioRuta;
+
+    @Column(name = "hora_fin_ruta")
+    private LocalDateTime horaFinRuta;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -35,4 +40,12 @@ public class RutaEntrega {
     public enum EstadoRuta {
         ASIGNADO, EN_RUTA, ENTREGADO
     }
+
+    @OneToOne
+    @JoinColumn(name = "pedido_id", unique = true, nullable = false)
+    private Pedido pedido;
+
+    @ManyToOne
+    @JoinColumn(name = "repartidor_id", nullable = false)
+    private Usuario repartidor;
 }
