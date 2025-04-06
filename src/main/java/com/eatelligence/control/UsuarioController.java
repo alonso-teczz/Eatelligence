@@ -10,10 +10,5 @@ public class UsuarioController {
     public String entry() {
         return "index";
     }
-
-    @GetMapping("/register")
-    public String mostrarFormulario() {
-        return "register";
-    }
     
 }
