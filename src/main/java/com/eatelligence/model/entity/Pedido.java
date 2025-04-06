@@ -1,9 +1,10 @@
 package com.eatelligence.model.entity;
 
 import lombok.*;
-
 import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "pedidos")
@@ -16,50 +17,43 @@ public class Pedido {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @Column(nullable = false)
-    private LocalDateTime fechaPedido;
 
-    @Column(nullable = false)
-    private LocalDateTime fechaEntregaEstimada;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "usuario_id", nullable = false)
+    private Usuario cliente;
 
-    @Column(nullable = false)
-    private LocalDateTime fechaEntregado;
-
-    @Column(nullable = true)
-    private LocalDateTime fechaCancelado;
-
-    @Column(nullable = false)
-    private Double total;
-
-    @Column(name = "nota_cliente", length = 500)
-    private String notaCliente;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "metodo_pago", nullable = false)
-    private MetodoPago metodoPago;
-
-    public enum MetodoPago {
-        EFECTIVO,
-        TARJETA,
-        PAYPAL,
-        BIZUM
-    }
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "restaurante_id", nullable = false)
+    private Restaurante restaurante;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private EstadoPedido estado;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "metodo_pago", nullable = false)
+    private MetodoPago metodoPago;
+
+    @Column(name = "fecha_realizado", nullable = false)
+    private LocalDateTime fechaRealizado;
+
+    @Column(name = "fecha_estimada")
+    private LocalDateTime fechaEstimada;
+
+    @Column(name = "fecha_entregado")
+    private LocalDateTime fechaEntregado;
+
+    @Column(name = "nota_cliente", length = 500)
+    private String notaCliente;
+
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
+    private List<PedidoPlato> pedidoPlatos;
+
     public enum EstadoPedido {
-        PENDIENTE, EN_PREPARACION, EN_CAMINO, ENTREGADO, CANCELADO
+        PENDIENTE, ACEPTADO, EN_CAMINO, ENTREGADO, CANCELADO
     }
 
-    @ManyToOne
-    @JoinColumn(name = "usuario_id", nullable = false)
-    private Usuario usuario;
-
-    @ManyToOne
-    @JoinColumn(name = "restaurante_id", nullable = false)
-    private Restaurante restaurante;    
-
+    public enum MetodoPago {
+        TARJETA, PAYPAL, EFECTIVO
+    }
 }
