@@ -1,0 +1,9 @@
+body {
+    background-color: #f8f9fa;
+  }
+
+.card-registro {
+    max-width: 700px;
+    margin: auto;
+    border-radius: 1rem;
+}
