@@ -40,6 +40,7 @@ public class Usuario {
         joinColumns = @JoinColumn(name = "usuario_id"),
         inverseJoinColumns = @JoinColumn(name = "rol_id")
     )
+    @EqualsAndHashCode.Exclude
     private List<Rol> roles;
 
     @Column
@@ -51,9 +52,11 @@ public class Usuario {
     private LocalDateTime fechaRegistro = LocalDateTime.now();
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+    @EqualsAndHashCode.Exclude
     private List<Pedido> pedidos;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    @EqualsAndHashCode.Exclude
     private List<UsuarioRol> usuarioRoles;
 
 }

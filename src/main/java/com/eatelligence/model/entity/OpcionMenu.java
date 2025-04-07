@@ -12,6 +12,7 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -43,5 +44,7 @@ public class OpcionMenu {
     private Boolean activo = true;
 
     @ManyToMany(mappedBy = "opciones")
+    @EqualsAndHashCode.Exclude
     private List<Rol> roles;
+
 }

@@ -17,6 +17,7 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -36,6 +37,7 @@ public class Restaurante {
 
     @OneToOne(optional = false)
     @JoinColumn(name = "usuario_id", unique = true)
+    @EqualsAndHashCode.Exclude
     private Usuario propietario;
 
     @Column(length = 500)
@@ -46,5 +48,6 @@ public class Restaurante {
     private List<Horario> horarios;
 
     @OneToMany(mappedBy = "restaurante", cascade = CascadeType.ALL)
+    @EqualsAndHashCode.Exclude
     private List<Plato> platos;
 }

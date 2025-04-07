@@ -25,10 +25,12 @@ public class PedidoPlato {
 
     @ManyToOne
     @JoinColumn(name = "pedido_id", nullable = false)
+    @EqualsAndHashCode.Exclude
     private Pedido pedido;
 
     @ManyToOne
     @JoinColumn(name = "plato_id", nullable = false)
+    @EqualsAndHashCode.Exclude
     private Plato plato;
     
 }

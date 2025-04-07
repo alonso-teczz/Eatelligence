@@ -20,10 +20,12 @@ public class Pedido {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "usuario_id", nullable = false)
+    @EqualsAndHashCode.Exclude
     private Usuario cliente;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "restaurante_id", nullable = false)
+    @EqualsAndHashCode.Exclude
     private Restaurante restaurante;
 
     @Enumerated(EnumType.STRING)
@@ -47,6 +49,7 @@ public class Pedido {
     private String notaCliente;
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
+    @EqualsAndHashCode.Exclude
     private List<PedidoPlato> pedidoPlatos;
 
     public enum EstadoPedido {

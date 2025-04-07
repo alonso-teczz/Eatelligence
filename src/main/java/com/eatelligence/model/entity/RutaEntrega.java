@@ -43,9 +43,11 @@ public class RutaEntrega {
 
     @OneToOne
     @JoinColumn(name = "pedido_id", unique = true, nullable = false)
+    @EqualsAndHashCode.Exclude
     private Pedido pedido;
 
     @ManyToOne
     @JoinColumn(name = "repartidor_id", nullable = false)
+    @EqualsAndHashCode.Exclude
     private Usuario repartidor;
 }

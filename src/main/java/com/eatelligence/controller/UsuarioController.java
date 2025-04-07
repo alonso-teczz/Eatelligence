@@ -1,4 +1,4 @@
-package com.eatelligence.control;
+package com.eatelligence.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.eatelligence.components.GeoapifyProperties;
 import com.eatelligence.model.dto.UsuarioRegistroDTO;
 import com.eatelligence.service.impl.UsuarioServiceImpl;
 
@@ -19,9 +20,13 @@ public class UsuarioController {
     @Autowired
     private UsuarioServiceImpl usuarioService;
 
+    @Autowired
+    private GeoapifyProperties geoapifyProperties;
+
     @GetMapping("/regUser")
     public String mostrarRegistro(Model model) {
         model.addAttribute("registroUsuario", new UsuarioRegistroDTO());
+        model.addAttribute("geoapifyKey", this.geoapifyProperties.getKey());
         return "registerUser";
     }
 

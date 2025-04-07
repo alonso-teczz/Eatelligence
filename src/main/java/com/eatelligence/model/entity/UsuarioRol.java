@@ -17,10 +17,12 @@ public class UsuarioRol {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "usuario_id", nullable = false)
+    @EqualsAndHashCode.Exclude
     private Usuario usuario;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "rol_id", nullable = false)
+    @EqualsAndHashCode.Exclude
     private Rol rol;
 
 }
