@@ -4,8 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.eatelligence.model.dto.UsuarioRegistroDTO;
+import com.eatelligence.model.embed.Direccion;
 import com.eatelligence.model.entity.Usuario;
 import com.eatelligence.repository.UsuarioRepository;
 import com.eatelligence.service.UsuarioService;
@@ -16,38 +19,66 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private Argon2PasswordEncoder passwordEncoder;
+
+    public String encodePassword(String password) {
+        return this.passwordEncoder.encode(password);
+    }
+
+    public boolean matchesPassword(String rawPassword, String hashedPassword) {
+        return this.passwordEncoder.matches(rawPassword, hashedPassword);
+    }
+
+    public Usuario DTOtoEntity(UsuarioRegistroDTO usuario) {
+        return Usuario.builder()
+            .nombre(usuario.getNombre())
+            .email(usuario.getEmail())
+            .telefono(usuario.getTelefono())
+            .direccion(
+                Direccion.builder()
+                .calle(usuario.getCalle())
+                .ciudad(usuario.getCiudad())
+                .provincia(usuario.getProvincia())
+                .codigoPostal(usuario.getCodigoPostal())
+                .build()
+            )
+            .contrasena(this.encodePassword(usuario.getContrasena()))
+            .build();
+    }
+
     @Override
-    public Usuario insertar(Usuario usuario) {
+    public Usuario insert(Usuario usuario) {
         return this.usuarioRepository.save(usuario);
     }
 
     @Override
-    public void actualizar(Usuario usuario) {
+    public void update(Usuario usuario) {
         this.usuarioRepository.save(usuario);
     }
 
     @Override
-    public Optional<Usuario> buscarPorId(Long id) {
+    public Optional<Usuario> searchById(Long id) {
         return this.usuarioRepository.findById(id);
     }
 
     @Override
-    public Optional<Usuario> buscarPorEmail(String email) {
+    public Optional<Usuario> searchById(String email) {
         return this.usuarioRepository.findByEmail(email);
     }
 
     @Override
-    public List<Usuario> listarTodos() {
+    public List<Usuario> getAll() {
         return this.usuarioRepository.findAll();
     }
 
     @Override
-    public void eliminar(Long id) {
+    public void deleteById(Long id) {
         usuarioRepository.deleteById(id);
     }
 
     @Override
-    public boolean existeUsuario(String nombre) {
+    public boolean existsUser(String nombre) {
         return this.usuarioRepository.existsByNombre(nombre);
     }
 }

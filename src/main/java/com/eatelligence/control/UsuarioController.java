@@ -39,10 +39,12 @@ public class UsuarioController {
             return "registerUser";
         }
 
-        if (this.usuarioService.existeUsuario(registroDTO.getNombre())) {
-            result.rejectValue("username",  "Nombre de usuario en uso");
+        if (this.usuarioService.existsUser(registroDTO.getNombre())) {
+            result.rejectValue("nombre",  "Nombre de usuario en uso");
             return "registerUser";
         }
+
+        this.usuarioService.insert(this.usuarioService.DTOtoEntity(registroDTO));
 
         return "";
     }

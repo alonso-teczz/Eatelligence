@@ -9,24 +9,24 @@ public interface UsuarioService {
 
     //? READ
     // Método para comprobar la existencia de un usuario por su nombre
-    boolean existeUsuario(String nombre);
+    boolean existsUser(String nombre);
 
     // Método para buscar un usuario por su ID
-    Optional<Usuario> buscarPorId(Long id);
+    Optional<Usuario> searchById(Long id);
     
     // Método para buscar un usuario por su correo electrónico
-    Optional<Usuario> buscarPorEmail(String email);
+    Optional<Usuario> searchById(String email);
 
     // Método para listar todos los usuarios registrados
-    List<Usuario> listarTodos();
+    List<Usuario> getAll();
 
     //* CREATE
-    Usuario insertar(Usuario usuario);
+    Usuario insert(Usuario usuario);
 
     //+ UPDATE
-    void actualizar(Usuario usuario); 
+    void update(Usuario usuario); 
 
 
     //! DELETE
-    void eliminar(Long id);
+    void deleteById(Long id);
 }

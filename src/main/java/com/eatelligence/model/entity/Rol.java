@@ -1,8 +1,9 @@
 package com.eatelligence.model.entity;
 
-import lombok.*;
+import java.util.List;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @Table(name = "roles")
@@ -19,6 +20,21 @@ public class Rol {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, unique = true)
     private NombreRol nombre;
+
+    @ManyToMany(mappedBy = "roles")
+    private List<Usuario> usuarios;
+
+    @ManyToMany
+    @JoinTable(
+        name = "rol_opciones",
+        joinColumns = @JoinColumn(name = "rol_id"),
+        inverseJoinColumns = @JoinColumn(name = "opcion_id")
+    )
+    private List<OpcionMenu> opciones;
+
+    @OneToMany(mappedBy = "rol", cascade = CascadeType.ALL)
+    private List<UsuarioRol> usuarioRoles;
+
 
     public enum NombreRol {
         ADMINISTRADOR,
