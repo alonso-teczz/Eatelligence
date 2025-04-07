@@ -29,10 +29,10 @@
         </li>
 
         <li class="nav-item" th:unless="${session.usuario != null}">
-          <a class="nav-link fs-5" th:href="@{/login}">Iniciar sesión</a>
+          <a class="nav-link fs-5" th:href="@{/logUser}">Iniciar sesión</a>
         </li>
         <li class="nav-item" th:unless="${session.usuario != null}">
-          <a class="nav-link fs-5" th:href="@{/register}">Registrarse</a>
+          <a class="nav-link fs-5" th:href="@{/regUser}">Registrarse</a>
         </li>
       </ul>
     </div>

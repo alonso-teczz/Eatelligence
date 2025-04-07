@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.eatelligence.model.dto.UsuarioRegistroDTO;
@@ -20,7 +20,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     private UsuarioRepository usuarioRepository;
 
     @Autowired
-    private Argon2PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     public String encodePassword(String password) {
         return this.passwordEncoder.encode(password);

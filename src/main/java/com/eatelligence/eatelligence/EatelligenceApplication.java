@@ -8,10 +8,12 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.event.EventListener;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @ComponentScan("com.eatelligence")
 @EntityScan("com.eatelligence.model")
+@EnableJpaRepositories("com.eatelligence.repository")
 public class EatelligenceApplication {
 
 	public static void main(String[] args) {

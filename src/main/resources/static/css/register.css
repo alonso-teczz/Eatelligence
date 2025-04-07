@@ -6,13 +6,20 @@
 
 .autocomplete-dropdown {
   position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
   z-index: 1000;
   background-color: #fff;
   border: 1px solid #ced4da;
   border-radius: 0.5rem;
-  max-height: 140px;
+  max-height: 160px;
   overflow-y: auto;
   box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.05);
+}
+
+.autocomplete-dropdown:empty {
+  display: none;
 }
 
 .autocomplete-item {
@@ -34,5 +41,13 @@
 }
 
 .is-invalid + .invalid-feedback {
+  display: block;
+}
+
+.invalid-feedback.js-feedback {
+  display: none;
+}
+
+.is-invalid + .invalid-feedback.js-feedback {
   display: block;
 }

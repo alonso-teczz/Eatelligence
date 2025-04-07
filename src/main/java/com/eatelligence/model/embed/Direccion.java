@@ -26,6 +26,9 @@ public class Direccion {
     @Column(nullable = false)
     private String codigoPostal;
 
+    @Column(nullable = false)
+    private String numCalle;
+
     @Column
     private Double latitud;
 
