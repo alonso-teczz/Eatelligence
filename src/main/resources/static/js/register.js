@@ -10,10 +10,20 @@ document.addEventListener("DOMContentLoaded", function () {
   const cpInput = document.getElementById("codigoPostal");
   const dropdown = document.getElementById("sugerencias");
 
+  const contrasena = document.getElementById("contrasena");
+  const repetirContrasena = document.getElementById("repetirContrasena");
+  const togglePassword = document.getElementById("togglePassword");
+  const iconoPassword = document.getElementById("iconoPassword");
+
+  const checkboxRestaurante = document.getElementById("activarRestaurante");
+  const acordeonRestaurante = document.getElementById("form-restaurante");
+  const nombreComercial = document.getElementById("nombreComercial");
+  const descripcion = document.getElementById("descripcion");
+
   const campos = {
     nombre: document.getElementById("nombre"),
     email: document.getElementById("email"),
-    contrasena: document.getElementById("contrasena"),
+    contrasena: contrasena,
     telefono: document.getElementById("telefono"),
     calle: calleInput,
     numCalle: numCalleInput,
@@ -55,7 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
         calleInput.value = place.properties.street || place.properties.address_line1 || '';
         numCalleInput.value = place.properties.housenumber || '';
         ciudadInput.value = place.properties.city || '';
-        provinciaInput.value = place.properties.state || '';
+        provinciaInput.value = place.properties.county || '';
         cpInput.value = place.properties.postcode || '';
         dropdown.innerHTML = '';
 
@@ -73,83 +83,102 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
+  togglePassword.addEventListener("click", () => {
+    const isPassword = contrasena.type === "password";
+    contrasena.type = isPassword ? "text" : "password";
+    iconoPassword.classList.toggle("bi-eye");
+    iconoPassword.classList.toggle("bi-eye-slash");
+  });
+
+  checkboxRestaurante?.addEventListener("change", () => {
+    if (checkboxRestaurante.checked) {
+      new bootstrap.Collapse(acordeonRestaurante, { show: true });
+      nombreComercial.setAttribute("required", "required");
+      descripcion.setAttribute("required", "required");
+    } else {
+      new bootstrap.Collapse(acordeonRestaurante, { toggle: false }).hide();
+      nombreComercial.removeAttribute("required");
+      descripcion.removeAttribute("required");
+      nombreComercial.value = "";
+      descripcion.value = "";
+      nombreComercial.classList.remove("is-invalid");
+      descripcion.classList.remove("is-invalid");
+    }
+  });
+
   form.addEventListener("submit", function (e) {
     let valido = true;
 
-    // Limpiar errores anteriores
     Object.entries(campos).forEach(([_, input]) => {
       input.classList.remove("is-invalid");
-      const feedback = input.parentElement.querySelector(".js-feedback");
-      if (feedback) {
-        feedback.textContent = "";
-        feedback.style.display = "none";
-      }
     });
+    contrasena.classList.remove("is-invalid");
+    repetirContrasena.classList.remove("is-invalid");
+    nombreComercial?.classList.remove("is-invalid");
+    descripcion?.classList.remove("is-invalid");
 
-    // Validar uno por uno y mostrar solo el primer error
     for (const [key, input] of Object.entries(campos)) {
       const valor = input.value.trim();
-      const feedback = input.parentElement.querySelector(".js-feedback");
 
       if (!valor) {
         input.classList.add("is-invalid");
-        if (feedback) {
-          feedback.style.display = "block";
-          feedback.textContent = obtenerMensajeError(key);
-        }
+        input.focus();
         valido = false;
         break;
       }
 
-      // Validación de email
       if (key === "email" && !/^\S+@\S+\.\S+$/.test(valor)) {
         input.classList.add("is-invalid");
-        if (feedback) {
-          feedback.style.display = "block";
-          feedback.textContent = "Introduce un correo válido";
-        }
+        input.focus();
         valido = false;
         break;
       }
 
-      // Validación de teléfono: exactamente 9 dígitos
       if (key === "telefono" && !/^\d{9}$/.test(valor)) {
         input.classList.add("is-invalid");
-        if (feedback) {
-          feedback.style.display = "block";
-          feedback.textContent = "El teléfono debe tener 9 dígitos numéricos";
-        }
+        input.focus();
         valido = false;
         break;
       }
 
-      // Validación de contraseña
       if (key === "contrasena" && !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(valor)) {
         input.classList.add("is-invalid");
-        if (feedback) {
-          feedback.style.display = "block";
-          feedback.textContent = "La contraseña debe tener mínimo 8 caracteres, incluyendo mayúscula, minúscula, número y símbolo";
-        }
+        input.focus();
         valido = false;
         break;
       }
     }
 
-    if (!valido) e.preventDefault();
-  });
-
-  function obtenerMensajeError(key) {
-    switch (key) {
-      case "nombre": return "El nombre es obligatorio";
-      case "email": return "El correo es obligatorio";
-      case "contrasena": return "La contraseña es obligatoria";
-      case "telefono": return "El teléfono es obligatorio";
-      case "calle": return "La calle es obligatoria";
-      case "numCalle": return "El número de la calle es obligatorio";
-      case "ciudad": return "La ciudad es obligatoria";
-      case "provincia": return "La provincia es obligatoria";
-      case "codigoPostal": return "El código postal es obligatorio";
-      default: return "Este campo es obligatorio";
+    // Validar coincidencia de contraseñas
+    if (valido && contrasena.value.trim() !== repetirContrasena.value.trim()) {
+      repetirContrasena.classList.add("is-invalid");
+      repetirContrasena.focus();
+      valido = false;
     }
-  }
+
+    // Validación extra para restaurante si está activo
+    if (valido && checkboxRestaurante?.checked) {
+      if (nombreComercial.value.trim().length < 6) {
+        nombreComercial.classList.add("is-invalid");
+        nombreComercial.focus();
+        valido = false;
+      } else if (descripcion.value.trim().length < 6) {
+        descripcion.classList.add("is-invalid");
+        descripcion.focus();
+        valido = false;
+      }
+    }
+
+    if (checkboxRestaurante?.checked) {
+      form.setAttribute("action", "/validRestReg");
+    } else {
+      form.setAttribute("action", "/validUserReg");
+    }
+
+    if (!valido) {
+      e.preventDefault();
+    } else {
+      repetirContrasena.disabled = true;
+    }
+  });
 });

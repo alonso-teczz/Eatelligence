@@ -1,9 +1,69 @@
-.formulario-registro {
-  max-width: 700px;
-  margin: auto;
-  border-radius: 0.75rem;
+/* ===== Paleta personalizada ===== */
+:root {
+  --color-principal: #abc294;
+  --color-secundario: #1d6448;
+  --color-texto: #1d1d1d;
 }
 
+/* ===== Estilos generales del formulario ===== */
+.formulario-registro {
+  background-color: #fff;
+  border-left: 6px solid var(--color-secundario);
+  border-radius: 12px;
+}
+
+/* Título */
+.formulario-registro h2 {
+  color: var(--color-secundario);
+  font-weight: 700;
+}
+
+/* Inputs enfocados */
+.formulario-registro input:focus,
+.formulario-registro textarea:focus {
+  border-color: var(--color-principal);
+  box-shadow: 0 0 0 0.2rem rgba(171, 194, 148, 0.25);
+}
+
+/* Botón de envío */
+.formulario-registro button[type="submit"] {
+  background-color: var(--color-principal);
+  border-color: var(--color-secundario);
+  color: #fff;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.formulario-registro button[type="submit"]:hover {
+  background-color: var(--color-secundario);
+  border-color: var(--color-secundario);
+}
+
+/* Switch de restaurante */
+.form-check-input:checked {
+  background-color: var(--color-secundario);
+  border-color: var(--color-secundario);
+}
+
+/* Acordeón del restaurante */
+.accordion-button.disabled {
+  background-color: var(--color-principal);
+  color: var(--color-secundario);
+  font-weight: 600;
+  opacity: 1;
+  cursor: default;
+}
+
+/* Validación */
+.is-invalid {
+  border-color: #dc3545 !important;
+}
+
+.is-invalid:focus {
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+/* ===== Autocompletado (ya tenías esto) ===== */
 .autocomplete-dropdown {
   position: absolute;
   top: 100%;
@@ -29,25 +89,4 @@
 
 .autocomplete-item:hover {
   background-color: #f1f1f1;
-}
-
-.is-invalid {
-  border-color: #dc3545;
-}
-
-.invalid-feedback {
-  display: none;
-  color: #dc3545;
-}
-
-.is-invalid + .invalid-feedback {
-  display: block;
-}
-
-.invalid-feedback.js-feedback {
-  display: none;
-}
-
-.is-invalid + .invalid-feedback.js-feedback {
-  display: block;
 }

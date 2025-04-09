@@ -38,6 +38,7 @@ public class UsuarioServiceImpl implements UsuarioService {
             .direccion(
                 Direccion.builder()
                 .calle(usuario.getCalle())
+                .numCalle(usuario.getNumCalle())
                 .ciudad(usuario.getCiudad())
                 .provincia(usuario.getProvincia())
                 .codigoPostal(usuario.getCodigoPostal())
