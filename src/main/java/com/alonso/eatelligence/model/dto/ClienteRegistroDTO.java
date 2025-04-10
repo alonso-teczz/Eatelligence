@@ -49,4 +49,7 @@ public class ClienteRegistroDTO {
 
     @NotBlank(message = "El código postal es obligatorio")
     private String codigoPostal;
+
+    private Double latitud;
+    private Double longitud;
 }

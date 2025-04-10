@@ -125,7 +125,7 @@
 .container-usuario,
 .container-restaurante {
   opacity: 0;
-  visibility: hidden;
+  display: none;
   transform: translateY(10px);
   pointer-events: none;
   transition: opacity 0.4s ease, transform 0.4s ease;
@@ -136,7 +136,7 @@
 .container-usuario.mostrar,
 .container-restaurante.mostrar {
   opacity: 1;
-  visibility: visible;
+  display: block;
   transform: translateY(0);
   pointer-events: auto;
   height: auto;

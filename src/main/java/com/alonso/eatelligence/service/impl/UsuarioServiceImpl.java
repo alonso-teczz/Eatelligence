@@ -8,7 +8,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.alonso.eatelligence.model.dto.ClienteRegistroDTO;
+import com.alonso.eatelligence.model.dto.RestauranteRegistroDTO;
 import com.alonso.eatelligence.model.embed.Direccion;
+import com.alonso.eatelligence.model.entity.Restaurante;
 import com.alonso.eatelligence.model.entity.Usuario;
 import com.alonso.eatelligence.repository.UsuarioRepository;
 import com.alonso.eatelligence.service.UsuarioService;
@@ -30,23 +32,33 @@ public class UsuarioServiceImpl implements UsuarioService {
         return this.passwordEncoder.matches(rawPassword, hashedPassword);
     }
 
-    public Usuario ClientDTOtoEntity(ClienteRegistroDTO usuario) {
+    public Usuario clientDTOtoEntity(ClienteRegistroDTO cliente) {
         return Usuario.builder()
-            .nombre(usuario.getNombre())
-            .email(usuario.getEmail())
-            .telefono(usuario.getTelefono())
+            .nombre(cliente.getNombre())
+            .email(cliente.getEmail())
+            .telefono(cliente.getTelefono())
             .direccion(
                 Direccion.builder()
-                .calle(usuario.getCalle())
-                .numCalle(usuario.getNumCalle())
-                .ciudad(usuario.getCiudad())
-                .provincia(usuario.getProvincia())
-                .codigoPostal(usuario.getCodigoPostal())
+                .calle(cliente.getCalle())
+                .numCalle(cliente.getNumCalle())
+                .ciudad(cliente.getCiudad())
+                .provincia(cliente.getProvincia())
+                .codigoPostal(cliente.getCodigoPostal())
+                .latitud(cliente.getLatitud())
+                .longitud(cliente.getLongitud())
                 .build()
             )
-            .contrasena(this.encodePassword(usuario.getContrasena()))
+            .contrasena(this.encodePassword(cliente.getContrasena()))
             .build();
     }
+
+    public Restaurante restDTOtoEntity(RestauranteRegistroDTO restaurante) {
+        return Restaurante.builder()
+            .propietario(this.clientDTOtoEntity(restaurante))
+            .nombreComercial(restaurante.getNombreComercial())
+            .descripcion(restaurante.getDescripcion())
+            .build();
+    }    
 
     @Override
     public Usuario insert(Usuario usuario) {

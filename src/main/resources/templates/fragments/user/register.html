@@ -5,7 +5,7 @@
 
       <!-- Formulario de usuario -->
       <div class="container-usuario mostrar">
-        <form id="form-usuario" th:action="@{/validUserReg}" th:object="${registroUsuario}" method="post" class="form-registro">
+        <form id="form-usuario" th:action="@{/validClientReg}" th:object="${registroUsuario}" method="post" class="form-registro">
           <div th:replace="fragments/user/regUserBase :: userBaseFields"></div>
         </form>
       </div>

@@ -42,9 +42,9 @@ public class UsuarioController {
             return "registerUser";
         }
 
-        this.usuarioService.insert(this.usuarioService.ClientDTOtoEntity(registroDTO));
+        this.usuarioService.insert(this.usuarioService.clientDTOtoEntity(registroDTO));
 
-        return "";
+        return "redirect:/";
     }
 
     @PostMapping("/validRestaurantReg")
@@ -56,8 +56,8 @@ public class UsuarioController {
             return "registerUser";
         }
 
-        // this.usuarioService.insert(this.usuarioService.ClientDTOtoEntity(registroDTO));
+        //this.restauranteService.insert(this.restauranteService.restDTOtoEntity(registroDTO));
 
-        return "";
+        return "redirect:/";
     }
 }
