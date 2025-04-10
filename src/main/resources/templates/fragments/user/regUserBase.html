@@ -11,8 +11,8 @@
             <!-- Email -->
         <div class="col-md-6">
             <label for="email" class="form-label">Correo electrónico</label>
-            <input type="email" th:field="*{email}" class="form-control" id="email" placeholder="Ej. carlos@email.com" required pattern="^\S+@\S+\.\S+$">
-            <div class="invalid-feedback">Introduce un correo válido</div>
+            <input type="email" th:field="*{email}" class="form-control" id="email" placeholder="Ej. carlos@gmail.com" required pattern="^\S+@\S+\.\S+$">
+            <div class="invalid-feedback">Introduce un correo electrónico válido en el formato: usuario@dominio.extensión</div>
             <div class="d-block" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
         </div>
     </div>
