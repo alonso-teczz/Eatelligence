@@ -6,8 +6,10 @@ document.addEventListener("DOMContentLoaded", function () {
   const containerUsuario = document.querySelector(".container-usuario");
   const containerRestaurante = document.querySelector(".container-restaurante");
   const checkbox = document.getElementById("activarRestaurante");
-  const acordeon = document.getElementById("acordeon-restaurante");
-  const btnSubmitUsuario = containerUsuario.querySelector("button[type='button']");
+  const btnRegistro = document.getElementById("btn-registro");
+
+  const togglePassword = document.getElementById("togglePassword");
+  const iconoPassword = document.getElementById("iconoPassword");
 
   const calleInput = document.getElementById("calle");
   const numCalleInput = document.getElementById("numCalle");
@@ -16,29 +18,62 @@ document.addEventListener("DOMContentLoaded", function () {
   const cpInput = document.getElementById("codigoPostal");
   const dropdown = document.getElementById("sugerencias");
 
-  const contrasena = document.getElementById("contrasena");
-  const repetirContrasena = document.getElementById("repetirContrasena");
-  const togglePassword = document.getElementById("togglePassword");
-  const iconoPassword = document.getElementById("iconoPassword");
-
-  const nombreComercial = document.getElementById("nombreComercial");
-  const descripcion = document.getElementById("descripcion");
-
-  const campos = {
-    nombre: document.getElementById("nombre"),
-    email: document.getElementById("email"),
-    contrasena: contrasena,
-    telefono: document.getElementById("telefono"),
-    calle: calleInput,
-    numCalle: numCalleInput,
-    ciudad: ciudadInput,
-    provincia: provinciaInput,
-    codigoPostal: cpInput
-  };
-
   let timeout;
 
-  // Autocompletado de dirección
+  const datosComunes = {};
+
+  function guardarDatosFormulario(form) {
+    const inputs = form.querySelectorAll("input, textarea");
+    inputs.forEach(input => {
+      if (input.id) datosComunes[input.id] = input.value;
+    });
+  }
+
+  function restaurarDatosFormulario(form) {
+    const inputs = form.querySelectorAll("input, textarea");
+    inputs.forEach(input => {
+      if (input.id && datosComunes[input.id]) {
+        input.value = datosComunes[input.id];
+      }
+    });
+  }
+
+  function toggleFormularios(esRestaurante) {
+    guardarDatosFormulario(esRestaurante ? formUsuario : formRestaurante);
+
+    formUsuario.classList.remove("mostrar");
+    formRestaurante.classList.remove("mostrar");
+    containerUsuario.classList.remove("mostrar");
+    containerRestaurante.classList.remove("mostrar");
+
+    if (esRestaurante) {
+      formRestaurante.classList.add("mostrar");
+      containerRestaurante.classList.add("mostrar");
+      checkbox.checked = true;
+      restaurarDatosFormulario(formRestaurante);
+    } else {
+      formUsuario.classList.add("mostrar");
+      containerUsuario.classList.add("mostrar");
+      checkbox.checked = false;
+      restaurarDatosFormulario(formUsuario);
+    }
+
+    mostrarAcordeon();
+  }
+
+  function mostrarAcordeon() {
+    const contenido = document.getElementById("contenido-acordeon-restaurante");
+    if (contenido && !contenido.classList.contains("show")) {
+      new bootstrap.Collapse(contenido, { toggle: false }).show();
+    }
+  }
+
+  toggleFormularios(checkbox.checked);
+
+  checkbox.addEventListener("change", () => {
+    toggleFormularios(checkbox.checked);
+  });
+
   calleInput?.addEventListener("input", () => {
     const query = calleInput.value.trim();
     clearTimeout(timeout);
@@ -88,88 +123,40 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // Mostrar/ocultar contraseña
   togglePassword?.addEventListener("click", () => {
+    const formActivo = document.querySelector(".form-registro.mostrar");
+    const contrasena = formActivo?.querySelector("#contrasena");
+    if (!contrasena) return;
+
     const isPassword = contrasena.type === "password";
     contrasena.type = isPassword ? "text" : "password";
     iconoPassword.classList.toggle("bi-eye");
     iconoPassword.classList.toggle("bi-eye-slash");
   });
 
-  // Forzar mostrar el acordeón (si existe)
-  function mostrarAcordeon() {
-    const contenido = document.getElementById("contenido-acordeon-restaurante");
-    if (contenido && !contenido.classList.contains("show")) {
-      new bootstrap.Collapse(contenido, { toggle: false }).show();
-    }
-  }  
+  btnRegistro?.addEventListener("click", () => {
+    const formActivo = document.querySelector(".form-registro.mostrar");
+    if (!formActivo) return;
 
-  // Alternar visibilidad entre formularios
-  function toggleFormularios(esRestaurante) {
-    if (esRestaurante) {
-      containerUsuario.classList.remove("mostrar");
-      containerRestaurante.classList.add("mostrar");
-      checkbox.checked = true;
-    } else {
-      containerRestaurante.classList.remove("mostrar");
-      containerUsuario.classList.add("mostrar");
-      checkbox.checked = false;
-  
-      // Limpiar formulario restaurante
-      formRestaurante.querySelectorAll("input, textarea").forEach(el => {
-        el.value = "";
-        el.classList.remove("is-invalid");
-      });
-  
-      formRestaurante.querySelectorAll("[disabled]").forEach(el => el.removeAttribute("disabled"));
-    }
-  
-    mostrarAcordeon();
-  }  
-
-  // Estado inicial
-  toggleFormularios(checkbox.checked);
-
-  // Evento cambio de checkbox
-  checkbox.addEventListener("change", () => {
-    if (checkbox.checked) {
-      containerUsuario.classList.add("d-none");
-      containerUsuario.style.display = "none";
-  
-      containerRestaurante.classList.remove("d-none");
-      containerRestaurante.style.display = "block";
-  
-      mostrarAcordeon(); // 👈 Esto activa el acordeón
-    } else {
-      containerRestaurante.classList.add("d-none");
-      containerRestaurante.style.display = "none";
-  
-      containerUsuario.classList.remove("d-none");
-      containerUsuario.style.display = "block";
-    }
-  });  
-
-  // Disparar el submit del formulario usuario desde su botón
-  btnSubmitUsuario?.addEventListener("click", () => {
-    formUsuario?.requestSubmit();
-  });
-
-  // Validación al enviar cualquiera de los formularios (form-restaurante tiene botón propio tipo submit)
-  const form = document.querySelector(".form-registro");
-  form?.addEventListener("submit", function (e) {
     let valido = true;
 
-    Object.entries(campos).forEach(([_, input]) => {
-      input.classList.remove("is-invalid");
-    });
-    contrasena.classList.remove("is-invalid");
-    repetirContrasena.classList.remove("is-invalid");
-    nombreComercial?.classList.remove("is-invalid");
-    descripcion?.classList.remove("is-invalid");
+    const allInputs = formActivo.querySelectorAll("input, textarea");
+    allInputs.forEach(input => input.classList.remove("is-invalid"));
+
+    const campos = {
+      nombre: formActivo.querySelector("#nombre"),
+      email: formActivo.querySelector("#email"),
+      contrasena: formActivo.querySelector("#contrasena"),
+      telefono: formActivo.querySelector("#telefono"),
+      calle: formActivo.querySelector("#calle"),
+      numCalle: formActivo.querySelector("#numCalle"),
+      ciudad: formActivo.querySelector("#ciudad"),
+      provincia: formActivo.querySelector("#provincia"),
+      codigoPostal: formActivo.querySelector("#codigoPostal")
+    };
 
     for (const [key, input] of Object.entries(campos)) {
-      const valor = input.value.trim();
-
+      const valor = input?.value.trim();
       if (!valor) {
         input.classList.add("is-invalid");
         input.focus();
@@ -191,7 +178,7 @@ document.addEventListener("DOMContentLoaded", function () {
         break;
       }
 
-      if (key === "contrasena" && !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_]).{8,}$/.test(valor)) {
+      if (key === "contrasena" && !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(valor)) {
         input.classList.add("is-invalid");
         input.focus();
         valido = false;
@@ -199,44 +186,49 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
 
-    if (valido && contrasena.value.trim() !== repetirContrasena.value.trim()) {
-      repetirContrasena.classList.add("is-invalid");
-      repetirContrasena.focus();
-      valido = false;
-    }
-
-    if (valido && checkbox.checked) {
-      if (nombreComercial.value.trim().length < 6) {
-        nombreComercial.classList.add("is-invalid");
-        nombreComercial.focus();
+    const inputContrasena = formActivo?.querySelector("#contrasena");
+    const inputRepetir = formActivo?.querySelector("#repetirContrasena");
+    
+    if (valido && inputRepetir) {
+      const repetirValor = inputRepetir.value.trim();
+    
+      // Elimina mensajes anteriores
+      inputRepetir.classList.remove("is-invalid");
+    
+      // Obtenemos el div de feedback
+      const feedbackDiv = inputRepetir.nextElementSibling;
+      
+      if (!repetirValor) {
+        inputRepetir.classList.add("is-invalid");
+        if (feedbackDiv) feedbackDiv.textContent = "Repite la contraseña";
+        inputRepetir.focus();
         valido = false;
-      } else if (descripcion.value.trim().length < 6) {
-        descripcion.classList.add("is-invalid");
-        descripcion.focus();
+      } else if (inputContrasena && inputContrasena.value !== repetirValor) {
+        inputRepetir.classList.add("is-invalid");
+        if (feedbackDiv) feedbackDiv.textContent = "Las contraseñas no coinciden";
+        inputRepetir.focus();
         valido = false;
       }
     }
 
-    if (checkbox.checked) {
-      form.setAttribute("action", "/validRestaurantReg");
-    } else {
-      form.setAttribute("action", "/validClientReg");
+    if (valido && checkbox.checked) {
+      const nombreCom = formActivo.querySelector("#nombreComercial");
+      const desc = formActivo.querySelector("#descripcion");
+
+      if (!nombreCom || nombreCom.value.trim().length < 6) {
+        nombreCom.classList.add("is-invalid");
+        nombreCom.focus();
+        valido = false;
+      } else if (!desc || desc.value.trim().length < 6) {
+        desc.classList.add("is-invalid");
+        desc.focus();
+        valido = false;
+      }
     }
 
-    if (!valido) {
-      e.preventDefault();
-    } else {
-      repetirContrasena.disabled = true;
-    }
-  });
-
-  const btnRegistro = document.getElementById("btn-registro");
-
-  btnRegistro?.addEventListener("click", () => {
-    if (checkbox.checked) {
-      formRestaurante?.requestSubmit();
-    } else {
-      formUsuario?.requestSubmit();
+    if (valido) {
+      if (inputRepetir) inputRepetir.disabled = true;
+      formActivo.requestSubmit();
     }
   });
 });

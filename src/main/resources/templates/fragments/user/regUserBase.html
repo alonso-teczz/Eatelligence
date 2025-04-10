@@ -22,23 +22,24 @@
         <div class="col-md-3 position-relative">
             <label for="contrasena" class="form-label">Contraseña</label>
             <div class="input-group">
-                <input type="password" th:field="*{contrasena}" class="form-control" id="contrasena" required pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}">
-                <span class="input-group-text" id="togglePassword" style="cursor: pointer;">
+              <input type="password" th:field="*{contrasena}" class="form-control" id="contrasena"
+                     required pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}">
+              <span class="input-group-text rounded-end" id="togglePassword" style="cursor: pointer;">
                 <i class="bi bi-eye" id="iconoPassword"></i>
-                </span>
+              </span>
+              <div class="invalid-feedback">Debe tener mínimo 8 caracteres, mayúsculas, minúsculas, número y símbolo</div>
             </div>
-            <div class="invalid-feedback">Debe tener mínimo 8 caracteres, mayúsculas, minúsculas, número y símbolo</div>
             <div class="d-block" th:if="${#fields.hasErrors('contrasena')}" th:errors="*{contrasena}"></div>
-        </div>
+        </div>          
 
         <!-- Repetir contraseña -->
         <div class="col-md-3">
             <label for="repetirContrasena" class="form-label">Repetir contraseña</label>
             <input type="password" class="form-control" id="repetirContrasena" placeholder="Repite la contraseña">
-            <div class="invalid-feedback">Las contraseñas no coinciden</div>
-        </div>
+            <div class="invalid-feedback">Las contraseñas no coinciden</div>            
+        </div>          
 
-        <!-- Teléfono -->
+          <!-- Teléfono -->
         <div class="col-md-6">
             <label for="telefono" class="form-label">Teléfono</label>
             <input type="text" th:field="*{telefono}" class="form-control" id="telefono" placeholder="Ej. 612345678" required pattern="^\d{9}$">

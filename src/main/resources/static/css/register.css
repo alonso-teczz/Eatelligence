@@ -122,20 +122,23 @@
   background-color: #f1f1f1;
 }
 
-/* ==== Animación entre formularios ==== */
 .container-usuario,
 .container-restaurante {
-  transition: all 0.4s ease;
   opacity: 0;
+  visibility: hidden;
   transform: translateY(10px);
   pointer-events: none;
-  display: none;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  height: 0;
+  overflow: hidden;
 }
 
 .container-usuario.mostrar,
 .container-restaurante.mostrar {
-  display: block;
   opacity: 1;
+  visibility: visible;
   transform: translateY(0);
   pointer-events: auto;
+  height: auto;
+  overflow: visible;
 }

@@ -1,32 +1,38 @@
 <div th:fragment="restaurantFields">
-    <!-- Acordeón de restaurante controlado por checkbox -->
     <div class="accordion mt-3" id="acordeon-restaurante">
-        <div class="accordion-item">
-          <h2 class="accordion-header" id="headingRestaurante">
-            <button class="accordion-button collapsed" type="button"
-                    data-bs-toggle="collapse" data-bs-target="#contenido-acordeon-restaurante"
-                    aria-expanded="false" aria-controls="contenido-acordeon-restaurante">
-              Datos del restaurante
-            </button>
-          </h2>
-          <div id="contenido-acordeon-restaurante" class="accordion-collapse collapse"
-               aria-labelledby="headingRestaurante" data-bs-parent="#acordeon-restaurante">
-            <div class="accordion-body">
-                <div class="mb-3">
-                    <label for="nombreComercial" class="form-label">Nombre comercial</label>
-                    <input type="text" class="form-control" id="nombreComercial" name="nombreComercial"
-                            placeholder="Ej. Restaurante La Parrilla" minlength="6" pattern=".{6,}">
-                    <div class="invalid-feedback">Por favor, introduce un nombre válido (mínimo 6 caracteres).</div>
-                </div>
-                    <div class="mb-3">
-                        <label for="descripcion" class="form-label">Descripción del restaurante</label>
-                        <textarea class="form-control" id="descripcion" name="descripcion" rows="4"
-                            placeholder="Describe brevemente tu restaurante, tipo de comida, ambiente, etc."
-                            minlength="6"></textarea>
-                    <div class="invalid-feedback">La descripción debe tener al menos 6 caracteres.</div>
-                </div>                
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingRestaurante">
+          <button class="accordion-button collapsed" type="button"
+                  data-bs-toggle="collapse" data-bs-target="#contenido-acordeon-restaurante"
+                  aria-expanded="false" aria-controls="contenido-acordeon-restaurante">
+            Datos del restaurante
+          </button>
+        </h2>
+        <div id="contenido-acordeon-restaurante" class="accordion-collapse collapse show"
+             aria-labelledby="headingRestaurante" data-bs-parent="#acordeon-restaurante">
+          <div class="accordion-body">
+            
+            <!-- Nombre comercial -->
+            <div class="mb-3">
+              <label for="nombreComercial" class="form-label">Nombre comercial</label>
+              <input type="text" th:field="*{nombreComercial}" class="form-control" id="nombreComercial"
+                     placeholder="Ej. Restaurante La Parrilla" minlength="6" pattern=".{6,}">
+              <div class="invalid-feedback">Por favor, introduce un nombre válido (mínimo 6 caracteres).</div>
+              <div class="d-block" th:if="${#fields.hasErrors('nombreComercial')}" th:errors="*{nombreComercial}"></div>
             </div>
+  
+            <!-- Descripción -->
+            <div class="mb-3">
+              <label for="descripcion" class="form-label">Descripción del restaurante</label>
+              <textarea th:field="*{descripcion}" class="form-control" id="descripcion" rows="4"
+                        placeholder="Describe brevemente tu restaurante, tipo de comida, ambiente, etc."
+                        minlength="6"></textarea>
+              <div class="invalid-feedback">La descripción debe tener al menos 6 caracteres.</div>
+              <div class="d-block" th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></div>
             </div>
+  
+          </div>
         </div>
+      </div>
     </div>
-</div>
+</div>  

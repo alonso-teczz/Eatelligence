@@ -56,7 +56,7 @@ public class UsuarioController {
             return "registerUser";
         }
 
-        this.usuarioService.insert(this.usuarioService.ClientDTOtoEntity(registroDTO));
+        // this.usuarioService.insert(this.usuarioService.ClientDTOtoEntity(registroDTO));
 
         return "";
     }
