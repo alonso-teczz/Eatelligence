@@ -10,12 +10,20 @@
   background-color: #fff;
   border-left: 6px solid var(--color-secundario);
   border-radius: 12px;
+  padding: 2rem;
 }
 
 /* Título */
 .formulario-registro h2 {
   color: var(--color-secundario);
   font-weight: 700;
+  font-size: 1.8rem;
+}
+
+/* Etiquetas */
+.formulario-registro label {
+  color: var(--color-secundario);
+  font-weight: 600;
 }
 
 /* Inputs enfocados */
@@ -25,16 +33,24 @@
   box-shadow: 0 0 0 0.2rem rgba(171, 194, 148, 0.25);
 }
 
+/* Inputs y textarea base */
+.formulario-registro input,
+.formulario-registro textarea {
+  font-size: 0.95rem;
+}
+
 /* Botón de envío */
-.formulario-registro button[type="submit"] {
+.formulario-registro button[type="submit"],
+#btn-registro {
   background-color: var(--color-principal);
   border-color: var(--color-secundario);
   color: #fff;
   font-weight: 600;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
-.formulario-registro button[type="submit"]:hover {
+.formulario-registro button[type="submit"]:hover,
+#btn-registro:hover {
   background-color: var(--color-secundario);
   border-color: var(--color-secundario);
 }
@@ -45,13 +61,28 @@
   border-color: var(--color-secundario);
 }
 
-/* Acordeón del restaurante */
+/* Estilo acordeón */
+.accordion-button {
+  background-color: #f8f9fa;
+  font-weight: 500;
+  color: var(--color-secundario);
+}
+
+.accordion-button:not(.collapsed) {
+  background-color: var(--color-principal);
+  color: var(--color-secundario);
+}
+
 .accordion-button.disabled {
   background-color: var(--color-principal);
   color: var(--color-secundario);
   font-weight: 600;
   opacity: 1;
   cursor: default;
+}
+
+.accordion-body {
+  background-color: #fdfdfd;
 }
 
 /* Validación */
@@ -89,4 +120,22 @@
 
 .autocomplete-item:hover {
   background-color: #f1f1f1;
+}
+
+/* ==== Animación entre formularios ==== */
+.container-usuario,
+.container-restaurante {
+  transition: all 0.4s ease;
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+  display: none;
+}
+
+.container-usuario.mostrar,
+.container-restaurante.mostrar {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
 }

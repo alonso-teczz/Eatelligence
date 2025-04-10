@@ -1,0 +1,92 @@
+<div th:fragment="userBaseFields">
+    <div class="row g-3">
+        <!-- Nombre -->
+        <div class="col-md-6">
+            <label for="nombre" class="form-label">Nombre</label>
+            <input type="text" th:field="*{nombre}" class="form-control" id="nombre" placeholder="Ej. Carlos" required>
+            <div class="invalid-feedback">El nombre es obligatorio</div>
+            <div class="d-block" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
+        </div>
+
+            <!-- Email -->
+        <div class="col-md-6">
+            <label for="email" class="form-label">Correo electrónico</label>
+            <input type="email" th:field="*{email}" class="form-control" id="email" placeholder="Ej. carlos@email.com" required pattern="^\S+@\S+\.\S+$">
+            <div class="invalid-feedback">Introduce un correo válido</div>
+            <div class="d-block" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+        </div>
+    </div>
+
+    <div class="row g-3 mt-2">
+        <!-- Contraseña -->
+        <div class="col-md-3 position-relative">
+            <label for="contrasena" class="form-label">Contraseña</label>
+            <div class="input-group">
+                <input type="password" th:field="*{contrasena}" class="form-control" id="contrasena" required pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}">
+                <span class="input-group-text" id="togglePassword" style="cursor: pointer;">
+                <i class="bi bi-eye" id="iconoPassword"></i>
+                </span>
+            </div>
+            <div class="invalid-feedback">Debe tener mínimo 8 caracteres, mayúsculas, minúsculas, número y símbolo</div>
+            <div class="d-block" th:if="${#fields.hasErrors('contrasena')}" th:errors="*{contrasena}"></div>
+        </div>
+
+        <!-- Repetir contraseña -->
+        <div class="col-md-3">
+            <label for="repetirContrasena" class="form-label">Repetir contraseña</label>
+            <input type="password" class="form-control" id="repetirContrasena" placeholder="Repite la contraseña">
+            <div class="invalid-feedback">Las contraseñas no coinciden</div>
+        </div>
+
+        <!-- Teléfono -->
+        <div class="col-md-6">
+            <label for="telefono" class="form-label">Teléfono</label>
+            <input type="text" th:field="*{telefono}" class="form-control" id="telefono" placeholder="Ej. 612345678" required pattern="^\d{9}$">
+            <div class="invalid-feedback">Debe contener 9 dígitos</div>
+            <div class="d-block" th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}"></div>
+        </div>
+    </div>
+
+    <div class="mt-3 position-relative">
+        <!-- Calle -->
+        <label for="calle" class="form-label">Calle</label>
+        <input type="text" th:field="*{calle}" class="form-control" id="calle" autocomplete="off" placeholder="Calle de Alcalá 45, 28014, Madrid, España" required>
+        <div id="sugerencias" class="autocomplete-dropdown"></div>
+        <div class="invalid-feedback">La calle es obligatoria</div>
+        <div class="d-block" th:if="${#fields.hasErrors('calle')}" th:errors="*{calle}"></div>
+    </div>        
+
+    <div class="row g-3 mt-3">
+        <!-- Número de Calle -->
+        <div class="col-md-6">
+            <label for="numCalle" class="form-label">Número</label>
+            <input type="text" th:field="*{numCalle}" class="form-control" id="numCalle" readonly required>
+            <div class="invalid-feedback">El número de la calle es obligatorio</div>
+            <div class="d-block" th:if="${#fields.hasErrors('numCalle')}" th:errors="*{numCalle}"></div>
+        </div>
+
+        <!-- Ciudad -->
+        <div class="col-md-6">
+            <label for="ciudad" class="form-label">Ciudad / Municipio</label>
+            <input type="text" th:field="*{ciudad}" class="form-control" id="ciudad" readonly required>
+            <div class="invalid-feedback">La ciudad es obligatoria</div>
+            <div class="d-block" th:if="${#fields.hasErrors('ciudad')}" th:errors="*{ciudad}"></div>
+        </div>
+
+        <!-- Provincia -->
+        <div class="col-md-6">
+            <label for="provincia" class="form-label">Provincia</label>
+            <input type="text" th:field="*{provincia}" class="form-control" id="provincia" readonly required>
+            <div class="invalid-feedback">La provincia es obligatoria</div>
+            <div class="d-block" th:if="${#fields.hasErrors('provincia')}" th:errors="*{provincia}"></div>
+        </div>
+
+        <!-- Código Postal -->
+        <div class="col-md-6">
+            <label for="codigoPostal" class="form-label">Código Postal</label>
+            <input type="text" th:field="*{codigoPostal}" class="form-control" id="codigoPostal" readonly required>
+            <div class="invalid-feedback">El código postal es obligatorio</div>
+            <div class="d-block" th:if="${#fields.hasErrors('codigoPostal')}" th:errors="*{codigoPostal}"></div>
+        </div>
+    </div>
+</div>

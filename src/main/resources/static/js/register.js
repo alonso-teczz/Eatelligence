@@ -1,7 +1,13 @@
 document.addEventListener("DOMContentLoaded", function () {
   const apiKey = "eddca3679eed46f79e25f3aa58c75054";
 
-  const form = document.getElementById("form-registro");
+  const formUsuario = document.getElementById("form-usuario");
+  const formRestaurante = document.getElementById("form-restaurante");
+  const containerUsuario = document.querySelector(".container-usuario");
+  const containerRestaurante = document.querySelector(".container-restaurante");
+  const checkbox = document.getElementById("activarRestaurante");
+  const acordeon = document.getElementById("acordeon-restaurante");
+  const btnSubmitUsuario = containerUsuario.querySelector("button[type='button']");
 
   const calleInput = document.getElementById("calle");
   const numCalleInput = document.getElementById("numCalle");
@@ -15,8 +21,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const togglePassword = document.getElementById("togglePassword");
   const iconoPassword = document.getElementById("iconoPassword");
 
-  const checkboxRestaurante = document.getElementById("activarRestaurante");
-  const acordeonRestaurante = document.getElementById("form-restaurante");
   const nombreComercial = document.getElementById("nombreComercial");
   const descripcion = document.getElementById("descripcion");
 
@@ -34,7 +38,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   let timeout;
 
-  calleInput.addEventListener("input", () => {
+  // Autocompletado de dirección
+  calleInput?.addEventListener("input", () => {
     const query = calleInput.value.trim();
     clearTimeout(timeout);
 
@@ -83,30 +88,75 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  togglePassword.addEventListener("click", () => {
+  // Mostrar/ocultar contraseña
+  togglePassword?.addEventListener("click", () => {
     const isPassword = contrasena.type === "password";
     contrasena.type = isPassword ? "text" : "password";
     iconoPassword.classList.toggle("bi-eye");
     iconoPassword.classList.toggle("bi-eye-slash");
   });
 
-  checkboxRestaurante?.addEventListener("change", () => {
-    if (checkboxRestaurante.checked) {
-      new bootstrap.Collapse(acordeonRestaurante, { show: true });
-      nombreComercial.setAttribute("required", "required");
-      descripcion.setAttribute("required", "required");
-    } else {
-      new bootstrap.Collapse(acordeonRestaurante, { toggle: false }).hide();
-      nombreComercial.removeAttribute("required");
-      descripcion.removeAttribute("required");
-      nombreComercial.value = "";
-      descripcion.value = "";
-      nombreComercial.classList.remove("is-invalid");
-      descripcion.classList.remove("is-invalid");
+  // Forzar mostrar el acordeón (si existe)
+  function mostrarAcordeon() {
+    const contenido = document.getElementById("contenido-acordeon-restaurante");
+    if (contenido && !contenido.classList.contains("show")) {
+      new bootstrap.Collapse(contenido, { toggle: false }).show();
     }
+  }  
+
+  // Alternar visibilidad entre formularios
+  function toggleFormularios(esRestaurante) {
+    if (esRestaurante) {
+      containerUsuario.classList.remove("mostrar");
+      containerRestaurante.classList.add("mostrar");
+      checkbox.checked = true;
+    } else {
+      containerRestaurante.classList.remove("mostrar");
+      containerUsuario.classList.add("mostrar");
+      checkbox.checked = false;
+  
+      // Limpiar formulario restaurante
+      formRestaurante.querySelectorAll("input, textarea").forEach(el => {
+        el.value = "";
+        el.classList.remove("is-invalid");
+      });
+  
+      formRestaurante.querySelectorAll("[disabled]").forEach(el => el.removeAttribute("disabled"));
+    }
+  
+    mostrarAcordeon();
+  }  
+
+  // Estado inicial
+  toggleFormularios(checkbox.checked);
+
+  // Evento cambio de checkbox
+  checkbox.addEventListener("change", () => {
+    if (checkbox.checked) {
+      containerUsuario.classList.add("d-none");
+      containerUsuario.style.display = "none";
+  
+      containerRestaurante.classList.remove("d-none");
+      containerRestaurante.style.display = "block";
+  
+      mostrarAcordeon(); // 👈 Esto activa el acordeón
+    } else {
+      containerRestaurante.classList.add("d-none");
+      containerRestaurante.style.display = "none";
+  
+      containerUsuario.classList.remove("d-none");
+      containerUsuario.style.display = "block";
+    }
+  });  
+
+  // Disparar el submit del formulario usuario desde su botón
+  btnSubmitUsuario?.addEventListener("click", () => {
+    formUsuario?.requestSubmit();
   });
 
-  form.addEventListener("submit", function (e) {
+  // Validación al enviar cualquiera de los formularios (form-restaurante tiene botón propio tipo submit)
+  const form = document.querySelector(".form-registro");
+  form?.addEventListener("submit", function (e) {
     let valido = true;
 
     Object.entries(campos).forEach(([_, input]) => {
@@ -141,7 +191,7 @@ document.addEventListener("DOMContentLoaded", function () {
         break;
       }
 
-      if (key === "contrasena" && !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(valor)) {
+      if (key === "contrasena" && !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_]).{8,}$/.test(valor)) {
         input.classList.add("is-invalid");
         input.focus();
         valido = false;
@@ -149,15 +199,13 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
 
-    // Validar coincidencia de contraseñas
     if (valido && contrasena.value.trim() !== repetirContrasena.value.trim()) {
       repetirContrasena.classList.add("is-invalid");
       repetirContrasena.focus();
       valido = false;
     }
 
-    // Validación extra para restaurante si está activo
-    if (valido && checkboxRestaurante?.checked) {
+    if (valido && checkbox.checked) {
       if (nombreComercial.value.trim().length < 6) {
         nombreComercial.classList.add("is-invalid");
         nombreComercial.focus();
@@ -169,16 +217,26 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
 
-    if (checkboxRestaurante?.checked) {
-      form.setAttribute("action", "/validRestReg");
+    if (checkbox.checked) {
+      form.setAttribute("action", "/validRestaurantReg");
     } else {
-      form.setAttribute("action", "/validUserReg");
+      form.setAttribute("action", "/validClientReg");
     }
 
     if (!valido) {
       e.preventDefault();
     } else {
       repetirContrasena.disabled = true;
+    }
+  });
+
+  const btnRegistro = document.getElementById("btn-registro");
+
+  btnRegistro?.addEventListener("click", () => {
+    if (checkbox.checked) {
+      formRestaurante?.requestSubmit();
+    } else {
+      formUsuario?.requestSubmit();
     }
   });
 });

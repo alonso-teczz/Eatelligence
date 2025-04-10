@@ -8,7 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import com.alonso.eatelligence.model.dto.UsuarioRegistroDTO;
+import com.alonso.eatelligence.model.dto.RestauranteRegistroDTO;
+import com.alonso.eatelligence.model.dto.ClienteRegistroDTO;
 import com.alonso.eatelligence.service.impl.UsuarioServiceImpl;
 
 import jakarta.validation.Valid;
@@ -21,14 +22,15 @@ public class UsuarioController {
 
 
     @GetMapping("/regUser")
-    public String mostrarRegistro(Model model) {
-        model.addAttribute("registroUsuario", new UsuarioRegistroDTO());
+    public String mostrarFormularioRegistro(Model model) {
+        model.addAttribute("registroUsuario", new ClienteRegistroDTO());
+        model.addAttribute("registroRestaurante", new RestauranteRegistroDTO());
         return "registerUser";
     }
 
-    @PostMapping("/validUserReg")
-    public String validateUserRegister(
-        @Valid @ModelAttribute("registroUsuario") UsuarioRegistroDTO registroDTO,
+    @PostMapping("/validClientReg")
+    public String validateClientRegister(
+        @Valid @ModelAttribute("registroUsuario") ClienteRegistroDTO registroDTO,
         BindingResult result
     ) {
         if (result.hasErrors()) {
@@ -40,7 +42,21 @@ public class UsuarioController {
             return "registerUser";
         }
 
-        this.usuarioService.insert(this.usuarioService.DTOtoEntity(registroDTO));
+        this.usuarioService.insert(this.usuarioService.ClientDTOtoEntity(registroDTO));
+
+        return "";
+    }
+
+    @PostMapping("/validRestaurantReg")
+    public String validateRestaurantRegister(
+        @Valid @ModelAttribute("registroRestaurante") RestauranteRegistroDTO registroDTO,
+        BindingResult result
+    ) {
+        if (result.hasErrors()) {
+            return "registerUser";
+        }
+
+        this.usuarioService.insert(this.usuarioService.ClientDTOtoEntity(registroDTO));
 
         return "";
     }

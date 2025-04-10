@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.alonso.eatelligence.model.dto.UsuarioRegistroDTO;
+import com.alonso.eatelligence.model.dto.ClienteRegistroDTO;
 import com.alonso.eatelligence.model.embed.Direccion;
 import com.alonso.eatelligence.model.entity.Usuario;
 import com.alonso.eatelligence.repository.UsuarioRepository;
@@ -30,7 +30,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         return this.passwordEncoder.matches(rawPassword, hashedPassword);
     }
 
-    public Usuario DTOtoEntity(UsuarioRegistroDTO usuario) {
+    public Usuario ClientDTOtoEntity(ClienteRegistroDTO usuario) {
         return Usuario.builder()
             .nombre(usuario.getNombre())
             .email(usuario.getEmail())

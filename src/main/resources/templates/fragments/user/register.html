@@ -1,0 +1,35 @@
+<div th:fragment="formRegUser">
+  <div class="container mt-4">
+    <div class="card p-3 shadow formulario-registro">
+      <h2 class="mb-4 text-center"><i class="bi bi-person-plus-fill"></i> Registro</h2>
+
+      <!-- ✅ Formulario de usuario -->
+      <div class="container-usuario">
+        <form id="form-usuario" th:action="@{/validUserReg}" th:object="${registroUsuario}" method="post" class="form-registro" novalidate>
+          <div th:replace="fragments/user/regUserBase :: userBaseFields"></div>
+        </form>
+      </div>
+
+      <!-- ✅ Formulario de restaurante (oculto al inicio) -->
+      <div class="container-restaurante d-none" style="display: none;">
+        <form id="form-restaurante" th:action="@{/validRestaurantReg}" th:object="${registroRestaurante}" method="post" class="form-registro" novalidate>
+          <div th:replace="fragments/user/regUserBase :: userBaseFields"></div>
+          <div th:replace="fragments/user/regRestaurante :: restaurantFields"></div>
+        </form>
+      </div>
+
+      <!-- ✅ Checkbox fuera de los formularios y antes del botón -->
+      <div class="form-check form-switch mt-4">
+        <input class="form-check-input" type="checkbox" id="activarRestaurante">
+        <label class="form-check-label" for="activarRestaurante">¿Eres un restaurante?</label>
+      </div>
+
+      <!-- ✅ Botón que lanza el registro según el formulario activo -->
+      <div class="mt-4 text-end">
+        <button type="button" id="btn-registro" class="btn btn-primary w-100">
+          <i class="bi bi-check-circle-fill"></i> Registrarse
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
