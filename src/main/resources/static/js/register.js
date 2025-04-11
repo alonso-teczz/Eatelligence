@@ -5,18 +5,14 @@ document.addEventListener("DOMContentLoaded", function () {
   const formRestaurante = document.getElementById("form-restaurante");
   const containerUsuario = document.querySelector(".container-usuario");
   const containerRestaurante = document.querySelector(".container-restaurante");
-  const checkbox = document.getElementById("activarRestaurante");
-  const btnRegistro = document.getElementById("btn-registro");
-
-  const togglePassword = document.getElementById("togglePassword");
-  const iconoPassword = document.getElementById("iconoPassword");
-
   const calleInput = document.getElementById("calle");
+  const dropdown = document.getElementById("sugerencias");
   const numCalleInput = document.getElementById("numCalle");
   const ciudadInput = document.getElementById("ciudad");
   const provinciaInput = document.getElementById("provincia");
   const cpInput = document.getElementById("codigoPostal");
-  const dropdown = document.getElementById("sugerencias");
+  const checkbox = document.getElementById("activarRestaurante");
+  const btnRegistro = document.getElementById("btn-registro");
 
   let timeout;
 
@@ -58,41 +54,62 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-
 /**
- * Muestra u oculta los formularios de usuario y restaurante.
- *
- * El parámetro esRestaurante indica si se debe mostrar el formulario del restaurante o del usuario.
- * La función guarda los valores de los campos de entrada del formulario que se va a ocultar,
- * y los restaura en el formulario que se va a mostrar.
- *
- * @param {boolean} esRestaurante - true si se debe mostrar el formulario del restaurante, false en caso contrario.
+ * Muestra u oculta el formulario de restaurante en función del estado del checkbox.
+ * 
+ * Si el checkbox est  activado, muestra el formulario de restaurante y oculta el formulario de usuario.
+ * Si el checkbox est  desactivado, muestra el formulario de usuario y oculta el formulario de restaurante.
+ * 
+ * Antes de mostrar el formulario de restaurante, guarda los valores de los campos de entrada del formulario
+ * de usuario en el objeto `datosComunes`. Luego, restaura los valores guardados en el formulario de
+ * restaurante.
+ * 
+ * @param {boolean} esRestaurante - Si el checkbox est  activado (true) o desactivado (false).
  */
+function toggleFormularios(esRestaurante) {
+  guardarDatosFormulario(esRestaurante ? formUsuario : formRestaurante);
 
-  function toggleFormularios(esRestaurante) {
-    guardarDatosFormulario(esRestaurante ? formUsuario : formRestaurante);
+  formUsuario.classList.remove("mostrar");
+  formRestaurante.classList.remove("mostrar");
+  containerUsuario.classList.remove("mostrar");
+  containerRestaurante.classList.remove("mostrar");
 
-    formUsuario.classList.remove("mostrar");
-    formRestaurante.classList.remove("mostrar");
-    containerUsuario.classList.remove("mostrar");
-    containerRestaurante.classList.remove("mostrar");
+  const acordeonContenido = document.getElementById("contenido-acordeon-restaurante");
+  const botonAcordeon = document.querySelector(".accordion-button");
 
-    if (esRestaurante) {
-      formRestaurante.classList.add("mostrar");
-      containerRestaurante.classList.add("mostrar");
-      checkbox.checked = true;
-      restaurarDatosFormulario(formRestaurante);
-      configurarTogglePassword(formRestaurante);
-    } else {
-      formUsuario.classList.add("mostrar");
-      containerUsuario.classList.add("mostrar");
-      checkbox.checked = false;
-      restaurarDatosFormulario(formUsuario);
-      configurarTogglePassword(formUsuario);
-    }    
+  if (esRestaurante) {
+    formRestaurante.classList.add("mostrar");
+    containerRestaurante.classList.add("mostrar");
+    checkbox.checked = true;
+    restaurarDatosFormulario(formRestaurante);
 
-    showAccordion();
+    // Forzar mostrar acordeón
+    new bootstrap.Collapse(acordeonContenido, { toggle: false }).show();
+
+    // Desactivar botón del acordeón (no clicable)
+    botonAcordeon.classList.add("disabled");
+    botonAcordeon.setAttribute("aria-disabled", "true");
+    botonAcordeon.style.pointerEvents = "none";
+
+    configurarTogglePassword(formRestaurante);
+
+  } else {
+    formUsuario.classList.add("mostrar");
+    containerUsuario.classList.add("mostrar");
+    checkbox.checked = false;
+    restaurarDatosFormulario(formUsuario);
+
+    // Permitir de nuevo abrir/cerrar el acordeón manualmente
+    botonAcordeon.classList.remove("disabled");
+    botonAcordeon.removeAttribute("aria-disabled");
+    botonAcordeon.style.pointerEvents = "auto";
+
+    // Colapsar el acordeón
+    new bootstrap.Collapse(acordeonContenido, { toggle: false }).hide();
+
+    configurarTogglePassword(formUsuario);
   }
+}
 
 /**
  * Asegura que la sección del acordeón para los detalles del restaurante esté visible.

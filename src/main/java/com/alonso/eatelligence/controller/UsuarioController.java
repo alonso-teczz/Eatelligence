@@ -20,7 +20,6 @@ public class UsuarioController {
     @Autowired
     private UsuarioServiceImpl usuarioService;
 
-
     @GetMapping("/regUser")
     public String mostrarFormularioRegistro(Model model) {
         model.addAttribute("registroUsuario", new ClienteRegistroDTO());
@@ -38,7 +37,7 @@ public class UsuarioController {
         }
 
         if (this.usuarioService.existsUser(registroDTO.getNombre())) {
-            result.rejectValue("nombre",  "Nombre de usuario en uso");
+            result.rejectValue("nombre", "error.usuario", "El usuario ya existe");
             return "registerUser";
         }
 
