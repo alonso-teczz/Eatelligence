@@ -36,12 +36,12 @@ public class UsuarioController {
             return "registerUser";
         }
 
-        if (this.usuarioService.existsUser(registroDTO.getNombre())) {
+        if (this.usuarioService.existsByNombre(registroDTO.getNombre())) {
             result.rejectValue("nombre", "error.usuario", "El usuario ya existe");
             return "registerUser";
         }
 
-        this.usuarioService.insert(this.usuarioService.clientDTOtoEntity(registroDTO));
+        this.usuarioService.save(this.usuarioService.clientDTOtoEntity(registroDTO));
 
         return "redirect:/";
     }

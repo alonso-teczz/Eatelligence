@@ -51,5 +51,6 @@ public class ClienteRegistroDTO {
     private String codigoPostal;
 
     private Double latitud;
+    
     private Double longitud;
 }

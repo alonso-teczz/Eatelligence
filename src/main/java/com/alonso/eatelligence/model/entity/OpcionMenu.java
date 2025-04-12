@@ -39,7 +39,7 @@ public class OpcionMenu {
     @Column
     private Integer orden;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TINYINT(1)")
     @Builder.Default
     private Boolean activo = true;
 

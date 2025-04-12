@@ -43,9 +43,9 @@ public class Usuario {
     @EqualsAndHashCode.Exclude
     private List<Rol> roles;
 
-    @Column
+    @Column(nullable = false, columnDefinition = "TINYINT(1)")
     @Builder.Default
-    private Boolean activo = true;
+    private boolean activo = true;
 
     @Column
     @Builder.Default

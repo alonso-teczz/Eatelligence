@@ -49,6 +49,7 @@ public class UsuarioServiceImpl implements UsuarioService {
                 .build()
             )
             .contrasena(this.encodePassword(cliente.getContrasena()))
+            // .activo(true)
             .build();
     }
 
@@ -61,7 +62,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     }    
 
     @Override
-    public Usuario insert(Usuario usuario) {
+    public Usuario save(Usuario usuario) {
         return this.usuarioRepository.save(usuario);
     }
 
@@ -71,17 +72,13 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public Optional<Usuario> searchById(Long id) {
+    public Optional<Usuario> findById(Long id) {
         return this.usuarioRepository.findById(id);
     }
 
-    @Override
-    public Optional<Usuario> searchById(String email) {
-        return this.usuarioRepository.findByEmail(email);
-    }
 
     @Override
-    public List<Usuario> getAll() {
+    public List<Usuario> getAllUsers() {
         return this.usuarioRepository.findAll();
     }
 
@@ -91,7 +88,8 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public boolean existsUser(String nombre) {
+    public boolean existsByNombre(String nombre) {
         return this.usuarioRepository.existsByNombre(nombre);
     }
+
 }

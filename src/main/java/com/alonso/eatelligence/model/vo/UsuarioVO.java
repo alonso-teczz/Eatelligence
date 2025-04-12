@@ -8,14 +8,14 @@ import com.alonso.eatelligence.model.entity.Pedido;
 import com.alonso.eatelligence.model.entity.Rol;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class UsuarioVO {
 
     private Long id;
