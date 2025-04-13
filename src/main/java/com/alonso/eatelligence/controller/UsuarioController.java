@@ -4,15 +4,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import com.alonso.eatelligence.model.dto.RestauranteRegistroDTO;
 import com.alonso.eatelligence.model.dto.ClienteRegistroDTO;
+import com.alonso.eatelligence.model.dto.RestauranteRegistroDTO;
 import com.alonso.eatelligence.service.impl.UsuarioServiceImpl;
-
-import jakarta.validation.Valid;
+import com.alonso.eatelligence.validation.groups.ValidacionCliente;
+import com.alonso.eatelligence.validation.groups.ValidacionRestaurante;
 
 @Controller
 public class UsuarioController {
@@ -29,15 +30,15 @@ public class UsuarioController {
 
     @PostMapping("/validClientReg")
     public String validateClientRegister(
-        @Valid @ModelAttribute("registroUsuario") ClienteRegistroDTO registroDTO,
+        @Validated(ValidacionCliente.class) @ModelAttribute("registroUsuario") ClienteRegistroDTO registroDTO,
         BindingResult result
     ) {
         if (result.hasErrors()) {
             return "registerUser";
         }
 
-        if (this.usuarioService.existsByNombre(registroDTO.getNombre())) {
-            result.rejectValue("nombre", "error.usuario", "El usuario ya existe");
+        if (this.usuarioService.existsByUsername(registroDTO.getNombre())) {
+            result.rejectValue("username", "error.username", "El usuario ya existe");
             return "registerUser";
         }
 
@@ -48,7 +49,7 @@ public class UsuarioController {
 
     @PostMapping("/validRestaurantReg")
     public String validateRestaurantRegister(
-        @Valid @ModelAttribute("registroRestaurante") RestauranteRegistroDTO registroDTO,
+        @Validated(ValidacionRestaurante.class) @ModelAttribute("registroRestaurante") RestauranteRegistroDTO registroDTO,
         BindingResult result
     ) {
         if (result.hasErrors()) {

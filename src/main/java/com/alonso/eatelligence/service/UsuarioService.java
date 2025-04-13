@@ -9,7 +9,7 @@ public interface UsuarioService {
 
     //? READ
     // Método para comprobar la existencia de un usuario por su nombre
-    boolean existsByNombre(String nombre);
+    boolean existsByUsername(String username);
 
     // Método para buscar un usuario por su ID
     Optional<Usuario> findById(Long id);

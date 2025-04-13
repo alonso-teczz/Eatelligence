@@ -1,0 +1,74 @@
+<div th:fragment="direccionForm(prefix)">
+    <!-- Calle -->
+    <div class="mb-3 input-autocomplete-wrapper">
+      <label th:for="${prefix + '.calle'}" class="form-label">Calle</label>
+      <input type="text"
+             th:field="*{__${prefix}__.calle}"
+             class="form-control"
+             th:id="${prefix + '.calle'}"
+             placeholder="Calle de Alcalá, 21, 28014 Madrid, España"
+             required>
+      <div class="autocomplete-dropdown" th:attr="data-dropdown=${prefix}"></div>
+      <div class="invalid-feedback">La calle es obligatoria</div>
+      <div class="d-block" th:if="${#fields.hasErrors(prefix + '.calle')}" th:errors="*{__${prefix}__.calle}"></div>
+    </div>
+  
+    <div class="row">
+      <!-- Ciudad -->
+      <div class="col-md-6 mb-3">
+        <label th:for="${prefix + '.ciudad'}" class="form-label">Ciudad</label>
+        <input type="text"
+        th:field="*{__${prefix}__.ciudad}"
+        class="form-control"
+        th:id="${prefix + '.ciudad'}"
+        readonly
+        required>
+        <div class="invalid-feedback">La ciudad es obligatoria</div>
+        <div class="d-block" th:if="${#fields.hasErrors(prefix + '.ciudad')}" th:errors="*{__${prefix}__.ciudad}"></div>
+      </div>
+      
+      <!-- Provincia -->
+      <div class="col-md-6 mb-3">
+        <label th:for="${prefix + '.provincia'}" class="form-label">Provincia</label>
+          <input type="text"
+                 th:field="*{__${prefix}__.provincia}"
+                 class="form-control"
+                 th:id="${prefix + '.provincia'}"
+                 readonly
+                 required>
+                 <div class="invalid-feedback">La provincia es obligatoria</div>
+          <div class="d-block" th:if="${#fields.hasErrors(prefix + '.provincia')}" th:errors="*{__${prefix}__.provincia}"></div>
+      </div>
+    </div>
+      
+    <div class="row">
+      <!-- Número -->
+      <div class="col-md-6">
+        <label th:for="${prefix + '.numCalle'}" class="form-label">Número</label>
+        <input type="text"
+              th:field="*{__${prefix}__.numCalle}"
+              class="form-control"
+              th:id="${prefix + '.numCalle'}"
+              required
+              readonly>
+        <div class="invalid-feedback">El número de la calle es obligatorio</div>
+        <div class="d-block" th:if="${#fields.hasErrors(prefix + '.numCalle')}" th:errors="*{__${prefix}__.numCalle}"></div>
+      </div>
+      <!-- Código Postal -->
+      <div class="col-md-6">
+        <label th:for="${prefix + '.codigoPostal'}" class="form-label">Código Postal</label>
+        <input type="text"
+               th:field="*{__${prefix}__.codigoPostal}"
+               class="form-control"
+               th:id="${prefix + '.codigoPostal'}"
+               required
+               readonly>
+        <div class="invalid-feedback">El código postal es obligatorio</div>
+        <div class="d-block" th:if="${#fields.hasErrors(prefix + '.codigoPostal')}" th:errors="*{__${prefix}__.codigoPostal}"></div>
+      </div>
+    </div>
+  
+    <!-- Latitud y Longitud (ocultas) -->
+    <input type="hidden" th:field="*{__${prefix}__.latitud}" th:id="${prefix + '.latitud'}">
+    <input type="hidden" th:field="*{__${prefix}__.longitud}" th:id="${prefix + '.longitud'}">
+</div>  

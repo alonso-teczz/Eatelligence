@@ -6,14 +6,14 @@
       <!-- Formulario de usuario -->
       <div class="container-usuario mostrar">
         <form id="form-usuario" th:action="@{/validClientReg}" th:object="${registroUsuario}" method="post" class="form-registro">
-          <div th:replace="fragments/user/regUserBase :: userBaseFields"></div>
+          <div th:replace="fragments/user/regUserBase :: clientUserFields"></div>
         </form>
       </div>
 
       <!-- Formulario de restaurante (oculto al inicio) -->
       <div class="container-restaurante">
         <form id="form-restaurante" th:action="@{/validRestaurantReg}" th:object="${registroRestaurante}" method="post" class="form-registro">
-          <div th:replace="fragments/user/regUserBase :: userBaseFields"></div>
+          <div th:replace="fragments/user/regUserBase :: restaurantUserFields('propietario')"></div>
           <div th:replace="fragments/user/regRestaurante :: restaurantFields"></div>
         </form>
       </div>

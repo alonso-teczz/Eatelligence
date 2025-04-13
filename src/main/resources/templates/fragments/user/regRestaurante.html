@@ -11,13 +11,12 @@
         <div id="contenido-acordeon-restaurante" class="accordion-collapse collapse show"
              aria-labelledby="headingRestaurante" data-bs-parent="#acordeon-restaurante">
           <div class="accordion-body">
-            
             <!-- Nombre comercial -->
             <div class="mb-3">
               <label for="nombreComercial" class="form-label">Nombre comercial</label>
               <input type="text" th:field="*{nombreComercial}" class="form-control" id="nombreComercial"
-                     placeholder="Ej. Restaurante La Parrilla" minlength="6" pattern=".{6,}">
-              <div class="invalid-feedback">Por favor, introduce un nombre válido (mínimo 6 caracteres).</div>
+                     placeholder="Ej. Restaurante La Parrilla" minlength="6" maxlength="50" pattern=".{6,}" required>
+              <div class="invalid-feedback">El nombre comercial debe tener al menos 6 caracteres</div>
               <div class="d-block" th:if="${#fields.hasErrors('nombreComercial')}" th:errors="*{nombreComercial}"></div>
             </div>
   
@@ -30,7 +29,22 @@
               <div class="invalid-feedback">La descripción debe tener al menos 6 caracteres.</div>
               <div class="d-block" th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></div>
             </div>
-  
+            
+            <!-- Teléfono fijo -->
+            <div class="mb-3">
+              <label for="telefonoFijo" class="form-label">Teléfono fijo (opcional)</label>
+              <input type="text" th:field="*{telefonoFijo}" class="form-control" id="telefonoFijo"
+                    pattern="^[89]\\d{8}$" placeholder="Ej. 980213188">
+              <div class="invalid-feedback">El teléfono móvil debe tener 9 dígitos y empezar por 8 ó 9</div>
+              <div class="d-block" th:if="${#fields.hasErrors('telefonoFijo')}" th:errors="*{telefonoFijo}"></div>
+            </div>
+
+            <!-- Dirección del restaurante -->
+            <hr class="my-4">
+            <h5 class="mt-4 mb-3 border-bottom pb-2 text-success fw-semibold">
+              Dirección del restaurante
+            </h5>            
+            <div th:replace="fragments/user/direccion :: direccionForm('direccionRestaurante')"></div>
           </div>
         </div>
       </div>

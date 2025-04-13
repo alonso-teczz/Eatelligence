@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.alonso.eatelligence.model.dto.ClienteRegistroDTO;
 import com.alonso.eatelligence.model.dto.RestauranteRegistroDTO;
-import com.alonso.eatelligence.model.embed.Direccion;
+import com.alonso.eatelligence.model.entity.Direccion;
 import com.alonso.eatelligence.model.entity.Restaurante;
 import com.alonso.eatelligence.model.entity.Usuario;
 import com.alonso.eatelligence.repository.UsuarioRepository;
@@ -33,33 +33,58 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     public Usuario clientDTOtoEntity(ClienteRegistroDTO cliente) {
-        return Usuario.builder()
+        Usuario usuario = Usuario.builder()
+            .username(cliente.getUsername())
             .nombre(cliente.getNombre())
+            .apellidos(cliente.getApellidos())
             .email(cliente.getEmail())
-            .telefono(cliente.getTelefono())
-            .direccion(
-                Direccion.builder()
-                .calle(cliente.getCalle())
-                .numCalle(cliente.getNumCalle())
-                .ciudad(cliente.getCiudad())
-                .provincia(cliente.getProvincia())
-                .codigoPostal(cliente.getCodigoPostal())
-                .latitud(cliente.getLatitud())
-                .longitud(cliente.getLongitud())
-                .build()
-            )
-            .contrasena(this.encodePassword(cliente.getContrasena()))
-            // .activo(true)
+            .telefonoMovil(cliente.getTelefonoMovil())
+            .password(this.encodePassword(cliente.getPassword()))
             .build();
+
+        if (cliente.getDireccion() != null) {
+            usuario.getDirecciones().add(
+                Direccion.builder()
+                .calle(cliente.getDireccion().getCalle())
+                .numCalle(cliente.getDireccion().getNumCalle())
+                .ciudad(cliente.getDireccion().getCiudad())
+                .provincia(cliente.getDireccion().getProvincia())
+                .codigoPostal(cliente.getDireccion().getCodigoPostal())
+                .latitud(cliente.getDireccion().getLatitud())
+                .longitud(cliente.getDireccion().getLongitud())
+                .usuario(usuario)
+                .build()
+            );
+        }
+
+        return usuario;
     }
 
+
     public Restaurante restDTOtoEntity(RestauranteRegistroDTO restaurante) {
-        return Restaurante.builder()
-            .propietario(this.clientDTOtoEntity(restaurante))
+        Restaurante restauranteEntity = Restaurante.builder()
+            .propietario(this.clientDTOtoEntity(restaurante.getPropietario()))
             .nombreComercial(restaurante.getNombreComercial())
             .descripcion(restaurante.getDescripcion())
+            .telefonoFijo(restaurante.getTelefonoFijo())
+            .direccion(
+                Direccion.builder()
+                .calle(restaurante.getDireccionRestaurante().getCalle())
+                .numCalle(restaurante.getDireccionRestaurante().getNumCalle())
+                .ciudad(restaurante.getDireccionRestaurante().getCiudad())
+                .provincia(restaurante.getDireccionRestaurante().getProvincia())
+                .codigoPostal(restaurante.getDireccionRestaurante().getCodigoPostal())
+                .latitud(restaurante.getDireccionRestaurante().getLatitud())
+                .longitud(restaurante.getDireccionRestaurante().getLongitud())
+                .build()
+            )
             .build();
-    }    
+
+        restauranteEntity.getDireccion().setRestaurante(restauranteEntity);
+
+        return restauranteEntity;
+    }
+      
 
     @Override
     public Usuario save(Usuario usuario) {
@@ -88,8 +113,8 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public boolean existsByNombre(String nombre) {
-        return this.usuarioRepository.existsByNombre(nombre);
+    public boolean existsByUsername(String nombre) {
+        return this.usuarioRepository.existsByUsername(nombre);
     }
 
 }

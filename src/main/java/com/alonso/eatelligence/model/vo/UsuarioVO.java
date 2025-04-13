@@ -3,7 +3,6 @@ package com.alonso.eatelligence.model.vo;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.alonso.eatelligence.model.embed.Direccion;
 import com.alonso.eatelligence.model.entity.Pedido;
 import com.alonso.eatelligence.model.entity.Rol;
 
@@ -20,19 +19,23 @@ public class UsuarioVO {
 
     private Long id;
 
+    private String username;
+
     private String nombre;
+
+    private String apellidos;
 
     private String email;
 
-    private String telefono;
-
-    private Direccion direccion;
+    private String telefonoMovil;
 
     private String contrasena;
 
-    private Rol rol;
-
     private boolean activo;
+    
+    private List<DireccionVO> direcciones;
+
+    private Rol rol;
 
     private LocalDateTime fechaRegistro;
 

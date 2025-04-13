@@ -43,6 +43,13 @@ public class Restaurante {
     @Column(length = 500)
     private String descripcion;
 
+    @Column
+    private String telefonoFijo;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "direccion_id", nullable = false)
+    private Direccion direccion;
+
     @ElementCollection
     @CollectionTable(name = "horarios", joinColumns = @JoinColumn(name = "restaurante_id"))
     private List<Horario> horarios;
