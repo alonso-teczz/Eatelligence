@@ -10,31 +10,81 @@ document.addEventListener("DOMContentLoaded", function () {
 
   let timeout;
 
+
   /**
-   * Sincroniza los campos de un formulario origen con los campos
-   * de un formulario destino. La sincronizaci n se hace por coincidencia
-   * de sufijo en el nombre del campo. Si el nombre del campo del formulario
-   * origen comienza por "propietario." o "direccionRestaurante.", se
-   * quita ese prefijo antes de buscar el campo en el formulario destino.
-   * @param {HTMLFormElement} origen Formulario origen que contiene los
-   *   campos que se van a sincronizar.
-   * @param {HTMLFormElement} destino Formulario destino que contendr  los
-   *   campos sincronizados.
+   * Sincroniza los campos de dos formularios: origen y destino.
+   * - Los campos de dirección (calle, numCalle, ciudad, provincia, código postal) se sincronizan
+   *   entre los prefijos "direccion." y "propietario.direccion.".
+   * - El campo repeatPass se copia directo por ID.
+   * - La visibilidad del campo de contraseña se sincroniza.
+   * - El resto de campos se sincronizan eliminando el prefijo "propietario." si lo tienen.
+   * @param {HTMLElement} origen - El formulario de origen.
+   * @param {HTMLElement} destino - El formulario de destino.
    */
   function sincronizarCampos(origen, destino) {
-    const inputsOrigen = origen.querySelectorAll("input, textarea");
-
+    const camposDireccion = ["calle", "numCalle", "ciudad", "provincia", "codigoPostal"];
+    const inputsOrigen = origen.querySelectorAll("input, textarea, select");
+  
     inputsOrigen.forEach(inputOrigen => {
-      const name = inputOrigen.name;
-      if (!name) return;
-
-      // Normaliza el nombre del campo (quita propietario. o direccionRestaurante.)
-      const nombreBase = name.replace(/^propietario\.|^direccionRestaurante\./, "");
-
-      // Busca en destino por coincidencia de sufijo
-      const inputDestino = destino.querySelector(`[name$=".${nombreBase}"]`);
+      const nameOrigen = inputOrigen.name;
+      if (!nameOrigen) return;
+  
+      const valor = inputOrigen.value;
+  
+      // Campo repeatPass (ID igual en ambos)
+      if (inputOrigen.id === "repeatPass") {
+        const inputDestino = destino.querySelector("#repeatPass");
+        if (inputDestino) {
+          inputDestino.value = valor;
+          copiarEstadoValidacion(inputOrigen, inputDestino);
+        }
+        return;
+      }
+  
+      // Detectar si es campo de dirección
+      const campoDireccion = camposDireccion.find(c => nameOrigen.endsWith("." + c));
+      if (campoDireccion) {
+        const nombreBase = nameOrigen.replace(/^direccion\.|^propietario\.direccion\./, "");
+        const inputDestino = Array.from(destino.querySelectorAll("input"))
+          .find(input => input.name.endsWith("." + nombreBase) && (input.name.startsWith("direccion.") || input.name.startsWith("propietario.direccion.")));
+        if (inputDestino) {
+          inputDestino.value = valor;
+          copiarEstadoValidacion(inputOrigen, inputDestino);
+        }
+        return;
+      }
+  
+      // Campos normales
+      const nombreBase = nameOrigen.replace(/^propietario\./, "");
+      const inputDestino = Array.from(destino.querySelectorAll("input, textarea"))
+        .find(input => input.name === nombreBase || input.name.endsWith("." + nombreBase));
+  
       if (inputDestino) {
-        inputDestino.value = inputOrigen.value;
+        inputDestino.value = valor;
+        copiarEstadoValidacion(inputOrigen, inputDestino);
+      }
+    });
+  }
+  
+  function copiarEstadoValidacion(inputOrigen, inputDestino) {
+    // Copiar clases de validación
+    inputDestino.classList.remove("is-valid", "is-invalid");
+    if (inputOrigen.classList.contains("is-valid")) inputDestino.classList.add("is-valid");
+    if (inputOrigen.classList.contains("is-invalid")) inputDestino.classList.add("is-invalid");
+  
+    // Copiar contenido de feedback dinámico si tienen mismo ID base (por ejemplo: username-feedback-success)
+    const feedbackTipos = ["success", "error"];
+    feedbackTipos.forEach(tipo => {
+      const idOrigen = inputOrigen.id ? `${inputOrigen.id}-feedback-${tipo}` : null;
+      const idDestino = inputDestino.id ? `${inputDestino.id}-feedback-${tipo}` : null;
+  
+      if (idOrigen && idDestino) {
+        const msgOrigen = document.getElementById(idOrigen);
+        const msgDestino = document.getElementById(idDestino);
+        if (msgOrigen && msgDestino) {
+          msgDestino.innerText = msgOrigen.innerText;
+          msgDestino.className = msgOrigen.className; // mantiene clases como d-none
+        }
       }
     });
   }
@@ -50,6 +100,13 @@ document.addEventListener("DOMContentLoaded", function () {
    *   de restaurante o de usuario.
    */
   function toggleFormularios(esRestaurante) {
+    const formularioVisible = formUsuario.classList.contains("mostrar") ? formUsuario : formRestaurante;
+    const formularioOculto = esRestaurante ? formRestaurante : formUsuario;
+  
+    // Siempre sincroniza del formulario visible al nuevo que se va a mostrar
+    sincronizarCampos(formularioVisible, formularioOculto);
+  
+    // Oculta ambos
     formUsuario.classList.remove("mostrar");
     formRestaurante.classList.remove("mostrar");
     containerUsuario.classList.remove("mostrar");
@@ -59,8 +116,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const botonAcordeon = document.querySelector(".accordion-button");
   
     if (esRestaurante) {
-      sincronizarCampos(formUsuario, formRestaurante);
-  
       formRestaurante.classList.add("mostrar");
       containerRestaurante.classList.add("mostrar");
   
@@ -68,9 +123,9 @@ document.addEventListener("DOMContentLoaded", function () {
       botonAcordeon.classList.add("disabled");
       botonAcordeon.setAttribute("aria-disabled", "true");
       botonAcordeon.style.pointerEvents = "none";
-    } else {
-      sincronizarCampos(formRestaurante, formUsuario);
   
+      configurarTogglePassword(formRestaurante);
+    } else {
       formUsuario.classList.add("mostrar");
       containerUsuario.classList.add("mostrar");
   
@@ -79,10 +134,9 @@ document.addEventListener("DOMContentLoaded", function () {
       botonAcordeon.style.pointerEvents = "auto";
   
       new bootstrap.Collapse(acordeonContenido, { toggle: false }).hide();
-    }
   
-    const formActivo = esRestaurante ? formRestaurante : formUsuario;
-    configurarTogglePassword(formActivo);
+      configurarTogglePassword(formUsuario);
+    }
   }  
   
   /**
@@ -175,13 +229,79 @@ document.addEventListener("DOMContentLoaded", function () {
           .catch(err => console.error("Error al obtener sugerencias:", err));
       }, 300);
     });
-  }     
+  }
+
+  function configurarComprobacionUsername() {
+    const inputs = [document.getElementById("username"), document.getElementById("propietario.username")];
+  
+    inputs.forEach(input => {
+      if (!input) return;
+  
+      input.addEventListener("input", () => {
+        const username = input.value.trim();
+  
+        const successFeedback = document.getElementById(`${input.id}-feedback-success`);
+        const errorFeedback = document.getElementById(`${input.id}-feedback-error`);
+  
+        // Ocultar feedback si el username es demasiado corto
+        if (username.length < 6) {
+          ocultarFeedback(input, successFeedback, errorFeedback);
+          return;
+        }
+  
+        fetch(`/api/users/exists?username=${encodeURIComponent(username)}`)
+          .then(res => res.json())
+          .then(existe => {
+            if (existe) {
+              mostrarError(input, errorFeedback, successFeedback);
+            } else {
+              mostrarSuccess(input, successFeedback, errorFeedback);
+            }
+          })
+          .catch(err => {
+            console.error("Error al verificar username", err);
+            ocultarFeedback(input, successFeedback, errorFeedback);
+          });
+      });
+    });
+  
+    function mostrarError(input, error, success) {
+      input.classList.add("is-invalid");
+      input.classList.remove("is-valid");
+      if (error) error.classList.remove("d-none");
+      if (success) success.classList.add("d-none");
+    
+      // Oculta feedback estático para evitar duplicado
+      const staticMsgErr = input.parentElement.querySelector(".validation-static");
+      if (staticMsgErr) staticMsgErr.classList.add("d-none");
+    }
+    
+    function mostrarSuccess(input, success, error) {
+      input.classList.remove("is-invalid");
+      input.classList.add("is-valid");
+      if (success) success.classList.remove("d-none");
+      if (error) error.classList.add("d-none");
+    
+      const staticMsgErr = input.parentElement.querySelector(".validation-static");
+      if (staticMsgErr) staticMsgErr.classList.add("d-none");
+    }
+    
+    function ocultarFeedback(input, success, error) {
+      input.classList.remove("is-valid", "is-invalid");
+      if (success) success.classList.add("d-none");
+      if (error) error.classList.add("d-none");
+    
+      const staticMsgErr = input.parentElement.querySelector(".validation-static");
+      if (staticMsgErr) staticMsgErr.classList.remove("d-none");
+    }    
+  }  
   
   configurarAutocompletadoDireccion(formUsuario, "direccion");
   configurarAutocompletadoDireccion(formRestaurante, "propietario.direccion");
   configurarAutocompletadoDireccion(formRestaurante, "direccionRestaurante");
   toggleFormularios(checkbox.checked);
   configurarTogglePassword(checkbox.checked ? formRestaurante : formUsuario);
+  configurarComprobacionUsername();
 
   checkbox.addEventListener("change", () => {
     toggleFormularios(checkbox.checked);
@@ -195,14 +315,15 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });  
   
-  btnRegistro?.addEventListener("click", () => {
+  btnRegistro?.addEventListener("click", async () => {
     const formActivo = document.querySelector(".form-registro.mostrar");
     if (!formActivo) return;
-
+  
     let valido = true;
-    const prefix = formActivo.id === "form-restaurante" ? "propietario" : "";
-    const direccionPrefix = formActivo.id === "form-restaurante" ? "direccionRestaurante" : "direccion";
-
+    const esRestaurante = formActivo.id === "form-restaurante";
+    const prefix = esRestaurante ? "propietario" : "";
+    const direccionPrefix = esRestaurante ? "propietario.direccion" : "direccion";
+  
     const campos = {
       nombre: formActivo.querySelector(`[name$="${prefix ? prefix + ".nombre" : "nombre"}"]`),
       apellidos: formActivo.querySelector(`[name$="${prefix ? prefix + ".apellidos" : "apellidos"}"]`),
@@ -218,20 +339,28 @@ document.addEventListener("DOMContentLoaded", function () {
       codigoPostal: formActivo.querySelector(`[name$="${direccionPrefix}.codigoPostal"]`)
     };
 
-    Object.values(campos).forEach(input => input?.classList.remove("is-invalid"));
-
+    const direccionRestaurante = {
+      calle: formRestaurante.querySelector('[name="direccionRestaurante.calle"]'),
+      ciudad: formRestaurante.querySelector('[name="direccionRestaurante.ciudad"]'),
+      provincia: formRestaurante.querySelector('[name="direccionRestaurante.provincia"]'),
+      numCalle: formRestaurante.querySelector('[name="direccionRestaurante.numCalle"]'),
+      codigoPostal: formRestaurante.querySelector('[name="direccionRestaurante.codigoPostal"]')
+    };
+    
+    [...Object.values(campos), ...Object.values(direccionRestaurante)].forEach(input => input?.classList.remove("is-invalid"));
+    
+    // Validar campos principales
     for (const [key, input] of Object.entries(campos)) {
       if (!input) continue;
       const valor = input.value.trim();
-    
-      // Validación común: campo vacío
+      
       if (!valor) {
         input.classList.add("is-invalid");
         input.focus();
         valido = false;
         break;
       }
-    
+  
       switch (key) {
         case "nombre":
           if (valor.length < 3 || valor.length > 20) {
@@ -240,31 +369,47 @@ document.addEventListener("DOMContentLoaded", function () {
             valido = false;
           }
           break;
-    
-        case "apellidos":
-          if (valor.length < 6 || valor.length > 30) {
+          case "apellidos":
+            if (valor.length < 6 || valor.length > 30) {
             input.classList.add("is-invalid");
             input.focus();
             valido = false;
           }
           break;
-    
         case "username":
           if (valor.length < 6 || valor.length > 20) {
             input.classList.add("is-invalid");
             input.focus();
             valido = false;
+          } else {
+            try {
+              const existe = await fetch(`/api/users/exists?username=${encodeURIComponent(valor)}`)
+                .then(res => res.json());
+        
+              if (existe) {
+                input.classList.add("is-invalid");
+                input.focus();
+        
+                const feedback = document.getElementById(`${input.id}-feedback-error`);
+                if (feedback) {
+                  feedback.classList.remove("d-none");
+                }
+        
+                valido = false;
+              }
+            } catch (err) {
+              console.error("Error al validar username:", err);
+              valido = false;
+            }
           }
           break;
-    
         case "email":
           if (!/^\S+@\S+\.\S+$/.test(valor)) {
             input.classList.add("is-invalid");
-            input.focus();
-            valido = false;
-          }
-          break;
-    
+          input.focus();
+          valido = false;
+        }
+        break;
         case "password":
           if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(valor)) {
             input.classList.add("is-invalid");
@@ -272,7 +417,6 @@ document.addEventListener("DOMContentLoaded", function () {
             valido = false;
           }
           break;
-    
         case "repeatPass":
           if (valor !== campos.password.value) {
             input.classList.add("is-invalid");
@@ -280,7 +424,6 @@ document.addEventListener("DOMContentLoaded", function () {
             valido = false;
           }
           break;
-    
         case "telefonoMovil":
           if (!/^[67]\d{8}$/.test(valor)) {
             input.classList.add("is-invalid");
@@ -289,22 +432,28 @@ document.addEventListener("DOMContentLoaded", function () {
           }
           break;
       }
-    
+        
       if (!valido) break;
-    }    
-
+    }
+    
+    // Validaciones extra restaurante
     if (valido && checkbox.checked) {
-      const nombreCom = formActivo.querySelector('[name$="nombreComercial"]');
-      const desc = formActivo.querySelector('[name$="descripcion"]');
+      const nombreComercial = formActivo.querySelector('[name$="nombreComercial"]');
+      const descripcion = formActivo.querySelector('[name$="descripcion"]');
+      const emailEmpresa = formActivo.querySelector('[name$="emailEmpresa"]');
       const telFijo = formActivo.querySelector('[name$="telefonoFijo"]');
-
-      if (!nombreCom || nombreCom.value.trim().length < 6) {
-        nombreCom.classList.add("is-invalid");
-        nombreCom.focus();
+  
+      if (!nombreComercial || nombreComercial.value.trim().length < 6) {
+        nombreComercial.classList.add("is-invalid");
+        nombreComercial.focus();
         valido = false;
-      } else if (!desc || desc.value.trim().length < 6) {
-        desc.classList.add("is-invalid");
-        desc.focus();
+      } else if (!descripcion || descripcion.value.trim().length < 6) {
+        descripcion.classList.add("is-invalid");
+        descripcion.focus();
+        valido = false;
+      } else if (emailEmpresa && emailEmpresa.value.trim() !== "" && !/^\S+@\S+\.\S+$/.test(emailEmpresa.value)) {
+        emailEmpresa.classList.add("is-invalid");
+        emailEmpresa.focus();
         valido = false;
       } else if (telFijo && telFijo.value && !/^[89]\d{8}$/.test(telFijo.value)) {
         telFijo.classList.add("is-invalid");
@@ -313,8 +462,22 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
 
+    // Validar dirección del restaurante
+    if (valido && checkbox.checked) {
+      for (const input of Object.values(direccionRestaurante)) {
+        if (!input) continue;
+        const valor = input.value.trim();
+        if (!valor) {
+          input.classList.add("is-invalid");
+          input.focus();
+          valido = false;
+          break;
+        }
+      }
+    }
+  
     if (valido) {
       formActivo.requestSubmit();
     }
-  });
+  });  
 });

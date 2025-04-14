@@ -17,7 +17,7 @@
               <input type="text" th:field="*{nombreComercial}" class="form-control" id="nombreComercial"
                      placeholder="Ej. Restaurante La Parrilla" minlength="6" maxlength="50" pattern=".{6,}" required>
               <div class="invalid-feedback">El nombre comercial debe tener al menos 6 caracteres</div>
-              <div class="d-block" th:if="${#fields.hasErrors('nombreComercial')}" th:errors="*{nombreComercial}"></div>
+              <div class="d-block invalid-feedback fs-6 mt-2 ms-1" th:if="${#fields.hasErrors('nombreComercial')}" th:errors="*{nombreComercial}"></div>
             </div>
   
             <!-- Descripción -->
@@ -27,16 +27,33 @@
                         placeholder="Describe brevemente tu restaurante, tipo de comida, ambiente, etc."
                         minlength="6"></textarea>
               <div class="invalid-feedback">La descripción debe tener al menos 6 caracteres.</div>
-              <div class="d-block" th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></div>
+              <div class="d-block invalid-feedback fs-6 mt-2 ms-1" th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></div>
             </div>
-            
-            <!-- Teléfono fijo -->
-            <div class="mb-3">
-              <label for="telefonoFijo" class="form-label">Teléfono fijo (opcional)</label>
-              <input type="text" th:field="*{telefonoFijo}" class="form-control" id="telefonoFijo"
-                    pattern="^[89]\\d{8}$" placeholder="Ej. 980213188">
-              <div class="invalid-feedback">El teléfono móvil debe tener 9 dígitos y empezar por 8 ó 9</div>
-              <div class="d-block" th:if="${#fields.hasErrors('telefonoFijo')}" th:errors="*{telefonoFijo}"></div>
+          
+            <div class="row">
+              <!-- Email de empresa (opcional) -->
+              <div class="col-md-6">
+                <label for="emailEmpresa" class="form-label">Correo de empresa (opcional)</label>
+                <input type="email"
+                      th:field="*{emailEmpresa}"
+                      class="form-control"
+                      th:id="${emailEmpresa}"
+                      placeholder="Ej. laparrilla@gmail.com"
+                      pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$">
+                <div class="invalid-feedback">Introduce un correo válido</div>
+                <div class="d-block invalid-feedback fs-6 mt-2 ms-1"
+                    th:if="${#fields.hasErrors('emailEmpresa')}"
+                    th:errors="*{emailEmpresa}"></div>
+              </div>
+              
+              <!-- Teléfono fijo -->
+              <div class="col-md-6 mb-3">
+                <label for="telefonoFijo" class="form-label">Teléfono fijo (opcional)</label>
+                <input type="text" th:field="*{telefonoFijo}" class="form-control" id="telefonoFijo"
+                      pattern="^[89]\\d{8}$" placeholder="Ej. 980213188">
+                <div class="invalid-feedback">El teléfono móvil debe tener 9 dígitos y empezar por 8 ó 9</div>
+                <div class="d-block invalid-feedback fs-6 mt-2 ms-1" th:if="${#fields.hasErrors('telefonoFijo')}" th:errors="*{telefonoFijo}"></div>
+              </div>
             </div>
 
             <!-- Dirección del restaurante -->

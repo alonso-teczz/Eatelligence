@@ -12,14 +12,15 @@ import com.alonso.eatelligence.model.dto.RestauranteRegistroDTO;
 import com.alonso.eatelligence.model.entity.Direccion;
 import com.alonso.eatelligence.model.entity.Restaurante;
 import com.alonso.eatelligence.model.entity.Usuario;
-import com.alonso.eatelligence.repository.UsuarioRepository;
-import com.alonso.eatelligence.service.UsuarioService;
+import com.alonso.eatelligence.repository.IRestauranteRepository;
+import com.alonso.eatelligence.service.IEntitableClient;
+import com.alonso.eatelligence.service.IRestauranteService;
 
 @Service
-public class UsuarioServiceImpl implements UsuarioService {
+public class ResturanteServiceImp implements IRestauranteService, IEntitableClient {
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private IRestauranteRepository restauranteRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -32,6 +33,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         return this.passwordEncoder.matches(rawPassword, hashedPassword);
     }
 
+    @Override
     public Usuario clientDTOtoEntity(ClienteRegistroDTO cliente) {
         Usuario usuario = Usuario.builder()
             .username(cliente.getUsername())
@@ -60,13 +62,13 @@ public class UsuarioServiceImpl implements UsuarioService {
         return usuario;
     }
 
-
     public Restaurante restDTOtoEntity(RestauranteRegistroDTO restaurante) {
         Restaurante restauranteEntity = Restaurante.builder()
             .propietario(this.clientDTOtoEntity(restaurante.getPropietario()))
             .nombreComercial(restaurante.getNombreComercial())
             .descripcion(restaurante.getDescripcion())
             .telefonoFijo(restaurante.getTelefonoFijo())
+            .emailEmpresa(restaurante.getEmailEmpresa())
             .direccion(
                 Direccion.builder()
                 .calle(restaurante.getDireccionRestaurante().getCalle())
@@ -84,37 +86,30 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         return restauranteEntity;
     }
-      
 
     @Override
-    public Usuario save(Usuario usuario) {
-        return this.usuarioRepository.save(usuario);
+    public Optional<Restaurante> findById(Long id) {
+        return this.restauranteRepository.findById(id);
     }
 
     @Override
-    public void update(Usuario usuario) {
-        this.usuarioRepository.save(usuario);
+    public List<Restaurante> getAllRestaurants() {
+        return this.restauranteRepository.findAll();
     }
 
     @Override
-    public Optional<Usuario> findById(Long id) {
-        return this.usuarioRepository.findById(id);
+    public Restaurante save(Restaurante restaurante) {
+        return this.restauranteRepository.save(restaurante);
     }
-
 
     @Override
-    public List<Usuario> getAllUsers() {
-        return this.usuarioRepository.findAll();
+    public void update(Restaurante restaurante) {
+        this.restauranteRepository.save(restaurante);
     }
-
+    
     @Override
     public void deleteById(Long id) {
-        usuarioRepository.deleteById(id);
+        this.restauranteRepository.deleteById(id);
     }
-
-    @Override
-    public boolean existsByUsername(String nombre) {
-        return this.usuarioRepository.existsByUsername(nombre);
-    }
-
+    
 }

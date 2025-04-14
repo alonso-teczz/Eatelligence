@@ -35,16 +35,18 @@ public class Restaurante {
     @Column(nullable = false)
     private String nombreComercial;
 
-    @OneToOne(optional = false)
+    @OneToOne(optional = false, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "usuario_id", unique = true)
-    @EqualsAndHashCode.Exclude
-    private Usuario propietario;
+    private Usuario propietario;    
 
     @Column(length = 500)
     private String descripcion;
 
     @Column
     private String telefonoFijo;
+
+    @Column(nullable = false)
+    private String emailEmpresa;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "direccion_id", nullable = false)

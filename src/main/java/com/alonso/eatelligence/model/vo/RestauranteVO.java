@@ -16,4 +16,6 @@ public class RestauranteVO extends UsuarioVO {
     private String descripcion;
 
     private String telefonoFijo;
+
+    private String emailEmpresa;
 }

@@ -6,7 +6,7 @@
             <label for="nombre" class="form-label">Nombre</label>
             <input type="text" th:field="*{nombre}" class="form-control" id="nombre" required placeholder="Ej. Carlos" minlength="3" maxlength="20">
             <div class="invalid-feedback">El nombre es obligatorio y debe tener de 3 a 20 caracteres</div>
-          <div class="d-block" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
+          <div class="d-block invalid-feedback fs-6 mt-2 ms-1" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
         </div>
         
         <!-- Apellidos -->
@@ -14,7 +14,7 @@
           <label for="apellidos" class="form-label">Apellidos</label>
           <input type="text" th:field="*{apellidos}" class="form-control" id="apellidos" required placeholder="Ej. García Pérez" minlength="6" maxlength="30">
           <div class="invalid-feedback">Los apellidos son obligatorios y deben tener de 6 a 30 caracteres</div>
-          <div class="d-block" th:if="${#fields.hasErrors('apellidos')}" th:errors="*{apellidos}"></div>
+          <div class="d-block invalid-feedback fs-6 mt-2 ms-1" th:if="${#fields.hasErrors('apellidos')}" th:errors="*{apellidos}"></div>
         </div>
     </div>
     
@@ -22,9 +22,19 @@
         <!-- Username -->
         <div class="col-md-6">
           <label for="username" class="form-label">Nombre de usuario</label>
-          <input type="text" th:field="*{username}" class="form-control" id="username" required placeholder="Ej. carlosgp_98" minlength="6" maxlength="20">
-          <div class="invalid-feedback">El nombre de usuario es obligatorio y debe tener de 6 a 20 caracteres</div>
-          <div class="d-block" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+          <input type="text" th:field="*{username}" class="form-control" id="username"
+                 required placeholder="Ej. carlosgp_98" minlength="6" maxlength="20">
+          
+          <!-- Feedback dinámico -->
+          <div class="valid-feedback d-none" id="username-feedback-success">¡Nombre de usuario disponible!</div>
+          <div class="invalid-feedback d-none" id="username-feedback-error">Nombre de usuario no disponible</div>
+        
+          <!-- Feedback de validación de longitud -->
+          <div class="invalid-feedback validation-static">El nombre de usuario es obligatorio y debe tener de 6 a 20 caracteres</div>
+        
+          <div class="d-block invalid-feedback fs-6 mt-2 ms-1"
+               th:if="${#fields.hasErrors('username')}"
+               th:errors="*{username}"></div>
         </div>
 
         <!-- Email -->
@@ -38,7 +48,7 @@
                 pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
                 placeholder="Ej. carlos.garpe@gmail.com">
             <div class="invalid-feedback">Introduce un correo válido</div>
-            <div class="d-block" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+            <div class="d-block invalid-feedback fs-6 mt-2 ms-1" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
         </div>
     </div>  
 
@@ -54,7 +64,7 @@
               </span>
               <div class="invalid-feedback">La contraseña debe tener mínimo 8 caracteres, teniendo 1 letra mayúscula,1 letra minúscula, 1 número y 1 caracter especial</div>
             </div>
-            <div class="d-block" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+            <div class="d-block invalid-feedback fs-6 mt-2 ms-1" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
         </div>          
 
         <!-- Repetir contraseña -->
@@ -67,9 +77,9 @@
         <!-- Teléfono -->
         <div class="col-md-6">
             <label for="telefonoMovil" class="form-label">Teléfono</label>
-            <input type="text" th:field="*{telefonoMovil}" class="form-control" id="telefonoMovil" placeholder="Ej. 689907011" required pattern="^[67]\\d{8}$">
+            <input type="text" th:field="*{telefonoMovil}" class="form-control" id="telefonoMovil" placeholder="Ej. 689907011" required pattern="^[67]\d{8}$">
             <div class="invalid-feedback">El teléfono móvil debe tener 9 dígitos y empezar por 6 ó 7</div>
-            <div class="d-block" th:if="${#fields.hasErrors('telefonoMovil')}" th:errors="*{telefonoMovil}"></div>
+            <div class="d-block invalid-feedback fs-6 mt-2 ms-1" th:if="${#fields.hasErrors('telefonoMovil')}" th:errors="*{telefonoMovil}"></div>
         </div>
     </div>
 
@@ -94,7 +104,7 @@
           <input type="text" th:field="*{__${prefix}__.nombre}" class="form-control"
                  th:id="${prefix + '.nombre'}" required placeholder="Ej. Carlos"  minlength="3" maxlength="20">
           <div class="invalid-feedback">El nombre es obligatorio y debe tener de 3 a 20 caracteres</div>
-          <div class="d-block" th:if="${#fields.hasErrors(prefix + '.nombre')}" th:errors="*{__${prefix}__.nombre}"></div>
+          <div class="d-block invalid-feedback fs-6 mt-2 ms-1" th:if="${#fields.hasErrors(prefix + '.nombre')}" th:errors="*{__${prefix}__.nombre}"></div>
         </div>
     
         <!-- Apellidos -->
@@ -103,17 +113,26 @@
           <input type="text" th:field="*{__${prefix}__.apellidos}" class="form-control"
                  th:id="${prefix + '.apellidos'}" required placeholder="Ej. García Pérez" minlength="6" maxlength="30">
           <div class="invalid-feedback">Los apellidos son obligatorios y deben tener de 6 a 30 caracteres</div>
-          <div class="d-block" th:if="${#fields.hasErrors(prefix + '.apellidos')}" th:errors="*{__${prefix}__.apellidos}"></div>
+          <div class="d-block invalid-feedback fs-6 mt-2 ms-1" th:if="${#fields.hasErrors(prefix + '.apellidos')}" th:errors="*{__${prefix}__.apellidos}"></div>
         </div>
 
-      <!-- Username -->
-      <div class="col-md-6">
-        <label th:for="${prefix + '.username'}" class="form-label">Nombre de usuario</label>
-        <input type="text" th:field="*{__${prefix}__.username}" class="form-control"
-               th:id="${prefix + '.username'}" required placeholder="Ej. carlosgp_98" minlength="3" maxlength="20">
-        <div class="invalid-feedback">El nombre de usuario es obligatorio y debe tener de 6 a 20 caracteres</div>
-        <div class="d-block" th:if="${#fields.hasErrors(prefix + '.username')}" th:errors="*{__${prefix}__.username}"></div>
-      </div>
+        <!-- Username -->
+        <div class="col-md-6">
+          <label th:for="${prefix + '.username'}" class="form-label">Nombre de usuario</label>
+          <input type="text" th:field="*{__${prefix}__.username}" class="form-control"
+                 th:id="${prefix + '.username'}" required placeholder="Ej. carlosgp_98" minlength="6" maxlength="20">
+          
+          <!-- Feedback dinámico -->
+          <div class="valid-feedback d-none" th:id="${prefix + '.username-feedback-success'}">¡Nombre de usuario disponible!</div>
+          <div class="invalid-feedback d-none" th:id="${prefix + '.username-feedback-error'}">Nombre de usuario no disponible</div>
+        
+          <!-- Feedback de validación de longitud -->
+          <div class="invalid-feedback validation-static">El nombre de usuario es obligatorio y debe tener de 6 a 20 caracteres</div>
+        
+          <div class="d-block invalid-feedback fs-6 mt-2 ms-1"
+               th:if="${#fields.hasErrors(prefix + '.username')}"
+               th:errors="*{__${prefix}__.username}"></div>
+        </div>
 
       <!-- Email -->
       <div class="col-md-6">
@@ -121,7 +140,7 @@
         <input type="email" th:field="*{__${prefix}__.email}" class="form-control"
                th:id="${prefix + '.email'}" required placeholder="Ej. carlos.garpe@gmail.com" pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$">
         <div class="invalid-feedback">Introduce un correo válido</div>
-        <div class="d-block" th:if="${#fields.hasErrors(prefix + '.email')}" th:errors="*{__${prefix}__.email}"></div>
+        <div class="d-block invalid-feedback fs-6 mt-2 ms-1" th:if="${#fields.hasErrors(prefix + '.email')}" th:errors="*{__${prefix}__.email}"></div>
       </div>
     </div>
   
@@ -138,7 +157,7 @@
           </span>
           <div class="invalid-feedback">La contraseña debe tener mínimo 8 caracteres, teniendo 1 letra mayúscula,1 letra minúscula, 1 número y 1 caracter especial</div>
         </div>
-        <div class="d-block" th:if="${#fields.hasErrors(prefix + '.password')}" th:errors="*{__${prefix}__.password}"></div>
+        <div class="d-block invalid-feedback fs-6 mt-2 ms-1" th:if="${#fields.hasErrors(prefix + '.password')}" th:errors="*{__${prefix}__.password}"></div>
       </div>
   
       <!-- Repetir contraseña -->
@@ -152,10 +171,10 @@
       <div class="col-md-6">
         <label th:for="${prefix + '.telefonoMovil'}" class="form-label">Teléfono</label>
         <input type="text" th:field="*{__${prefix}__.telefonoMovil}" class="form-control"
-               th:id="${prefix + '.telefonoMovil'}" pattern="^[67]\\d{8}$"
+               th:id="${prefix + '.telefonoMovil'}" pattern="^[67]\d{8}$"
                placeholder="Ej. 612345678" required>
         <div class="invalid-feedback">El teléfono móvil debe tener 9 dígitos y empezar por 6 ó 7</div>
-        <div class="d-block" th:if="${#fields.hasErrors(prefix + '.telefonoMovil')}" th:errors="*{__${prefix}__.telefonoMovil}"></div>
+        <div class="d-block invalid-feedback fs-6 mt-2 ms-1" th:if="${#fields.hasErrors(prefix + '.telefonoMovil')}" th:errors="*{__${prefix}__.telefonoMovil}"></div>
       </div>
     </div>
 

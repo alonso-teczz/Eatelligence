@@ -1,6 +1,7 @@
 package com.alonso.eatelligence.model.dto;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -36,4 +37,8 @@ public class RestauranteRegistroDTO {
         message = "El teléfono móvil debe tener 9 dígitos y empezar por 8 ó 9"
     )
     private String telefonoFijo;
+
+    @NotBlank(message = "El correo electrónico es obligatorio")
+    @Email(message = "Introduce un correo válido")
+    private String emailEmpresa;
 }
