@@ -1,4 +1,8 @@
 <div th:fragment="direccionForm(prefix)">
+    <div class="alert alert-warning mt-2" th:if="${prefix != 'direccion' and prefix != 'direccionRestaurante'}">
+      <i class="bi bi-exclamation-triangle-fill me-1"></i>
+      La dirección del propietario no es obligatoria, pero si decides rellenarla, debes completarla entera.
+    </div>  
     <!-- Calle -->
     <div class="mb-3 input-autocomplete-wrapper">
       <label th:for="${prefix + '.calle'}" class="form-label">Calle</label>
@@ -7,7 +11,7 @@
              class="form-control"
              th:id="${prefix + '.calle'}"
              placeholder="Calle de Alcalá, 21, 28014 Madrid, España"
-             required>
+             th:attr="${prefix == 'direccion' || prefix == 'direccionRestaurante'} ? 'required' : null">
       <div class="autocomplete-dropdown" th:attr="data-dropdown=${prefix}"></div>
       <div class="invalid-feedback">La calle es obligatoria</div>
       <div class="d-block invalid-feedback fs-6 mt-2 ms-1" th:if="${#fields.hasErrors(prefix + '.calle')}" th:errors="*{__${prefix}__.calle}"></div>
@@ -22,7 +26,7 @@
         class="form-control"
         th:id="${prefix + '.ciudad'}"
         readonly
-        required>
+        th:attr="${prefix == 'direccion' || prefix == 'direccionRestaurante'} ? 'required' : null">
         <div class="invalid-feedback">La ciudad es obligatoria</div>
         <div class="d-block invalid-feedback fs-6 mt-2 ms-1" th:if="${#fields.hasErrors(prefix + '.ciudad')}" th:errors="*{__${prefix}__.ciudad}"></div>
       </div>
@@ -35,7 +39,7 @@
                  class="form-control"
                  th:id="${prefix + '.provincia'}"
                  readonly
-                 required>
+                 th:attr="${prefix == 'direccion' || prefix == 'direccionRestaurante'} ? 'required' : null">
                  <div class="invalid-feedback">La provincia es obligatoria</div>
           <div class="d-block invalid-feedback fs-6 mt-2 ms-1" th:if="${#fields.hasErrors(prefix + '.provincia')}" th:errors="*{__${prefix}__.provincia}"></div>
       </div>
@@ -49,7 +53,7 @@
               th:field="*{__${prefix}__.numCalle}"
               class="form-control"
               th:id="${prefix + '.numCalle'}"
-              required
+              th:attr="${prefix == 'direccion' || prefix == 'direccionRestaurante'} ? 'required' : null"
               readonly>
         <div class="invalid-feedback">El número de la calle es obligatorio</div>
         <div class="d-block invalid-feedback fs-6 mt-2 ms-1" th:if="${#fields.hasErrors(prefix + '.numCalle')}" th:errors="*{__${prefix}__.numCalle}"></div>
@@ -61,7 +65,7 @@
                th:field="*{__${prefix}__.codigoPostal}"
                class="form-control"
                th:id="${prefix + '.codigoPostal'}"
-               required
+               th:attr="${prefix == 'direccion' || prefix == 'direccionRestaurante'} ? 'required' : null"
                readonly>
         <div class="invalid-feedback">El código postal es obligatorio</div>
         <div class="d-block invalid-feedback fs-6 mt-2 ms-1" th:if="${#fields.hasErrors(prefix + '.codigoPostal')}" th:errors="*{__${prefix}__.codigoPostal}"></div>

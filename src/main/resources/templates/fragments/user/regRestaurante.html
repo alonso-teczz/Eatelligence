@@ -31,13 +31,14 @@
             </div>
           
             <div class="row">
-              <!-- Email de empresa (opcional) -->
+              <!-- Email de empresa -->
               <div class="col-md-6">
-                <label for="emailEmpresa" class="form-label">Correo de empresa (opcional)</label>
+                <label for="emailEmpresa" class="form-label">Correo de empresa</label>
                 <input type="email"
                       th:field="*{emailEmpresa}"
                       class="form-control"
                       th:id="${emailEmpresa}"
+                      required
                       placeholder="Ej. laparrilla@gmail.com"
                       pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$">
                 <div class="invalid-feedback">Introduce un correo válido</div>

@@ -1,4 +1,4 @@
-package com.alonso.eatelligence.service.impl;
+package com.alonso.eatelligence.service.imp;
 
 import java.util.List;
 import java.util.Optional;
@@ -41,7 +41,6 @@ public class UsuarioServiceImp implements IUsuarioService, IEntitableClient {
             .telefonoMovil(cliente.getTelefonoMovil())
             .password(this.encodePassword(cliente.getPassword()))
             .build();
-
 
         usuario.getDirecciones().add(
             Direccion.builder()

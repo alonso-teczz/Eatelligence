@@ -1,4 +1,4 @@
-package com.alonso.eatelligence.service.impl;
+package com.alonso.eatelligence.service.imp;
 
 import java.util.List;
 import java.util.Optional;

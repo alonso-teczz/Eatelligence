@@ -324,7 +324,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const prefix = esRestaurante ? "propietario" : "";
     const direccionPrefix = esRestaurante ? "propietario.direccion" : "direccion";
   
-    const campos = {
+    const camposUsuario = {
       nombre: formActivo.querySelector(`[name$="${prefix ? prefix + ".nombre" : "nombre"}"]`),
       apellidos: formActivo.querySelector(`[name$="${prefix ? prefix + ".apellidos" : "apellidos"}"]`),
       username: formActivo.querySelector(`[name$="${prefix ? prefix + ".username" : "username"}"]`),
@@ -347,14 +347,32 @@ document.addEventListener("DOMContentLoaded", function () {
       codigoPostal: formRestaurante.querySelector('[name="direccionRestaurante.codigoPostal"]')
     };
     
-    [...Object.values(campos), ...Object.values(direccionRestaurante)].forEach(input => input?.classList.remove("is-invalid"));
+    [...Object.values(camposUsuario), ...Object.values(direccionRestaurante)].forEach(input => input?.classList.remove("is-invalid"));
     
     // Validar campos principales
-    for (const [key, input] of Object.entries(campos)) {
+    for (const [key, input] of Object.entries(camposUsuario)) {
       if (!input) continue;
       const valor = input.value.trim();
       
       if (!valor) {
+        const isDirectionField = ["calle", "ciudad", "provincia", "numCalle", "codigoPostal"].includes(key);
+    
+        // Validación especial si es formulario de restaurante y el campo es de dirección del propietario
+        if (esRestaurante && isDirectionField) {
+          const camposDireccion = ["calle", "ciudad", "provincia", "numCalle", "codigoPostal"];
+          const someFilled = camposDireccion.some(campo => camposUsuario[campo]?.value.trim() !== "");
+          const allFilled = camposDireccion.every(campo => camposUsuario[campo]?.value.trim() !== "");
+    
+          if (someFilled && !allFilled) {
+            input.classList.add("is-invalid");
+            input.focus();
+            valido = false;
+            break;
+          }
+    
+          continue;
+        }
+    
         input.classList.add("is-invalid");
         input.focus();
         valido = false;
@@ -398,7 +416,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 valido = false;
               }
             } catch (err) {
-              console.error("Error al validar username:", err);
+              console.error("Error al validar el nombre de usuario:", err);
               valido = false;
             }
           }
@@ -418,7 +436,7 @@ document.addEventListener("DOMContentLoaded", function () {
           }
           break;
         case "repeatPass":
-          if (valor !== campos.password.value) {
+          if (valor !== camposUsuario.password.value) {
             input.classList.add("is-invalid");
             input.focus();
             valido = false;
@@ -438,10 +456,14 @@ document.addEventListener("DOMContentLoaded", function () {
     
     // Validaciones extra restaurante
     if (valido && checkbox.checked) {
-      const nombreComercial = formActivo.querySelector('[name$="nombreComercial"]');
-      const descripcion = formActivo.querySelector('[name$="descripcion"]');
-      const emailEmpresa = formActivo.querySelector('[name$="emailEmpresa"]');
-      const telFijo = formActivo.querySelector('[name$="telefonoFijo"]');
+      const camposRestaurante = {
+        nombreComercial: formActivo.querySelector('[name$="nombreComercial"]'),
+        descripcion: formActivo.querySelector('[name$="descripcion"]'),
+        emailEmpresa: formActivo.querySelector('[name$="emailEmpresa"]'),
+        telFijo: formActivo.querySelector('[name$="telefonoFijo"]')
+      };
+
+      [Object.values(camposRestaurante)].forEach(input => input?.classList.remove("is-invalid"));
   
       if (!nombreComercial || nombreComercial.value.trim().length < 6) {
         nombreComercial.classList.add("is-invalid");
@@ -451,7 +473,7 @@ document.addEventListener("DOMContentLoaded", function () {
         descripcion.classList.add("is-invalid");
         descripcion.focus();
         valido = false;
-      } else if (emailEmpresa && emailEmpresa.value.trim() !== "" && !/^\S+@\S+\.\S+$/.test(emailEmpresa.value)) {
+      } else if (!emailEmpresa || !/^\S+@\S+\.\S+$/.test(emailEmpresa.value.trim())) {
         emailEmpresa.classList.add("is-invalid");
         emailEmpresa.focus();
         valido = false;

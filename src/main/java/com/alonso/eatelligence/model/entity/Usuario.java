@@ -67,7 +67,7 @@ public class Usuario {
 
     @Column(nullable = false, columnDefinition = "TINYINT(1)")
     @Builder.Default
-    private boolean activo = true;
+    private boolean verificado = false;
 
     @Column
     @Builder.Default
