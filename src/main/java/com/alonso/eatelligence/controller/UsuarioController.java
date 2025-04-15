@@ -157,13 +157,18 @@ public class UsuarioController {
         ra.addFlashAttribute("correoEmpresaFallido", correoRestauranteFallido);
         ra.addFlashAttribute("correoPropietarioFallido", correoPropietarioFallido);
         
-        return "redirect:/registro-exitoso";
+        return "redirect:/registroExitoso";
     }
 
     @GetMapping("/api/users/exists")
     @ResponseBody
     public boolean comprobarUsername(@RequestParam String username) {
         return this.usuarioService.existsByUsername(username);
+    }
+
+    @GetMapping("/registroExitoso")
+    public String mostrarRegistroExitoso() {
+        return "registroExitoso";
     }
 
 }
