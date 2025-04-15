@@ -40,7 +40,7 @@
                       th:id="${emailEmpresa}"
                       required
                       placeholder="Ej. laparrilla@gmail.com"
-                      pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$">
+                      pattern="^[a-zA-Z0-9_.+\-]+@[a-zA-Z0-9\-]+\.[a-zA-Z0-9.]+$">
                 <div class="invalid-feedback">Introduce un correo válido</div>
                 <div class="d-block invalid-feedback fs-6 mt-2 ms-1"
                     th:if="${#fields.hasErrors('emailEmpresa')}"

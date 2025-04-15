@@ -59,8 +59,4 @@ public class VerificationTokenServiceImp implements IVerificationService, Tokeni
     public void delete(VerificationToken token) {
         this.tokenRepository.delete(token);
     }
-
-    public VerificationToken findLastestByUsername(String username) {
-        return this.tokenRepository.findLastestByUsername(username);
-    }
 }

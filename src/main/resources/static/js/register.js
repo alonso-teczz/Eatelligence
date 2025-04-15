@@ -454,16 +454,17 @@ document.addEventListener("DOMContentLoaded", function () {
       if (!valido) break;
     }
     
-    // Validaciones extra restaurante
     if (valido && checkbox.checked) {
       const camposRestaurante = {
-        nombreComercial: formActivo.querySelector('[name$="nombreComercial"]'),
-        descripcion: formActivo.querySelector('[name$="descripcion"]'),
-        emailEmpresa: formActivo.querySelector('[name$="emailEmpresa"]'),
-        telFijo: formActivo.querySelector('[name$="telefonoFijo"]')
+        nombreComercial: formActivo.querySelector('[name="nombreComercial"]'),
+        descripcion: formActivo.querySelector('[name="descripcion"]'),
+        emailEmpresa: formActivo.querySelector('[name="emailEmpresa"]'),
+        telFijo: formActivo.querySelector('[name="telefonoFijo"]')
       };
 
-      [Object.values(camposRestaurante)].forEach(input => input?.classList.remove("is-invalid"));
+      const { nombreComercial, descripcion, emailEmpresa, telFijo } = camposRestaurante;
+
+      [...Object.values(camposRestaurante)].forEach(input => input?.classList.remove("is-invalid"));
   
       if (!nombreComercial || nombreComercial.value.trim().length < 6) {
         nombreComercial.classList.add("is-invalid");
@@ -477,7 +478,7 @@ document.addEventListener("DOMContentLoaded", function () {
         emailEmpresa.classList.add("is-invalid");
         emailEmpresa.focus();
         valido = false;
-      } else if (telFijo && telFijo.value && !/^[89]\d{8}$/.test(telFijo.value)) {
+      } else if (!telFijo && telFijo.value && !/^[89]\d{8}$/.test(telFijo.value)) {
         telFijo.classList.add("is-invalid");
         telFijo.focus();
         valido = false;

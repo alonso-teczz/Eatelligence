@@ -45,7 +45,7 @@
                 class="form-control"
                 id="email"
                 required
-                pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
+                pattern="^[a-zA-Z0-9_.+\-]+@[a-zA-Z0-9\-]+\.[a-zA-Z0-9.]+$"
                 placeholder="Ej. carlos.garpe@gmail.com">
             <div class="invalid-feedback">Introduce un correo válido</div>
             <div class="d-block invalid-feedback fs-6 mt-2 ms-1" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
@@ -138,7 +138,7 @@
       <div class="col-md-6">
         <label th:for="${prefix + '.email'}" class="form-label">Correo electrónico</label>
         <input type="email" th:field="*{__${prefix}__.email}" class="form-control"
-               th:id="${prefix + '.email'}" required placeholder="Ej. carlos.garpe@gmail.com" pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$">
+               th:id="${prefix + '.email'}" required placeholder="Ej. carlos.garpe@gmail.com" pattern="^[a-zA-Z0-9_.+\-]+@[a-zA-Z0-9\-]+\.[a-zA-Z0-9.]+$">
         <div class="invalid-feedback">Introduce un correo válido</div>
         <div class="d-block invalid-feedback fs-6 mt-2 ms-1" th:if="${#fields.hasErrors(prefix + '.email')}" th:errors="*{__${prefix}__.email}"></div>
       </div>
