@@ -1,5 +1,6 @@
 package com.alonso.eatelligence.controller;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Optional;
@@ -25,89 +26,113 @@ import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
-public class VerificationController {
+public class VerificacionController {
 
     private final VerificationTokenServiceImp tokenService;
     private final UsuarioServiceImp usuarioService;
     private final ResturanteServiceImp restauranteService;
     private final EmailService emailService;
 
-    @GetMapping("/verify")
+    @GetMapping("/verificar")
     @Transactional
     public String verificar(@RequestParam("token") String token, Model model) {
         VerificationToken vt = this.tokenService.findByToken(token).orElse(null);
 
         if (vt == null || vt.getFechaExpiracion().isBefore(LocalDateTime.now())) {
             model.addAttribute("error", "El token es inválido o ha expirado.");
-            return "verificacion-fallida";
+            return "feedback/verificacionFallida";
         }
 
         switch (vt.getTipo()) {
-            case USUARIO: 
+            case USUARIO -> {
                 Usuario usuario = vt.getUsuario();
                 usuario.setVerificado(true);
                 this.usuarioService.save(usuario);
                 model.addAttribute("nombre", usuario.getNombre());
-                break;
-            case RESTAURANTE:
+            }
+            case RESTAURANTE -> {
                 Restaurante restaurante = vt.getRestaurante();
                 restaurante.setVerificado(true);
                 this.restauranteService.save(restaurante);
                 model.addAttribute("nombre", restaurante.getNombreComercial());
-                break;
+            }
         }
 
         this.tokenService.delete(vt);
-        return "verificacion-exitosa";
+        return "feedback/verificacionExitosa";
     }
 
     @PostMapping("/reenviar-verificacion")
     @ResponseBody
     public ResponseEntity<?> reenviarVerificacion(
-        @RequestParam String token,
-        @RequestParam String tipo
+        @RequestParam("token") String token,
+        @RequestParam("tipo") String tipo
     ) {
-        Optional<VerificationToken> optToken = tokenService.findByToken(token);
+        Optional<VerificationToken> optToken = this.tokenService.findByToken(token);
         if (optToken.isEmpty()) return ResponseEntity.badRequest().body("Token inválido");
     
-        VerificationToken oldToken = optToken.get();
-        if (oldToken.getFechaExpiracion().isBefore(LocalDateTime.now())) {
-            tokenService.delete(oldToken);
-            return ResponseEntity.status(410).body("El token ha expirado");
+        VerificationToken oldVT = optToken.get();
+    
+        if (oldVT.getFechaExpiracion().isAfter(LocalDateTime.now())) {
+            Long segundosRestantes = Duration.between(LocalDateTime.now(), oldVT.getFechaExpiracion()).toSeconds();
+            return ResponseEntity.status(429)
+                .body("Ya existe un token activo. Podrás solicitar otro en " + (segundosRestantes / 60) + " minutos.|" + segundosRestantes);
+        }        
+    
+        Integer intentos = oldVT.getIntentosReenvio();
+        Long minutosEspera = (long) Math.pow(2, intentos) * 5;
+    
+        if (oldVT.getUltimoIntento() != null &&
+            oldVT.getUltimoIntento().plusMinutes(minutosEspera).isAfter(LocalDateTime.now())
+        ) {
+            Long segundosRestantes = Duration.between(LocalDateTime.now(), oldVT.getUltimoIntento().plusMinutes(minutosEspera)).toSeconds();
+        
+            return ResponseEntity.status(429)
+                .body("Debes esperar " + (segundosRestantes / 60) + " minutos para solicitar otro correo.|" + segundosRestantes);
         }
     
         try {
             switch (tipo.toUpperCase()) {
                 case "USUARIO" -> {
-                    Usuario u = oldToken.getUsuario();
+                    Usuario u = oldVT.getUsuario();
                     if (u == null) return ResponseEntity.badRequest().body("Token no asociado a un usuario");
-                    tokenService.delete(oldToken);
+                    this.tokenService.delete(oldVT);
     
-                    VerificationToken nuevo = tokenService.save(tokenService.forUser(u));
-                    emailService.sendVerificationEmail(
+                    VerificationToken newVT = tokenService.forUser(u, intentos++);
+                    newVT.setIntentosReenvio(intentos + 1);
+                    newVT.setUltimoIntento(LocalDateTime.now());
+                    newVT = tokenService.save(newVT);
+    
+                    this.emailService.sendVerificationEmail(
                         u.getEmail(),
                         "Reenvío de verificación",
                         "verificacion",
                         Map.of(
                             "nombre", u.getNombre(),
-                            "urlVerificacion", "http://localhost:8080/verify?token=" + nuevo.getToken()
+                            "urlVerificacion", "http://localhost:8080/verificar?token=" + newVT.getToken(),
+                            "proximoIntento", minutosEspera * 2 + " minutos"
                         )
                     );
                 }
     
                 case "RESTAURANTE" -> {
-                    Restaurante r = oldToken.getRestaurante();
+                    Restaurante r = oldVT.getRestaurante();
                     if (r == null) return ResponseEntity.badRequest().body("Token no asociado a un restaurante");
-                    tokenService.delete(oldToken);
+                    this.tokenService.delete(oldVT);
     
-                    VerificationToken nuevo = tokenService.save(tokenService.forRestaurant(r));
-                    emailService.sendVerificationEmail(
+                    VerificationToken newVT = tokenService.forRestaurant(r, intentos++);
+                    newVT.setIntentosReenvio(intentos + 1);
+                    newVT.setUltimoIntento(LocalDateTime.now());
+                    newVT = tokenService.save(newVT);
+    
+                    this.emailService.sendVerificationEmail(
                         r.getEmailEmpresa(),
                         "Reenvío de verificación",
                         "verificacion",
                         Map.of(
                             "nombre", r.getNombreComercial(),
-                            "urlVerificacion", "http://localhost:8080/verify?token=" + nuevo.getToken()
+                            "urlVerificacion", "http://localhost:8080/verificar?token=" + newVT.getToken(),
+                            "proximoIntento", minutosEspera * 2 + " minutos"
                         )
                     );
                 }
@@ -117,7 +142,7 @@ public class VerificationController {
                 }
             }
     
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok("Correo reenviado correctamente. Podrás solicitar otro en " + (minutosEspera * 2) + " minutos.");
     
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Error al reenviar el correo: " + e.getMessage());

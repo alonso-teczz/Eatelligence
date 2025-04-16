@@ -24,27 +24,46 @@ public class VerificationTokenServiceImp implements IVerificationService, Tokeni
     private final IVerificationTokenRepository tokenRepository;
     
     @Override
-    public VerificationToken forUser(Usuario usuario) {
+    public VerificationToken forUser(Usuario usuario, Integer intentosReenvio) {
         return this.tokenRepository.save(
             VerificationToken.builder()
+                .usuario(usuario)
                 .token(UUID.randomUUID().toString())
                 .fechaExpiracion(LocalDateTime.now().plusMinutes(15))
-                .tipo(VerificationToken.VerificationType.USUARIO)
-                .usuario(usuario)
+                .intentosReenvio(intentosReenvio)
+                .ultimoIntento(LocalDateTime.now())
+                .tipo(VerificationToken.TipoVerificacion.USUARIO)
                 .build()
         );
     }
 
     @Override
-    public VerificationToken forRestaurant(Restaurante restaurante) {
+    public VerificationToken forRestaurant(Restaurante restaurante, Integer intentosReenvio) {
         return this.tokenRepository.save(
             VerificationToken.builder()
+                .restaurante(restaurante)
                 .token(UUID.randomUUID().toString())
                 .fechaExpiracion(LocalDateTime.now().plusHours(1))
-                .tipo(VerificationToken.VerificationType.RESTAURANTE)
-                .restaurante(restaurante)
+                .intentosReenvio(intentosReenvio)
+                .ultimoIntento(LocalDateTime.now())
+                .tipo(VerificationToken.TipoVerificacion.RESTAURANTE)
                 .build()
         );
+    }
+
+    public Long calcularTiempoBloqueoSegundos(Integer intentosReenvio) {
+        return (long) Math.pow(2, intentosReenvio) * 5 * 60;
+    }
+
+    public String formatearTiempoEspera(Long segundos) {
+        long minutos = segundos / 60;
+
+        if (minutos < 60) {
+            return minutos + (minutos == 1 ? " minuto" : " minutos");
+        }
+
+        long horas = minutos / 60;
+        return horas + (horas == 1 ? " hora" : " horas");
     }
 
     @Override

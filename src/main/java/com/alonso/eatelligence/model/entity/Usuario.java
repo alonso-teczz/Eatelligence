@@ -51,7 +51,7 @@ public class Usuario {
     @Column(nullable = false)
     private String password;
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.REMOVE, orphanRemoval = true)
     @EqualsAndHashCode.Exclude
     @Builder.Default
     private List<Direccion> direcciones = new ArrayList<>();
@@ -81,4 +81,6 @@ public class Usuario {
     @EqualsAndHashCode.Exclude
     private List<UsuarioRol> usuarioRoles;
 
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<VerificationToken> tokens;
 }

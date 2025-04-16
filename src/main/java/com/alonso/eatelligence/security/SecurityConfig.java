@@ -1,7 +1,10 @@
 package com.alonso.eatelligence.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
@@ -12,13 +15,43 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    @Autowired
+    private CustomAccessDeniedHandler accessDeniedHandler;
+
     @Bean
-    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        //! Nueva forma de deshabilitar CSRF
-        return http
-            .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
+        http
             .csrf(csrf -> csrf.disable())
-            .build();
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers(HttpMethod.GET, "/api/users/exists")
+                .access((authentication, context) -> {
+                    return new AuthorizationDecision("XMLHttpRequest".equals(context.getRequest().getHeader("X-Requested-With")));
+                })
+                .requestMatchers(
+                "/",
+                    "/reg-user",
+                    "/validate-client-reg",
+                    "/validate-rest-reg",
+                    "/registro-exitoso",
+                    "/acceso-denegado",
+                    "/verificar",
+                    "/reenviar-verificacion"
+                )
+                .permitAll()
+                .requestMatchers(
+                    "/css/**",
+                    "/js/**",
+                    "/img/**"
+                )
+                .permitAll()
+                .anyRequest().authenticated()
+            )
+            .exceptionHandling(ex -> ex
+                .accessDeniedHandler(accessDeniedHandler)
+            );
+
+        return http.build();
     }
 
     @Bean

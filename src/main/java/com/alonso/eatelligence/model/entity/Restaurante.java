@@ -63,4 +63,7 @@ public class Restaurante {
     @OneToMany(mappedBy = "restaurante", cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
     private List<Plato> platos;
+
+    @OneToMany(mappedBy = "restaurante", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<VerificationToken> tokens;
 }

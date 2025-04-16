@@ -1,9 +1,11 @@
-package com.alonso.eatelligence.validation;
+package com.alonso.eatelligence.validation.annotations;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
 import java.lang.annotation.*;
+
+import com.alonso.eatelligence.validation.validators.DireccionCompletaValidator;
 
 @Documented
 @Constraint(validatedBy = DireccionCompletaValidator.class)

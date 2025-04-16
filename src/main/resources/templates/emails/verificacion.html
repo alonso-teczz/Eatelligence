@@ -8,7 +8,7 @@
   <div style="max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); overflow: hidden;">
     
     <div style="background-color: #abc294; padding: 20px; text-align: center;">
-      <h2 style="color: #1d6448; margin: 0;">¡Verifica tu cuenta en Eatelligence!</h2>
+      <h2 style="color: white; margin: 0;">¡Verifica tu cuenta en Eatelligence!</h2>
     </div>
 
     <div style="padding: 30px;">
@@ -30,6 +30,16 @@
         </a>
       </div>
 
+      <table role="presentation" style="width:100%; margin-top: 20px;">
+        <tr>
+          <td style="padding: 15px; background-color: #e7f1ff; border: 1px solid #b6d4fe; border-radius: 5px; color: #084298; font-family: sans-serif; font-size: 15px;">
+            <p th:if="${proximoIntento != null}" style="margin: 0;">
+              🕒 <span th:text="'Podrás volver a solicitar otro correo en ' + ${proximoIntento} + '.'"></span>
+            </p>
+          </td>
+        </tr>
+      </table>
+      
       <hr style="margin: 30px 0; border: none; border-top: 1px solid #ccc;">
 
       <p style="font-size: 12px; color: gray;">
@@ -37,6 +47,5 @@
       </p>
     </div>
   </div>
-
 </body>
 </html>

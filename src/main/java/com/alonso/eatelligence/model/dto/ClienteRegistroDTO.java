@@ -1,6 +1,7 @@
 package com.alonso.eatelligence.model.dto;
 
-import com.alonso.eatelligence.validation.DireccionCompleta;
+import com.alonso.eatelligence.validation.annotations.DireccionCompleta;
+import com.alonso.eatelligence.validation.annotations.PasswordMatches;
 import com.alonso.eatelligence.validation.groups.ValidacionCliente;
 import com.alonso.eatelligence.validation.groups.ValidacionRestaurante;
 
@@ -19,6 +20,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@PasswordMatches(groups = ValidacionCliente.class)
 public class ClienteRegistroDTO {
 
     @NotBlank(message = "El nombre de usuario es obligatorio")
@@ -43,6 +45,9 @@ public class ClienteRegistroDTO {
         message = "La contraseña debe tener mínimo 8 caracteres, teniendo 1 letra mayúscula,1 letra minúscula, 1 número y 1 caracter especial"
     )
     private String password;
+
+    @NotBlank(message = "Debes repetir la contraseña")
+    private String repeatPass;
 
     @NotBlank(message = "El teléfono móvil es obligatorio")
     @Pattern(regexp = "^[67]\\d{8}$", message = "El teléfono móvil debe tener 9 dígitos y empezar por 6 ó 7")

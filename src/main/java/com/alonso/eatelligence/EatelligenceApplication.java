@@ -14,7 +14,7 @@ public class EatelligenceApplication {
 		SpringApplication.run(EatelligenceApplication.class, args);
 	}
 
-	// Ejecuta el navegador automaticamente cuando se inicie la aplicacion
+	//! Ejecuta el navegador automáticamente cuando se inicie la aplicacion
 	@EventListener(ApplicationReadyEvent.class)
     public void openBrowser() {
         String url = "http://localhost:8080";

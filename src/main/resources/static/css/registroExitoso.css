@@ -1,0 +1,21 @@
+@import url("https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css");
+
+body {
+  background: #f4f8f2;
+}
+
+.card {
+  border-radius: 1rem;
+  transition: all 0.3s ease;
+  max-width: 600px;
+  width: 100%;
+}
+
+.card:hover {
+  transform: scale(1.01);
+}
+
+.swal-wide {
+    width: 600px !important;
+    max-width: 90vw;
+}  

@@ -1,6 +1,8 @@
-package com.alonso.eatelligence.validation;
+package com.alonso.eatelligence.validation.validators;
 
 import com.alonso.eatelligence.model.dto.DireccionRegistroDTO;
+import com.alonso.eatelligence.validation.annotations.DireccionCompleta;
+
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 

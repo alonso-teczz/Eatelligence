@@ -5,6 +5,6 @@ import com.alonso.eatelligence.model.entity.Usuario;
 import com.alonso.eatelligence.model.entity.VerificationToken;
 
 public interface Tokenizable {
-    public VerificationToken forUser(Usuario usuario);
-    public VerificationToken forRestaurant(Restaurante restaurante);
+    public VerificationToken forUser(Usuario usuario, Integer intentos);
+    public VerificationToken forRestaurant(Restaurante restaurante, Integer intentos);
 }

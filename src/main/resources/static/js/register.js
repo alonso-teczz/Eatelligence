@@ -29,17 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const nameOrigen = inputOrigen.name;
       if (!nameOrigen) return;
   
-      const valor = inputOrigen.value;
-  
-      // Campo repeatPass (ID igual en ambos)
-      if (inputOrigen.id === "repeatPass") {
-        const inputDestino = destino.querySelector("#repeatPass");
-        if (inputDestino) {
-          inputDestino.value = valor;
-          copiarEstadoValidacion(inputOrigen, inputDestino);
-        }
-        return;
-      }
+      const valor = inputOrigen.value;   
   
       // Detectar si es campo de dirección
       const campoDireccion = camposDireccion.find(c => nameOrigen.endsWith("." + c));
@@ -249,7 +239,11 @@ document.addEventListener("DOMContentLoaded", function () {
           return;
         }
   
-        fetch(`/api/users/exists?username=${encodeURIComponent(username)}`)
+        fetch(`/api/users/exists?username=${encodeURIComponent(username)}`, {
+          headers: {
+            "X-Requested-With": "XMLHttpRequest"
+          }
+        })
           .then(res => res.json())
           .then(existe => {
             if (existe) {
@@ -330,7 +324,7 @@ document.addEventListener("DOMContentLoaded", function () {
       username: formActivo.querySelector(`[name$="${prefix ? prefix + ".username" : "username"}"]`),
       email: formActivo.querySelector(`[name$="${prefix ? prefix + ".email" : "email"}"]`),
       password: formActivo.querySelector(`[name$="${prefix ? prefix + ".password" : "password"}"]`),
-      repeatPass: formActivo.querySelector("#repeatPass"),
+      repeatPass: formActivo.querySelector(`[name$=".repeatPass"]`),
       telefonoMovil: formActivo.querySelector(`[name$="${prefix ? prefix + ".telefonoMovil" : "telefonoMovil"}"]`),
       calle: formActivo.querySelector(`[name$="${direccionPrefix}.calle"]`),
       ciudad: formActivo.querySelector(`[name$="${direccionPrefix}.ciudad"]`),
@@ -401,7 +395,11 @@ document.addEventListener("DOMContentLoaded", function () {
             valido = false;
           } else {
             try {
-              const existe = await fetch(`/api/users/exists?username=${encodeURIComponent(valor)}`)
+              const existe = await fetch(`/api/users/exists?username=${encodeURIComponent(username)}`, {
+                headers: {
+                  "X-Requested-With": "XMLHttpRequest"
+                }
+              })
                 .then(res => res.json());
         
               if (existe) {

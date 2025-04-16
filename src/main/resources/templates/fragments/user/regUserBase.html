@@ -58,7 +58,7 @@
             <label for="password" class="form-label">Contraseña</label>
             <div class="input-group">
               <input type="password" th:field="*{password}" class="form-control" id="password"
-                     required pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}">
+                required pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}">
               <span class="input-group-text rounded-end" id="togglePassword">
                 <i class="bi bi-eye" id="iconoPassword"></i>
               </span>
@@ -69,10 +69,19 @@
 
         <!-- Repetir contraseña -->
         <div class="col-md-3">
-            <label for="repeatPass" class="form-label">Repetir contraseña</label>
-            <input type="password" class="form-control" id="repeatPass" placeholder="Repite la contraseña">
-            <div class="invalid-feedback">Las contraseñas no coinciden</div>            
-        </div>          
+          <label for="repeatPass" class="form-label">Repetir contraseña</label>
+          <input type="password"
+            th:field="*{repeatPass}"
+            id="repeatPass"
+            class="form-control"
+            placeholder="Repite tu contraseña"
+            required>
+          <div class="invalid-feedback">Las contraseñas no coinciden</div>
+          <div class="d-block invalid-feedback fs-6 mt-2 ms-1"
+               th:if="${#fields.hasErrors('repeatPass')}"
+               th:errors="*{repeatPass}">
+          </div>     
+        </div>
 
         <!-- Teléfono -->
         <div class="col-md-6">
@@ -120,7 +129,7 @@
         <div class="col-md-6">
           <label th:for="${prefix + '.username'}" class="form-label">Nombre de usuario</label>
           <input type="text" th:field="*{__${prefix}__.username}" class="form-control"
-                 th:id="${prefix + '.username'}" required placeholder="Ej. carlosgp_98" minlength="6" maxlength="20">
+            th:id="${prefix + '.username'}" required placeholder="Ej. carlosgp_98" minlength="6" maxlength="20">
           
           <!-- Feedback dinámico -->
           <div class="valid-feedback d-none" th:id="${prefix + '.username-feedback-success'}">¡Nombre de usuario disponible!</div>
@@ -138,7 +147,7 @@
       <div class="col-md-6">
         <label th:for="${prefix + '.email'}" class="form-label">Correo electrónico</label>
         <input type="email" th:field="*{__${prefix}__.email}" class="form-control"
-               th:id="${prefix + '.email'}" required placeholder="Ej. carlos.garpe@gmail.com" pattern="^[a-zA-Z0-9_.+\-]+@[a-zA-Z0-9\-]+\.[a-zA-Z0-9.]+$">
+          th:id="${prefix + '.email'}" required placeholder="Ej. carlos.garpe@gmail.com" pattern="^[a-zA-Z0-9_.+\-]+@[a-zA-Z0-9\-]+\.[a-zA-Z0-9.]+$">
         <div class="invalid-feedback">Introduce un correo válido</div>
         <div class="d-block invalid-feedback fs-6 mt-2 ms-1" th:if="${#fields.hasErrors(prefix + '.email')}" th:errors="*{__${prefix}__.email}"></div>
       </div>
@@ -150,8 +159,8 @@
         <label th:for="${prefix + '.password'}" class="form-label">Contraseña</label>
         <div class="input-group">
           <input type="password" th:field="*{__${prefix}__.password}" class="form-control"
-                 th:id="${prefix + '.password'}"
-                 required pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}">
+              th:id="${prefix + '.password'}"
+              required pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}">
           <span class="input-group-text rounded-end" id="togglePassword">
             <i class="bi bi-eye" id="iconoPassword"></i>
           </span>
@@ -162,9 +171,18 @@
   
       <!-- Repetir contraseña -->
       <div class="col-md-3">
-        <label for="repeatPass" class="form-label">Repetir contraseña</label>
-        <input type="password" class="form-control" id="repeatPass" placeholder="Repite la contraseña">
+        <label th:for="${prefix + '.repeatPass'}" class="form-label">Repetir contraseña</label>
+        <input type="password"
+               th:field="*{__${prefix}__.repeatPass}"
+               th:id="${prefix + '.repeatPass'}"
+               class="form-control"
+               placeholder="Repite tu contraseña"
+               required>
         <div class="invalid-feedback">Las contraseñas no coinciden</div>
+        <div class="d-block invalid-feedback fs-6 mt-2 ms-1"
+            th:if="${#fields.hasErrors(prefix + '.repeatPass')}"
+            th:errors="*{__${prefix}__.repeatPass}">
+        </div>     
       </div>
   
       <!-- Teléfono -->

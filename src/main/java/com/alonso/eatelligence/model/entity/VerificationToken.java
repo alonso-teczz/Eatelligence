@@ -22,9 +22,16 @@ public class VerificationToken {
     @Column(nullable = false)
     private LocalDateTime fechaExpiracion;
 
+    @Column
+    @Builder.Default
+    private Integer intentosReenvio = 0;
+    
+    @Column
+    private LocalDateTime ultimoIntento;    
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private VerificationType tipo;
+    private TipoVerificacion tipo;
 
     @OneToOne
     @JoinColumn(name = "usuario_id")
@@ -34,7 +41,7 @@ public class VerificationToken {
     @JoinColumn(name = "restaurante_id")
     private Restaurante restaurante;
 
-    public enum VerificationType {
+    public enum TipoVerificacion {
         USUARIO,
         RESTAURANTE
     }

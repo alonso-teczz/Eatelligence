@@ -152,6 +152,6 @@
   overflow: visible;
 }
 
-#togglePassword, #iconoPassword {
+[id$="togglePassword"], [id$="iconoPassword"] {
   cursor: pointer;
 }
