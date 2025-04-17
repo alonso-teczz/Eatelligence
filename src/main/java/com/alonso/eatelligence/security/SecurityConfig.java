@@ -28,16 +28,9 @@ public class SecurityConfig {
                 .access((authentication, context) -> {
                     return new AuthorizationDecision("XMLHttpRequest".equals(context.getRequest().getHeader("X-Requested-With")));
                 })
-                .requestMatchers(
-                "/",
-                    "/reg-user",
-                    "/validate-client-reg",
-                    "/validate-rest-reg",
-                    "/registro-exitoso",
-                    "/acceso-denegado",
-                    "/verificar",
-                    "/reenviar-verificacion"
-                )
+                .requestMatchers(HttpMethod.GET, "/", "/register", "/login", "/registro-exitoso", "/acceso-denegado", "/verificar")
+                .permitAll()
+                .requestMatchers(HttpMethod.POST, "/validate-client-reg", "/validate-rest-reg", "/validate-login", "/reenviar-verificacion")
                 .permitAll()
                 .requestMatchers(
                     "/css/**",
@@ -47,9 +40,16 @@ public class SecurityConfig {
                 .permitAll()
                 .anyRequest().authenticated()
             )
+            .formLogin(login -> login
+                .loginPage("/login")
+                .defaultSuccessUrl("/", true)
+                .permitAll()
+            )
             .exceptionHandling(ex -> ex
                 .accessDeniedHandler(accessDeniedHandler)
+                .authenticationEntryPoint((req, res, authEx) -> res.sendRedirect("/acceso-denegado"))
             );
+        
 
         return http.build();
     }

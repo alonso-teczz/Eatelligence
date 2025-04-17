@@ -1,0 +1,45 @@
+:root {
+  --color-principal: #abc294;
+  --color-secundario: #1d6448;
+}
+
+body {
+  background-color: #f8f9fa;
+}
+
+.container {
+  max-width: 900px;
+}
+
+.card {
+  border-radius: 1rem;
+  background-color: #ffffff;
+}
+
+.card h2 {
+  font-weight: 600;
+}
+
+.card .form-label {
+  font-weight: 500;
+}
+
+.card .form-control:focus {
+  border-color: #abc294;
+  box-shadow: 0 0 0 0.2rem rgba(171, 194, 148, 0.25);
+}
+
+.btn-success {
+  background-color: #abc294;
+  border-color: #1d6448;
+}
+
+.btn-success:hover {
+  background-color: #174f39;
+  border-color: #174f39;
+}
+
+label {
+  color: var(--color-secundario);
+  font-weight: 600;
+}

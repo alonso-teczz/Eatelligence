@@ -22,7 +22,7 @@ public class NoCacheFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         String uri = req.getRequestURI();
 
-        if (uri.startsWith("/reg-user") || uri.startsWith("/registro-exitoso")) {
+        if (uri.startsWith("/register") || uri.startsWith("/registro-exitoso")) {
             res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
             res.setHeader("Pragma", "no-cache");
             res.setDateHeader("Expires", 0);

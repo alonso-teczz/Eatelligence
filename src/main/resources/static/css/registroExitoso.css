@@ -1,21 +1,55 @@
-@import url("https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css");
-
 body {
-  background: #f4f8f2;
+  background: linear-gradient(to right, #f8f9fa, #e9f7ef);
 }
 
 .card {
+  max-width: 700px;
+  border: none;
   border-radius: 1rem;
-  transition: all 0.3s ease;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+}
+
+.card-body {
+  padding: 3rem;
+}
+
+h1.display-5 {
+  font-weight: 600;
+  color: #198754;
+}
+
+.alert-warning {
+  background-color: #fff3cd;
+  border-color: #ffecb5;
+  color: #856404;
+}
+
+.alert-info {
+  background-color: #cff4fc;
+  border-color: #b6effb;
+  color: #055160;
+}
+
+#cuentaAtrasContainer {
+  display: none;
   max-width: 600px;
-  width: 100%;
+  margin: 0 auto;
 }
 
-.card:hover {
-  transform: scale(1.01);
+#cuentaAtrasTexto {
+  font-size: 1.1rem;
 }
 
-.swal-wide {
-    width: 600px !important;
-    max-width: 90vw;
-}  
+#btn-reenviar {
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+#btn-reenviar:hover:not(:disabled) {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+  color: white;
+}
+
+#btn-reenviar i {
+  vertical-align: middle;
+}

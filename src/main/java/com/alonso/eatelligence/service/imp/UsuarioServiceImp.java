@@ -73,7 +73,6 @@ public class UsuarioServiceImp implements IUsuarioService, IEntitableClient {
         return this.usuarioRepository.findById(id);
     }
 
-
     @Override
     public List<Usuario> getAllUsers() {
         return this.usuarioRepository.findAll();
@@ -81,12 +80,20 @@ public class UsuarioServiceImp implements IUsuarioService, IEntitableClient {
 
     @Override
     public void deleteById(Long id) {
-        usuarioRepository.deleteById(id);
+        this.usuarioRepository.deleteById(id);
     }
 
     @Override
     public boolean existsByUsername(String nombre) {
         return this.usuarioRepository.existsByUsername(nombre);
+    }
+
+    public Usuario findByUsername(String username) {
+        return this.usuarioRepository.findByUsername(username);
+    }
+
+    public boolean checkPassword(Usuario u, String password) {
+        return this.matchesPassword(password, u.getPassword());
     }
 
 }

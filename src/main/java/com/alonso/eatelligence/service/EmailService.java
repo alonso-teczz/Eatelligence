@@ -1,6 +1,7 @@
 package com.alonso.eatelligence.service;
 
 import jakarta.mail.MessagingException;
+import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -26,13 +27,13 @@ public class EmailService {
         context.setVariables(data);
         String htmlContent = this.emailTemplateEngine.process(template, context);
 
-        MimeMessage mensaje = this.mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(mensaje, true, "UTF-8");
+        MimeMessage message = this.mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         helper.setTo(to);
         helper.setSubject(subject);
         helper.setText(htmlContent, true);
-        helper.setFrom("eatelligence.app@gmail.com", "Eatelligence");
+        helper.setFrom(new InternetAddress("eatelligence.app@gmail.com", "Eatelligence"));
 
-        this.mailSender.send(mensaje);
+        this.mailSender.send(message);
     }
 }

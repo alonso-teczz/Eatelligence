@@ -81,6 +81,7 @@ public class Usuario {
     @EqualsAndHashCode.Exclude
     private List<UsuarioRol> usuarioRoles;
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<VerificationToken> tokens;
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<VerificationToken> tokens = new ArrayList<>();    
 }

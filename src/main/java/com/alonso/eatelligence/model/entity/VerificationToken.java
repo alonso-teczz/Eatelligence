@@ -33,12 +33,12 @@ public class VerificationToken {
     @Column(nullable = false)
     private TipoVerificacion tipo;
 
-    @OneToOne
-    @JoinColumn(name = "usuario_id")
-    private Usuario usuario;
+    @ManyToOne
+    @JoinColumn(name = "usuario_id", nullable = true)
+    private Usuario usuario;    
 
     @OneToOne
-    @JoinColumn(name = "restaurante_id")
+    @JoinColumn(name = "restaurante_id", nullable = true)
     private Restaurante restaurante;
 
     public enum TipoVerificacion {

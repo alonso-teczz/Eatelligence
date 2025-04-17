@@ -8,4 +8,5 @@ import com.alonso.eatelligence.model.entity.Usuario;
 @Repository
 public interface IUsuarioRepository extends JpaRepository<Usuario, Long> {
     boolean existsByUsername(String username);
+    Usuario findByUsername(String username);
 }

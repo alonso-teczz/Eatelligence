@@ -41,7 +41,7 @@ public class UsuarioController {
 
     @Autowired
     private VerificationTokenServiceImp tokenService;
-
+    
     @Autowired
     private EmailService emailService;
 
@@ -54,26 +54,10 @@ public class UsuarioController {
     public RestauranteRegistroDTO registroRestaurante() {
         return new RestauranteRegistroDTO();
     }
-
-    @GetMapping("/reg-user")
+    
+    @GetMapping("/register")
     public String mostrarFormularioRegistro() {
-        return "registroUsuario";
-    }
-
-    @GetMapping("/registro-exitoso")
-    public String mostrarRegistroExitoso(HttpServletRequest request) {
-        Map<String, ?> flash = RequestContextUtils.getInputFlashMap(request);
-
-        if (flash == null || !flash.containsKey("token")) {
-            return "redirect:/reg-user";
-        }
-
-        return "feedback/registroExitoso";
-    }
-
-    @GetMapping("/acceso-denegado")
-    public String mostrarAccesoDenegado() {
-        return "feedback/accesoDenegado";
+        return "register";
     }
 
     @GetMapping("/api/users/exists")
@@ -81,26 +65,26 @@ public class UsuarioController {
     public boolean comprobarUsername(@RequestParam String username) {
         return this.usuarioService.existsByUsername(username);
     }
-
+    
     @PostMapping("/validate-client-reg")
     public String validateClientRegister(
-        @Validated(ValidacionCliente.class) @ModelAttribute("registroUsuario") ClienteRegistroDTO registroDTO,
+        @Validated(ValidacionCliente.class) @ModelAttribute("registroUsuario") ClienteRegistroDTO formRegistro,
         BindingResult result,
         RedirectAttributes ra
     ) {
-        if (this.usuarioService.existsByUsername(registroDTO.getUsername())) {
+        if (this.usuarioService.existsByUsername(formRegistro.getUsername())) {
             result.rejectValue("username", "error.username", "El nombre de usuario ya está en uso");
-            return "registroUsuario";
+            return "register";
         }
-
+    
         if (result.hasErrors()) {
-            return "registroUsuario";
+            return "register";
         }
-
-        Usuario u = this.usuarioService.save(this.usuarioService.clientDTOtoEntity(registroDTO));
+    
+        Usuario u = this.usuarioService.save(this.usuarioService.clientDTOtoEntity(formRegistro));
         VerificationToken vt = this.tokenService.save(this.tokenService.forUser(u, 0));
-
-        ra.addFlashAttribute("tiempoBloqueoEnSegundos", this.tokenService.calcularTiempoBloqueoSegundos(vt.getIntentosReenvio()));
+        
+        boolean correoUsuarioFallido = false;
         
         try {
             this.emailService.sendVerificationEmail(
@@ -113,43 +97,56 @@ public class UsuarioController {
                     "proximoIntento", this.tokenService.formatearTiempoEspera(this.tokenService.calcularTiempoBloqueoSegundos(vt.getIntentosReenvio()))
                 )
             );
-        
-            ra.addFlashAttribute("correoFallido", false);
         } catch (UnsupportedEncodingException | MessagingException e) {
-            System.err.println("Error al enviar el correo: " + e.getMessage());
-            ra.addFlashAttribute("correoFallido", true);
+            correoUsuarioFallido = true;
         }
         
+        ra.addFlashAttribute("tiempoBloqueoEnSegundos", this.tokenService.calcularTiempoBloqueoSegundos(vt.getIntentosReenvio()));
         ra.addFlashAttribute("token", vt.getToken());
         ra.addFlashAttribute("email", u.getEmail());
-        
+        ra.addFlashAttribute("correoUsuarioFallido", correoUsuarioFallido);
+
         return "redirect:/registro-exitoso";
-        
-    }
+    }    
 
     @PostMapping("/validate-rest-reg")
     public String validateRestaurantRegister(
-        @Validated(ValidacionRestaurante.class) @ModelAttribute("registroRestaurante") RestauranteRegistroDTO registroDTO,
+        @Validated(ValidacionRestaurante.class) @ModelAttribute("registroRestaurante") RestauranteRegistroDTO formRestaurante,
         BindingResult result,
         RedirectAttributes ra
     ) {
-        if (this.usuarioService.existsByUsername(registroDTO.getPropietario().getUsername())) {
+        if (usuarioService.existsByUsername(formRestaurante.getPropietario().getUsername())) {
             result.rejectValue("username", "error.username", "El nombre de usuario ya está en uso");
-            return "registroUsuario";
+            return "register";
         }
-
+    
         if (result.hasErrors()) {
-            return "registroUsuario";
+            return "register";
         }
-
-        Restaurante r = this.restauranteService.save(this.restauranteService.restDTOtoEntity(registroDTO));
-        VerificationToken vt = this.tokenService.save(this.tokenService.forRestaurant(r, 0));
-
-        ra.addFlashAttribute("tiempoBloqueoEnSegundos", this.tokenService.calcularTiempoBloqueoSegundos(vt.getIntentosReenvio()));
-        
+    
+        Restaurante r = this.restauranteService.save(restauranteService.restDTOtoEntity(formRestaurante));
+    
+        VerificationToken usuarioVT = this.tokenService.save(this.tokenService.forUser(r.getPropietario(), 0));
+        VerificationToken restauranteVT = this.tokenService.save(this.tokenService.forRestaurant(r, 0));
+    
+        boolean correoUsuarioFallido = false;
         boolean correoRestauranteFallido = false;
-        boolean correoPropietarioFallido = false;
-        
+    
+        try {
+            this.emailService.sendVerificationEmail(
+                r.getPropietario().getEmail(),
+                "Verificar cuenta de usuario del propietario",
+                "verificacion",
+                Map.of(
+                    "nombre", r.getPropietario().getNombre(),
+                    "urlVerificacion", "http://localhost:8080/verificar?token=" + usuarioVT.getToken(),
+                    "proximoIntento", this.tokenService.formatearTiempoEspera(this.tokenService.calcularTiempoBloqueoSegundos(usuarioVT.getIntentosReenvio()))
+                )
+            );
+        } catch (UnsupportedEncodingException | MessagingException e) {
+            correoUsuarioFallido = true;
+        }
+    
         try {
             this.emailService.sendVerificationEmail(
                 r.getEmailEmpresa(),
@@ -157,38 +154,38 @@ public class UsuarioController {
                 "verificacion",
                 Map.of(
                     "nombre", r.getNombreComercial(),
-                    "urlVerificacion", "http://localhost:8080/verificar?token=" + vt.getToken(),
-                    "proximoIntento", this.tokenService.formatearTiempoEspera(this.tokenService.calcularTiempoBloqueoSegundos(vt.getIntentosReenvio()))
+                    "urlVerificacion", "http://localhost:8080/verificar?token=" + restauranteVT.getToken(),
+                    "proximoIntento", this.tokenService.formatearTiempoEspera(this.tokenService.calcularTiempoBloqueoSegundos(restauranteVT.getIntentosReenvio()))
                 )
             );
         } catch (UnsupportedEncodingException | MessagingException e) {
-            System.err.println("Error al enviar el correo a la empresa: " + e.getMessage());
             correoRestauranteFallido = true;
         }
-        
-        try {
-            this.emailService.sendVerificationEmail(
-                r.getPropietario().getEmail(),
-                "Verificar cuenta de usuario propietario",
-                "verificacion",
-                Map.of(
-                    "nombre", r.getPropietario().getNombre(),
-                    "urlVerificacion", "http://localhost:8080/verificar?token=" + vt.getToken(),
-                    "proximoIntento", this.tokenService.formatearTiempoEspera(this.tokenService.calcularTiempoBloqueoSegundos(vt.getIntentosReenvio()))
-                )
-            );
-        } catch (UnsupportedEncodingException | MessagingException e) {
-            System.err.println("Error al enviar el correo al propietario: " + e.getMessage());
-            correoPropietarioFallido = true;
-        }
-        
-        ra.addFlashAttribute("token", vt.getToken());
+    
+        ra.addFlashAttribute("tiempoBloqueoEnSegundos", this.tokenService.calcularTiempoBloqueoSegundos(usuarioVT.getIntentosReenvio()));
+        ra.addFlashAttribute("token", usuarioVT.getToken());
         ra.addFlashAttribute("email", r.getPropietario().getEmail());
         ra.addFlashAttribute("nombreRestaurante", r.getNombreComercial());
-        ra.addFlashAttribute("correoEmpresaFallido", correoRestauranteFallido);
-        ra.addFlashAttribute("correoPropietarioFallido", correoPropietarioFallido);
-        
+        ra.addFlashAttribute("correoUsuarioFallido", correoUsuarioFallido);
+        ra.addFlashAttribute("correoRestFallido", correoRestauranteFallido);
+    
         return "redirect:/registro-exitoso";
+    }
+
+    @GetMapping("/registro-exitoso")
+    public String mostrarRegistroExitoso(HttpServletRequest req) {
+        Map<String, ?> flash = RequestContextUtils.getInputFlashMap(req);
+
+        if (flash == null || !flash.containsKey("token")) {
+            return "redirect:/register";
+        }
+
+        return "feedback/registroExitoso";
+    }
+
+    @GetMapping("/acceso-denegado")
+    public String mostrarAccesoDenegado() {
+        return "feedback/accesoDenegado";
     }
     
 }
