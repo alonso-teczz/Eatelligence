@@ -1,6 +1,6 @@
 package com.alonso.eatelligence.model.dto;
 
-import jakarta.validation.constraints.NotBlank;
+import com.alonso.eatelligence.validation.annotations.DireccionCompleta;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,24 +10,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class DireccionRegistroDTO {
-
-    @NotBlank(message = "La calle es obligatoria")
+@DireccionCompleta
+public class DireccionOpcionalDTO {
     private String calle;
-
-    @NotBlank(message = "El número de la calle es obligatorio")
     private String numCalle;
-
-    @NotBlank(message = "La ciudad es obligatoria")
     private String ciudad;
-
-    @NotBlank(message = "La provincia es obligatoria")
     private String provincia;
-
-    @NotBlank(message = "El código postal es obligatorio")
     private String codigoPostal;
-
     private Double latitud;
-    
     private Double longitud;
 }

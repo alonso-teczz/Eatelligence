@@ -1,10 +1,6 @@
 package com.alonso.eatelligence.model.dto;
 
-import com.alonso.eatelligence.validation.annotations.DireccionCompleta;
 import com.alonso.eatelligence.validation.annotations.PasswordMatches;
-import com.alonso.eatelligence.validation.groups.ValidacionCliente;
-import com.alonso.eatelligence.validation.groups.ValidacionRestaurante;
-
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -20,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@PasswordMatches(groups = ValidacionCliente.class)
+@PasswordMatches
 public class ClienteRegistroDTO {
 
     @NotBlank(message = "El nombre de usuario es obligatorio")
@@ -42,7 +38,7 @@ public class ClienteRegistroDTO {
     @NotBlank(message = "La contraseña es obligatoria")
     @Pattern(
         regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_]).{8,}$",
-        message = "La contraseña debe tener mínimo 8 caracteres, teniendo 1 letra mayúscula,1 letra minúscula, 1 número y 1 caracter especial"
+        message = "La contraseña debe tener mínimo 8 caracteres, con mayúscula, minúscula, número y símbolo"
     )
     private String password;
 
@@ -54,7 +50,6 @@ public class ClienteRegistroDTO {
     private String telefonoMovil;
 
     @Valid
-    @NotNull(groups = ValidacionCliente.class, message = "La dirección es obligatoria")
-    @DireccionCompleta(groups = ValidacionRestaurante.class)
-    private DireccionRegistroDTO direccion;
+    @NotNull(message = "La dirección es obligatoria")
+    private DireccionOpcionalDTO direccion;
 }

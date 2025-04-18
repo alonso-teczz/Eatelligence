@@ -76,7 +76,13 @@ public class VerificacionController {
         if (oldVT.getFechaExpiracion().isAfter(LocalDateTime.now())) {
             Long segundosRestantes = Duration.between(LocalDateTime.now(), oldVT.getFechaExpiracion()).toSeconds();
             return ResponseEntity.status(429)
-                .body("Ya existe un token activo. Podrás solicitar otro en " + (segundosRestantes / 60) + " minutos.|" + segundosRestantes);
+                .body("Debes esperar " + 
+                    (segundosRestantes >= 60 
+                        ? (segundosRestantes / 60 > 1 
+                            ? (segundosRestantes / 60) + " minutos" 
+                            : "1 minuto") 
+                        : "menos de un minuto") + 
+                    " para solicitar otro correo.");
         }        
     
         Integer intentos = oldVT.getIntentosReenvio();
@@ -88,7 +94,13 @@ public class VerificacionController {
             Long segundosRestantes = Duration.between(LocalDateTime.now(), oldVT.getUltimoIntento().plusMinutes(minutosEspera)).toSeconds();
         
             return ResponseEntity.status(429)
-                .body("Debes esperar " + (segundosRestantes / 60) + " minutos para solicitar otro correo.|" + segundosRestantes);
+                .body("Debes esperar " + 
+                    (segundosRestantes >= 60 
+                        ? (segundosRestantes / 60 > 1 
+                            ? (segundosRestantes / 60) + " minutos" 
+                            : "1 minuto") 
+                        : "menos de un minuto") + 
+                    " para solicitar otro correo.");
         }
     
         try {
@@ -138,7 +150,7 @@ public class VerificacionController {
                 }
     
                 default -> {
-                    return ResponseEntity.badRequest().body("Tipo inválido");
+                    return ResponseEntity.badRequest().body("Tipo de token inválido");
                 }
             }
     

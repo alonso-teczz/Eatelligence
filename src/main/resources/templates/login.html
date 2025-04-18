@@ -21,15 +21,17 @@
             <div class="col-md-6">
               <label class="form-label">Nombre de usuario</label>
               <input type="text" class="form-control" th:field="*{username}" placeholder="Ej. carlosgp_98" required>
+              <div class="d-block invalid-feedback fs-6 mt-2 ms-1" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
             </div>
 
             <div class="col-md-6">
               <label class="form-label">Contraseña</label>
               <input type="password" class="form-control" th:field="*{password}" placeholder="Introduce tu contraseña" required>
+              <div class="d-block invalid-feedback fs-6 mt-2 ms-1" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
             </div>
           </div>
 
-          <div class="alert alert-danger mt-3" th:if="${loginError}" th:text="${loginError}"></div>
+          <!-- <div class="alert alert-danger mt-3" th:if="${loginError}" th:text="${loginError}"></div> -->
 
           <div class="d-grid mt-4">
             <button type="submit" class="btn btn-success btn-lg">

@@ -3,9 +3,12 @@ package com.alonso.eatelligence.controller;
 import com.alonso.eatelligence.model.dto.LoginDTO;
 import com.alonso.eatelligence.model.entity.Usuario;
 import com.alonso.eatelligence.service.imp.UsuarioServiceImp;
+import com.alonso.eatelligence.utils.ErrorUtils;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -36,6 +39,15 @@ public class AuthController {
         BindingResult result,
         Model model
     ) {
+        if (result.hasErrors()) {
+            ErrorUtils.filtrarPrimerError(result, formLogin, model, "loginDTO", List.of(
+                "username",
+                "password"
+            ));
+            
+            return "login";
+        }
+        
         Usuario u = this.usuarioService.findByUsername(formLogin.getUsername());
 
         if (!this.usuarioService.checkPassword(u, formLogin.getPassword())) {

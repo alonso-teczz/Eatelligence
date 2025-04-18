@@ -22,7 +22,7 @@ public class RestauranteRegistroDTO {
 
     @Valid
     @NotNull(message = "La dirección del restaurante es obligatoria")
-    private DireccionRegistroDTO direccionRestaurante;
+    private DireccionObligatoriaDTO direccionRestaurante;
 
     @NotBlank(message = "El nombre comercial no puede estar vacío")
     @Size(min = 6, max = 50, message = "El nombre comercial debe tener al menos 6 caracteres")
@@ -34,7 +34,7 @@ public class RestauranteRegistroDTO {
 
     @Pattern(
         regexp = "^$|^[89]\\d{8}$",
-        message = "El teléfono móvil debe tener 9 dígitos y empezar por 8 ó 9"
+        message = "El teléfono fijo debe tener 9 dígitos y empezar por 8 ó 9"
     )
     private String telefonoFijo;
 

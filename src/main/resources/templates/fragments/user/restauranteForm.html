@@ -3,13 +3,13 @@
       <div class="accordion-item">
         <h2 class="accordion-header" id="headingRestaurante">
           <button class="accordion-button collapsed" type="button"
-                  data-bs-toggle="collapse" data-bs-target="#contenido-acordeon-restaurante"
-                  aria-expanded="false" aria-controls="contenido-acordeon-restaurante">
+            data-bs-toggle="collapse" data-bs-target="#contenido-acordeon-restaurante"
+            aria-expanded="false" aria-controls="contenido-acordeon-restaurante">
             Datos del restaurante
           </button>
         </h2>
         <div id="contenido-acordeon-restaurante" class="accordion-collapse collapse show"
-             aria-labelledby="headingRestaurante" data-bs-parent="#acordeon-restaurante">
+            aria-labelledby="headingRestaurante" data-bs-parent="#acordeon-restaurante">
           <div class="accordion-body">
             <!-- Nombre comercial -->
             <div class="mb-3">
@@ -62,7 +62,7 @@
             <h5 class="mt-4 mb-3 border-bottom pb-2 text-success fw-semibold">
               Dirección del restaurante
             </h5>            
-            <div th:replace="fragments/user/direccion :: direccionForm('direccionRestaurante')"></div>
+            <div th:replace="fragments/user/direccionForm :: direccionFields('direccionRestaurante')"></div>
           </div>
         </div>
       </div>

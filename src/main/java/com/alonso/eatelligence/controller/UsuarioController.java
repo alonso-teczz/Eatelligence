@@ -1,12 +1,13 @@
 package com.alonso.eatelligence.controller;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,11 +25,11 @@ import com.alonso.eatelligence.service.EmailService;
 import com.alonso.eatelligence.service.imp.ResturanteServiceImp;
 import com.alonso.eatelligence.service.imp.UsuarioServiceImp;
 import com.alonso.eatelligence.service.imp.VerificationTokenServiceImp;
-import com.alonso.eatelligence.validation.groups.ValidacionCliente;
-import com.alonso.eatelligence.validation.groups.ValidacionRestaurante;
+import com.alonso.eatelligence.utils.ErrorUtils;
 
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 
 @Controller
 public class UsuarioController {
@@ -68,20 +69,36 @@ public class UsuarioController {
     
     @PostMapping("/validate-client-reg")
     public String validateClientRegister(
-        @Validated(ValidacionCliente.class) @ModelAttribute("registroUsuario") ClienteRegistroDTO formRegistro,
+        @Valid @ModelAttribute("registroUsuario") ClienteRegistroDTO formCliente,
         BindingResult result,
-        RedirectAttributes ra
+        RedirectAttributes ra,
+        Model model
     ) {
-        if (this.usuarioService.existsByUsername(formRegistro.getUsername())) {
+        if (this.usuarioService.existsByUsername(formCliente.getUsername())) {
             result.rejectValue("username", "error.username", "El nombre de usuario ya está en uso");
             return "register";
         }
     
         if (result.hasErrors()) {
+            ErrorUtils.filtrarPrimerError(result, formCliente, model, "registroUsuario", List.of(
+    "nombre",
+                "apellidos",
+                "username",
+                "email",
+                "password",
+                "repeatPass",
+                "telefonoMovil",
+                "direccion.calle",
+                "direccion.numCalle",
+                "direccion.ciudad",
+                "direccion.provincia",
+                "direccion.codigoPostal"
+            ));
+
             return "register";
         }
     
-        Usuario u = this.usuarioService.save(this.usuarioService.clientDTOtoEntity(formRegistro));
+        Usuario u = this.usuarioService.save(this.usuarioService.clientDTOtoEntity(formCliente));
         VerificationToken vt = this.tokenService.save(this.tokenService.forUser(u, 0));
         
         boolean correoUsuarioFallido = false;
@@ -111,16 +128,36 @@ public class UsuarioController {
 
     @PostMapping("/validate-rest-reg")
     public String validateRestaurantRegister(
-        @Validated(ValidacionRestaurante.class) @ModelAttribute("registroRestaurante") RestauranteRegistroDTO formRestaurante,
+        @Valid @ModelAttribute("registroRestaurante") RestauranteRegistroDTO formRestaurante,
         BindingResult result,
+        Model model,
         RedirectAttributes ra
     ) {
-        if (usuarioService.existsByUsername(formRestaurante.getPropietario().getUsername())) {
+        if (this.usuarioService.existsByUsername(formRestaurante.getPropietario().getUsername())) {
             result.rejectValue("username", "error.username", "El nombre de usuario ya está en uso");
             return "register";
         }
     
         if (result.hasErrors()) {
+            ErrorUtils.filtrarPrimerError(result, formRestaurante, model, "registroRestaurante", List.of(
+    "propietario.nombre",
+                "propietario.apellidos",
+                "propietario.username",
+                "propietario.email",
+                "propietario.password",
+                "propietario.repeatPass",
+                "propietario.telefonoMovil",
+                "nombreComercial",
+                "descripcion",
+                "emailEmpresa",
+                "telefonoFijo",
+                "direccionRestaurante.calle",
+                "direccionRestaurante.numCalle",
+                "direccionRestaurante.ciudad",
+                "direccionRestaurante.provincia",
+                "direccionRestaurante.codigoPostal"
+            ));
+
             return "register";
         }
     
@@ -185,7 +222,7 @@ public class UsuarioController {
 
     @GetMapping("/acceso-denegado")
     public String mostrarAccesoDenegado() {
-        return "feedback/accesoDenegado";
+        return "errors/accesoDenegado";
     }
     
 }

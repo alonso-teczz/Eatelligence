@@ -1,6 +1,5 @@
 package com.alonso.eatelligence.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -15,9 +14,6 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Autowired
-    private CustomAccessDeniedHandler accessDeniedHandler;
-
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
@@ -28,7 +24,7 @@ public class SecurityConfig {
                 .access((authentication, context) -> {
                     return new AuthorizationDecision("XMLHttpRequest".equals(context.getRequest().getHeader("X-Requested-With")));
                 })
-                .requestMatchers(HttpMethod.GET, "/", "/register", "/login", "/registro-exitoso", "/acceso-denegado", "/verificar")
+                .requestMatchers(HttpMethod.GET, "/", "/register", "/login", "/registro-exitoso", "/acceso-denegado", "/verificar", "/error")
                 .permitAll()
                 .requestMatchers(HttpMethod.POST, "/validate-client-reg", "/validate-rest-reg", "/validate-login", "/reenviar-verificacion")
                 .permitAll()
@@ -40,16 +36,10 @@ public class SecurityConfig {
                 .permitAll()
                 .anyRequest().authenticated()
             )
-            .formLogin(login -> login
-                .loginPage("/login")
-                .defaultSuccessUrl("/", true)
-                .permitAll()
-            )
             .exceptionHandling(ex -> ex
-                .accessDeniedHandler(accessDeniedHandler)
-                .authenticationEntryPoint((req, res, authEx) -> res.sendRedirect("/acceso-denegado"))
+                .accessDeniedHandler((req, res, authEx) -> res.sendRedirect("/acceso-denegado"))
+                .authenticationEntryPoint((req, res, authEx) -> res.sendRedirect("/login"))
             );
-        
 
         return http.build();
     }

@@ -1,40 +1,69 @@
 package com.alonso.eatelligence.validation.validators;
 
-import com.alonso.eatelligence.model.dto.DireccionRegistroDTO;
+import com.alonso.eatelligence.model.dto.DireccionOpcionalDTO;
 import com.alonso.eatelligence.validation.annotations.DireccionCompleta;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class DireccionCompletaValidator implements ConstraintValidator<DireccionCompleta, DireccionRegistroDTO> {
+public class DireccionCompletaValidator implements ConstraintValidator<DireccionCompleta, DireccionOpcionalDTO> {
 
     @Override
-    public boolean isValid(DireccionRegistroDTO direccion, ConstraintValidatorContext context) {
-        //! Si no hay nada rellenado, OK — es opcional
-        if (direccion == null) {
-            return true;
+    public boolean isValid(DireccionOpcionalDTO direccion, ConstraintValidatorContext context) {
+        if (direccion == null) return true;
+
+        boolean algunoRellenado = isFilled(direccion);
+
+        if (!algunoRellenado) return true;
+
+        boolean valido = true;
+
+        context.disableDefaultConstraintViolation();
+
+        //# Añade errores por campo si falta alguno
+        
+        if (isBlank(direccion.getCalle())) {
+            context.buildConstraintViolationWithTemplate("La calle es obligatoria")
+                   .addPropertyNode("calle").addConstraintViolation();
+            valido = false;
         }
 
-        boolean existsEmptyField =
-            notEmpty(direccion.getCalle()) ||
-            notEmpty(direccion.getNumCalle()) ||
-            notEmpty(direccion.getCiudad()) ||
-            notEmpty(direccion.getProvincia()) ||
-            notEmpty(direccion.getCodigoPostal());
+        if (isBlank(direccion.getNumCalle())) {
+            context.buildConstraintViolationWithTemplate("El número es obligatorio")
+                   .addPropertyNode("numCalle").addConstraintViolation();
+            valido = false;
+        }
 
-        boolean allFilled =
-            notEmpty(direccion.getCalle()) &&
-            notEmpty(direccion.getNumCalle()) &&
-            notEmpty(direccion.getCiudad()) &&
-            notEmpty(direccion.getProvincia()) &&
-            notEmpty(direccion.getCodigoPostal());
+        if (isBlank(direccion.getCiudad())) {
+            context.buildConstraintViolationWithTemplate("La ciudad es obligatoria")
+                   .addPropertyNode("ciudad").addConstraintViolation();
+            valido = false;
+        }
 
-        //! Si no hay nada rellenado, OK — es opcional.
-        //! Si hay alguno pero no todos, entonces es inválido.
-        return !existsEmptyField || allFilled;
+        if (isBlank(direccion.getProvincia())) {
+            context.buildConstraintViolationWithTemplate("La provincia es obligatoria")
+                   .addPropertyNode("provincia").addConstraintViolation();
+            valido = false;
+        }
+
+        if (isBlank(direccion.getCodigoPostal())) {
+            context.buildConstraintViolationWithTemplate("El código postal es obligatorio")
+                   .addPropertyNode("codigoPostal").addConstraintViolation();
+            valido = false;
+        }
+
+        return valido;
     }
 
-    private boolean notEmpty(String s) {
-        return s != null && !s.isBlank();
+    private boolean isFilled(DireccionOpcionalDTO d) {
+        return !isBlank(d.getCalle()) ||
+            !isBlank(d.getNumCalle()) ||
+            !isBlank(d.getCiudad()) ||
+            !isBlank(d.getProvincia()) ||
+            !isBlank(d.getCodigoPostal());
+    }
+
+    private boolean isBlank(String s) {
+        return s == null || s.isBlank();
     }
 }

@@ -23,7 +23,7 @@
         <div class="col-md-6">
           <label for="username" class="form-label">Nombre de usuario</label>
           <input type="text" th:field="*{username}" class="form-control" id="username"
-                 required placeholder="Ej. carlosgp_98" minlength="6" maxlength="20">
+            required placeholder="Ej. carlosgp_98" minlength="6" maxlength="20">
           
           <!-- Feedback dinámico -->
           <div class="valid-feedback d-none" id="username-feedback-success">¡Nombre de usuario disponible!</div>
@@ -97,7 +97,7 @@
     </h5> 
 
     <div class="mt-4">
-        <div th:replace="fragments/user/direccion :: direccionForm('direccion')"></div>
+        <div th:replace="fragments/user/direccionForm :: direccionFields('direccion')"></div>
     </div>
 
     <input type="hidden" name="latitud" id="latitud">
@@ -200,7 +200,7 @@
         Dirección personal
     </h5>
 
-    <div th:replace="fragments/user/direccion :: direccionForm(${prefix + '.direccion'})"></div>
+    <div th:replace="fragments/user/direccionForm :: direccionFields(${prefix + '.direccion'})"></div>
   
     <!-- Latitud y longitud de la dirección personal -->
     <input type="hidden" th:field="*{__${prefix}__.direccion.latitud}" th:id="${prefix + '.direccion.latitud'}">
