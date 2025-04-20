@@ -76,13 +76,13 @@ public class VerificacionController {
         if (oldVT.getFechaExpiracion().isAfter(LocalDateTime.now())) {
             Long segundosRestantes = Duration.between(LocalDateTime.now(), oldVT.getFechaExpiracion()).toSeconds();
             return ResponseEntity.status(429)
-                .body("Debes esperar " + 
+                .body("Tu último token aún no ha expirado. Debes esperar " + 
                     (segundosRestantes >= 60 
                         ? (segundosRestantes / 60 > 1 
                             ? (segundosRestantes / 60) + " minutos" 
                             : "1 minuto") 
                         : "menos de un minuto") + 
-                    " para solicitar otro correo.");
+                    " para solicitar otro correo de verificación.");
         }        
     
         Integer intentos = oldVT.getIntentosReenvio();
@@ -94,13 +94,13 @@ public class VerificacionController {
             Long segundosRestantes = Duration.between(LocalDateTime.now(), oldVT.getUltimoIntento().plusMinutes(minutosEspera)).toSeconds();
         
             return ResponseEntity.status(429)
-                .body("Debes esperar " + 
+                .body("Tu último token aún no ha expirado. Debes esperar " + 
                     (segundosRestantes >= 60 
                         ? (segundosRestantes / 60 > 1 
                             ? (segundosRestantes / 60) + " minutos" 
                             : "1 minuto") 
                         : "menos de un minuto") + 
-                    " para solicitar otro correo.");
+                    " para solicitar otro correo de verificación.");
         }
     
         try {
@@ -154,7 +154,7 @@ public class VerificacionController {
                 }
             }
     
-            return ResponseEntity.ok("Correo reenviado correctamente. Podrás solicitar otro en " + (minutosEspera * 2) + " minutos.");
+            return ResponseEntity.ok("Correo de verificación reenviado correctamente. Podrás solicitar otro en " + (minutosEspera * 2) + " minutos.");
     
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Error al reenviar el correo: " + e.getMessage());

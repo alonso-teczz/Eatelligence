@@ -3,18 +3,18 @@ package com.alonso.eatelligence.controller;
 import com.alonso.eatelligence.model.dto.LoginDTO;
 import com.alonso.eatelligence.model.entity.Usuario;
 import com.alonso.eatelligence.service.imp.UsuarioServiceImp;
-import com.alonso.eatelligence.utils.ErrorUtils;
+import com.alonso.eatelligence.utils.ValidationUtils;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @SessionAttributes("usuario")
@@ -40,11 +40,9 @@ public class AuthController {
         Model model
     ) {
         if (result.hasErrors()) {
-            ErrorUtils.filtrarPrimerError(result, formLogin, model, "loginDTO", List.of(
-                "username",
-                "password"
-            ));
-            
+            ValidationUtils.getFirstOrderedErrorFromBindingResult(result, formLogin.getClass())
+                .ifPresent(error -> model.addAttribute("globalError", error.getDefaultMessage()));
+    
             return "login";
         }
         
@@ -59,9 +57,13 @@ public class AuthController {
         return "redirect:/";
     }
 
-    @GetMapping("/logout")
-    public String cerrarSesion(HttpSession session) {
+
+
+    @PostMapping("/logout")
+    public String logout(HttpSession session, RedirectAttributes ra) {
         session.invalidate();
-        return "redirect:/login?logout";
+        ra.addFlashAttribute("logoutSuccess", true);
+        return "redirect:/login";
     }
+
 }

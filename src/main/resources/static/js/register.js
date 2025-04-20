@@ -340,162 +340,168 @@ document.addEventListener("DOMContentLoaded", function () {
       numCalle: formRestaurante.querySelector('[name="direccionRestaurante.numCalle"]'),
       codigoPostal: formRestaurante.querySelector('[name="direccionRestaurante.codigoPostal"]')
     };
-    
+
     [...Object.values(camposUsuario), ...Object.values(direccionRestaurante)].forEach(input => input?.classList.remove("is-invalid"));
     
+    const globalError = document.querySelector('#global-error') || null;
+    
+    if (globalError) {
+      globalError.style.display = 'none';
+    }
+
     // Validar campos principales
-    // for (const [key, input] of Object.entries(camposUsuario)) {
-    //   if (!input) continue;
-    //   const valor = input.value.trim();
+    for (const [key, input] of Object.entries(camposUsuario)) {
+      if (!input) continue;
+      const valor = input.value.trim();
       
-    //   if (!valor) {
-    //     const isDirectionField = ["calle", "ciudad", "provincia", "numCalle", "codigoPostal"].includes(key);
+      if (!valor) {
+        const isDirectionField = ["calle", "ciudad", "provincia", "numCalle", "codigoPostal"].includes(key);
     
-    //     // Validación especial si es formulario de restaurante y el campo es de dirección del propietario
-    //     if (esRestaurante && isDirectionField) {
-    //       const camposDireccion = ["calle", "ciudad", "provincia", "numCalle", "codigoPostal"];
-    //       const someFilled = camposDireccion.some(campo => camposUsuario[campo]?.value.trim() !== "");
-    //       const allFilled = camposDireccion.every(campo => camposUsuario[campo]?.value.trim() !== "");
+        // Validación especial si es formulario de restaurante y el campo es de dirección del propietario
+        if (esRestaurante && isDirectionField) {
+          const camposDireccion = ["calle", "ciudad", "provincia", "numCalle", "codigoPostal"];
+          const someFilled = camposDireccion.some(campo => camposUsuario[campo]?.value.trim() !== "");
+          const allFilled = camposDireccion.every(campo => camposUsuario[campo]?.value.trim() !== "");
     
-    //       if (someFilled && !allFilled) {
-    //         input.classList.add("is-invalid");
-    //         input.focus();
-    //         valido = false;
-    //         break;
-    //       }
+          if (someFilled && !allFilled) {
+            input.classList.add("is-invalid");
+            input.focus();
+            valido = false;
+            break;
+          }
     
-    //       continue;
-    //     }
+          continue;
+        }
     
-    //     input.classList.add("is-invalid");
-    //     input.focus();
-    //     valido = false;
-    //     break;
-    //   }
+        input.classList.add("is-invalid");
+        input.focus();
+        valido = false;
+        break;
+      }
   
-    //   switch (key) {
-    //     case "nombre":
-    //       if (valor.length < 3 || valor.length > 20) {
-    //         input.classList.add("is-invalid");
-    //         input.focus();
-    //         valido = false;
-    //       }
-    //       break;
-    //       case "apellidos":
-    //         if (valor.length < 6 || valor.length > 30) {
-    //         input.classList.add("is-invalid");
-    //         input.focus();
-    //         valido = false;
-    //       }
-    //       break;
-    //     case "username":
-    //       if (valor.length < 6 || valor.length > 20) {
-    //         input.classList.add("is-invalid");
-    //         input.focus();
-    //         valido = false;
-    //       } else {
-    //         try {
-    //           const existe = await fetch(`/api/users/exists?username=${encodeURIComponent(username)}`, {
-    //             headers: {
-    //               "X-Requested-With": "XMLHttpRequest"
-    //             }
-    //           })
-    //             .then(res => res.json());
+      switch (key) {
+        case "nombre":
+          if (valor.length < 3 || valor.length > 20) {
+            input.classList.add("is-invalid");
+            input.focus();
+            valido = false;
+          }
+          break;
+          case "apellidos":
+            if (valor.length < 6 || valor.length > 30) {
+            input.classList.add("is-invalid");
+            input.focus();
+            valido = false;
+          }
+          break;
+        case "username":
+          if (valor.length < 6 || valor.length > 20) {
+            input.classList.add("is-invalid");
+            input.focus();
+            valido = false;
+          } else {
+            try {
+              const existe = await fetch(`/api/users/exists?username=${encodeURIComponent(username)}`, {
+                headers: {
+                  "X-Requested-With": "XMLHttpRequest"
+                }
+              })
+                .then(res => res.json());
         
-    //           if (existe) {
-    //             input.classList.add("is-invalid");
-    //             input.focus();
+              if (existe) {
+                input.classList.add("is-invalid");
+                input.focus();
         
-    //             const feedback = document.getElementById(`${input.id}-feedback-error`);
-    //             if (feedback) {
-    //               feedback.classList.remove("d-none");
-    //             }
+                const feedback = document.getElementById(`${input.id}-feedback-error`);
+                if (feedback) {
+                  feedback.classList.remove("d-none");
+                }
         
-    //             valido = false;
-    //           }
-    //         } catch (err) {
-    //           console.error("Error al validar el nombre de usuario:", err);
-    //           valido = false;
-    //         }
-    //       }
-    //       break;
-    //     case "email":
-    //       if (!/^\S+@\S+\.\S+$/.test(valor)) {
-    //         input.classList.add("is-invalid");
-    //       input.focus();
-    //       valido = false;
-    //     }
-    //     break;
-    //     case "password":
-    //       if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(valor)) {
-    //         input.classList.add("is-invalid");
-    //         input.focus();
-    //         valido = false;
-    //       }
-    //       break;
-    //     case "repeatPass":
-    //       if (valor !== camposUsuario.password.value) {
-    //         input.classList.add("is-invalid");
-    //         input.focus();
-    //         valido = false;
-    //       }
-    //       break;
-    //     case "telefonoMovil":
-    //       if (!/^[67]\d{8}$/.test(valor)) {
-    //         input.classList.add("is-invalid");
-    //         input.focus();
-    //         valido = false;
-    //       }
-    //       break;
-    //   }
+                valido = false;
+              }
+            } catch (err) {
+              console.error("Error al validar el nombre de usuario:", err);
+              valido = false;
+            }
+          }
+          break;
+        case "email":
+          if (!/^\S+@\S+\.\S+$/.test(valor)) {
+            input.classList.add("is-invalid");
+          input.focus();
+          valido = false;
+        }
+        break;
+        case "password":
+          if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(valor)) {
+            input.classList.add("is-invalid");
+            input.focus();
+            valido = false;
+          }
+          break;
+        case "repeatPass":
+          if (valor !== camposUsuario.password.value) {
+            input.classList.add("is-invalid");
+            input.focus();
+            valido = false;
+          }
+          break;
+        case "telefonoMovil":
+          if (!/^[67]\d{8}$/.test(valor)) {
+            input.classList.add("is-invalid");
+            input.focus();
+            valido = false;
+          }
+          break;
+      }
         
-    //   if (!valido) break;
-    // }
+      if (!valido) break;
+    }
     
-    // if (valido && checkbox.checked) {
-    //   const camposRestaurante = {
-    //     nombreComercial: formActivo.querySelector('[name="nombreComercial"]'),
-    //     descripcion: formActivo.querySelector('[name="descripcion"]'),
-    //     emailEmpresa: formActivo.querySelector('[name="emailEmpresa"]'),
-    //     telFijo: formActivo.querySelector('[name="telefonoFijo"]')
-    //   };
+    if (valido && checkbox.checked) {
+      const camposRestaurante = {
+        nombreComercial: formActivo.querySelector('[name="nombreComercial"]'),
+        descripcion: formActivo.querySelector('[name="descripcion"]'),
+        emailEmpresa: formActivo.querySelector('[name="emailEmpresa"]'),
+        telFijo: formActivo.querySelector('[name="telefonoFijo"]')
+      };
 
-    //   const { nombreComercial, descripcion, emailEmpresa, telFijo } = camposRestaurante;
+      const { nombreComercial, descripcion, emailEmpresa, telFijo } = camposRestaurante;
 
-    //   [...Object.values(camposRestaurante)].forEach(input => input?.classList.remove("is-invalid"));
+      [...Object.values(camposRestaurante)].forEach(input => input?.classList.remove("is-invalid"));
   
-    //   if (!nombreComercial || nombreComercial.value.trim().length < 6) {
-    //     nombreComercial.classList.add("is-invalid");
-    //     nombreComercial.focus();
-    //     valido = false;
-    //   } else if (!descripcion || descripcion.value.trim().length < 6) {
-    //     descripcion.classList.add("is-invalid");
-    //     descripcion.focus();
-    //     valido = false;
-    //   } else if (!emailEmpresa || !/^\S+@\S+\.\S+$/.test(emailEmpresa.value.trim())) {
-    //     emailEmpresa.classList.add("is-invalid");
-    //     emailEmpresa.focus();
-    //     valido = false;
-    //   } else if (!telFijo && telFijo.value && !/^[89]\d{8}$/.test(telFijo.value)) {
-    //     telFijo.classList.add("is-invalid");
-    //     telFijo.focus();
-    //     valido = false;
-    //   }
-    // }
+      if (!nombreComercial || nombreComercial.value.trim().length < 6) {
+        nombreComercial.classList.add("is-invalid");
+        nombreComercial.focus();
+        valido = false;
+      } else if (!descripcion || descripcion.value.trim().length < 6) {
+        descripcion.classList.add("is-invalid");
+        descripcion.focus();
+        valido = false;
+      } else if (!emailEmpresa || !/^\S+@\S+\.\S+$/.test(emailEmpresa.value.trim())) {
+        emailEmpresa.classList.add("is-invalid");
+        emailEmpresa.focus();
+        valido = false;
+      } else if (!telFijo && telFijo.value && !/^[89]\d{8}$/.test(telFijo.value)) {
+        telFijo.classList.add("is-invalid");
+        telFijo.focus();
+        valido = false;
+      }
+    }
 
-    // // Validar dirección del restaurante
-    // if (valido && checkbox.checked) {
-    //   for (const input of Object.values(direccionRestaurante)) {
-    //     if (!input) continue;
-    //     const valor = input.value.trim();
-    //     if (!valor) {
-    //       input.classList.add("is-invalid");
-    //       input.focus();
-    //       valido = false;
-    //       break;
-    //     }
-    //   }
-    // }
+    // Validar dirección del restaurante
+    if (valido && checkbox.checked) {
+      for (const input of Object.values(direccionRestaurante)) {
+        if (!input) continue;
+        const valor = input.value.trim();
+        if (!valor) {
+          input.classList.add("is-invalid");
+          input.focus();
+          valido = false;
+          break;
+        }
+      }
+    }
   
     if (valido) {
       formActivo.requestSubmit();

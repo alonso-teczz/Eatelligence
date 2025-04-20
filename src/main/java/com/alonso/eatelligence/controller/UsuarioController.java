@@ -1,7 +1,6 @@
 package com.alonso.eatelligence.controller;
 
 import java.io.UnsupportedEncodingException;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +24,7 @@ import com.alonso.eatelligence.service.EmailService;
 import com.alonso.eatelligence.service.imp.ResturanteServiceImp;
 import com.alonso.eatelligence.service.imp.UsuarioServiceImp;
 import com.alonso.eatelligence.service.imp.VerificationTokenServiceImp;
-import com.alonso.eatelligence.utils.ErrorUtils;
+import com.alonso.eatelligence.utils.ValidationUtils;
 
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -80,20 +79,8 @@ public class UsuarioController {
         }
     
         if (result.hasErrors()) {
-            ErrorUtils.filtrarPrimerError(result, formCliente, model, "registroUsuario", List.of(
-    "nombre",
-                "apellidos",
-                "username",
-                "email",
-                "password",
-                "repeatPass",
-                "telefonoMovil",
-                "direccion.calle",
-                "direccion.numCalle",
-                "direccion.ciudad",
-                "direccion.provincia",
-                "direccion.codigoPostal"
-            ));
+            ValidationUtils.getFirstOrderedErrorFromBindingResult(result, formCliente.getClass())
+                .ifPresent(error -> model.addAttribute("globalError", error.getDefaultMessage()));
 
             return "register";
         }
@@ -139,26 +126,10 @@ public class UsuarioController {
         }
     
         if (result.hasErrors()) {
-            ErrorUtils.filtrarPrimerError(result, formRestaurante, model, "registroRestaurante", List.of(
-    "propietario.nombre",
-                "propietario.apellidos",
-                "propietario.username",
-                "propietario.email",
-                "propietario.password",
-                "propietario.repeatPass",
-                "propietario.telefonoMovil",
-                "nombreComercial",
-                "descripcion",
-                "emailEmpresa",
-                "telefonoFijo",
-                "direccionRestaurante.calle",
-                "direccionRestaurante.numCalle",
-                "direccionRestaurante.ciudad",
-                "direccionRestaurante.provincia",
-                "direccionRestaurante.codigoPostal"
-            ));
-
-            return "register";
+            ValidationUtils.getFirstOrderedErrorFromBindingResult(result, formRestaurante.getClass())
+                .ifPresent(error -> model.addAttribute("globalError", error.getDefaultMessage()));
+    
+            return "login";
         }
     
         Restaurante r = this.restauranteService.save(restauranteService.restDTOtoEntity(formRestaurante));

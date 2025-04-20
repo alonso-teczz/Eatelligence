@@ -76,9 +76,20 @@ document.addEventListener("DOMContentLoaded", () => {
           icon: 'info',
           title: 'Ya puedes reenviar el correo de verificación',
           showConfirmButton: false,
-          timer: 3000
+          timer: 3000,
+          timerProgressBar: true,
+          background: '#e0f0ff',
+          color: '#0d6efd',
+          customClass: {
+            popup: 'border-0 shadow rounded-4 px-4 py-3',
+            title: 'fw-semibold fs-6',
+            icon: 'text-primary fs-5 me-2'
+          },
+          didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer);
+            toast.addEventListener('mouseleave', Swal.resumeTimer);
+          }
         });
-
         return;
       }
 
@@ -89,12 +100,17 @@ document.addEventListener("DOMContentLoaded", () => {
       const tipo = correoRestFallido ? "RESTAURANTE" : "USUARIO";
 
       btnReenviar.disabled = true;
-      cuentaAtrasTexto.innerHTML = `<span class="text-info">Procesando solicitud...</span>`;
+      cuentaAtrasTexto.innerHTML = `<span class="text-info fw-semibold">Procesando solicitud...</span>`;
+
+      const csrfToken = document.getElementById('csrfToken').value;
+      const csrfHeader = document.getElementById('csrfHeader').value;
 
       fetch(`/reenviar-verificacion?token=${encodeURIComponent(token)}&tipo=${tipo}`, {
         method: 'POST',
         headers: {
-          'X-Requested-With': 'XMLHttpRequest'
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'X-Requested-With': 'XMLHttpRequest',
+          [csrfHeader]: csrfToken
         }
       }).then(async res => {
         const mensaje = await res.text();
@@ -107,7 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
             confirmButtonColor: '#1d6448'
           });
           btnReenviar.disabled = true;
-          cuentaAtrasTexto.innerHTML = `<span class="text-success">Correo reenviado correctamente. Espera unos minutos antes de volver a intentarlo.</span>`;
+          cuentaAtrasTexto.innerHTML = `<span class="text-success fw-semibold">Correo reenviado correctamente. Espera unos minutos antes de volver a intentarlo.</span>`;
         } else {
           Swal.fire({
             icon: 'error',

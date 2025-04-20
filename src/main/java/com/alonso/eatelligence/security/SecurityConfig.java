@@ -18,7 +18,6 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-            .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(HttpMethod.GET, "/api/users/exists")
                 .access((authentication, context) -> {
@@ -26,7 +25,7 @@ public class SecurityConfig {
                 })
                 .requestMatchers(HttpMethod.GET, "/", "/register", "/login", "/registro-exitoso", "/acceso-denegado", "/verificar", "/error")
                 .permitAll()
-                .requestMatchers(HttpMethod.POST, "/validate-client-reg", "/validate-rest-reg", "/validate-login", "/reenviar-verificacion")
+                .requestMatchers(HttpMethod.POST, "/validate-client-reg", "/validate-rest-reg", "/validate-login", "/reenviar-verificacion", "/logout")
                 .permitAll()
                 .requestMatchers(
                     "/css/**",
@@ -36,6 +35,7 @@ public class SecurityConfig {
                 .permitAll()
                 .anyRequest().authenticated()
             )
+            .logout(logout -> logout.disable())
             .exceptionHandling(ex -> ex
                 .accessDeniedHandler((req, res, authEx) -> res.sendRedirect("/acceso-denegado"))
                 .authenticationEntryPoint((req, res, authEx) -> res.sendRedirect("/login"))

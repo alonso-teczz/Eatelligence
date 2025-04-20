@@ -25,6 +25,17 @@ public class VerificationTokenServiceImp implements IVerificationService, Tokeni
     
     @Override
     public VerificationToken forUser(Usuario usuario, Integer intentosReenvio) {
+        Optional<VerificationToken> vtExistente = this.tokenRepository.findByUsuario(usuario);
+    
+        if (vtExistente.isPresent()) {
+            VerificationToken token = vtExistente.get();
+            token.setIntentosReenvio(intentosReenvio);
+            token.setToken(UUID.randomUUID().toString());
+            token.setFechaExpiracion(LocalDateTime.now().plusMinutes(15));
+            token.setUltimoIntento(LocalDateTime.now());
+            return this.tokenRepository.save(token);
+        }
+    
         return this.tokenRepository.save(
             VerificationToken.builder()
                 .usuario(usuario)
@@ -39,6 +50,17 @@ public class VerificationTokenServiceImp implements IVerificationService, Tokeni
 
     @Override
     public VerificationToken forRestaurant(Restaurante restaurante, Integer intentosReenvio) {
+        Optional<VerificationToken> vtExistente = this.tokenRepository.findByRestaurante(restaurante);
+    
+        if (vtExistente.isPresent()) {
+            VerificationToken token = vtExistente.get();
+            token.setIntentosReenvio(intentosReenvio);
+            token.setToken(UUID.randomUUID().toString());
+            token.setFechaExpiracion(LocalDateTime.now().plusHours(1));
+            token.setUltimoIntento(LocalDateTime.now());
+            return this.tokenRepository.save(token);
+        }
+    
         return this.tokenRepository.save(
             VerificationToken.builder()
                 .restaurante(restaurante)
