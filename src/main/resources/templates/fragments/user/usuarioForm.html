@@ -76,8 +76,12 @@
   <input type="hidden" name="longitud" id="longitud">
 </div>
 
-<!-- Fragmento para el formulario de registro de restaurante -->
+<!--+ Fragmento para el formulario de registro de restaurante -->
 <div th:fragment="restaurantUserFields(prefix)">
+  <div th:if="${globalError}" id="global-error" class="alert alert-danger" role="alert">
+    <i class="bi bi-exclamation-circle me-2"></i>
+    <span th:text="${globalError}"></span>
+  </div>
   <div class="row g-3">
     <div class="col-md-6">
       <label th:for="${prefix + '.nombre'}" class="form-label">Nombre</label>
