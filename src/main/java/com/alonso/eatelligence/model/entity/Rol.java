@@ -40,7 +40,7 @@ public class Rol {
 
 
     public enum NombreRol {
-        ADMINISTRADOR,
+        ADMIN,
         REPARTIDOR,
         COCINERO,
         CLIENTE

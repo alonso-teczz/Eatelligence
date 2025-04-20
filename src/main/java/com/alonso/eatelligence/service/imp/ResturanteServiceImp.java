@@ -93,6 +93,11 @@ public class ResturanteServiceImp implements IRestauranteService, IEntitableClie
     }
 
     @Override
+    public Optional<Restaurante> findByUsuario(Usuario usuario) {
+        return this.restauranteRepository.findByPropietario(usuario);
+    }
+
+    @Override
     public List<Restaurante> getAllRestaurants() {
         return this.restauranteRepository.findAll();
     }

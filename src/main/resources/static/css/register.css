@@ -5,6 +5,10 @@
   --color-texto: #1d1d1d;
 }
 
+body {
+  font-family: 'Inter', sans-serif;
+}
+
 /* ===== Estilos generales del formulario ===== */
 .formulario-registro {
   background-color: #fff;
@@ -43,7 +47,7 @@
 .formulario-registro button[type="submit"],
 #btn-registro {
   background-color: var(--color-principal);
-  border-color: var(--color-secundario);
+  border-color: var(--color-principal);
   color: #fff;
   font-weight: 600;
   transition: all 0.3s ease;
@@ -57,7 +61,8 @@
 
 #btn-registro:focus {
   box-shadow: 0 0 0 0.2rem rgba(171, 194, 148, 0.25);
-  border-color: var(--color-secundario);
+  border-color: var(--color-principal);
+  background-color: var(--color-secundario);
 }
 /* Switch de restaurante */
 .form-check-input:checked {
@@ -66,6 +71,10 @@
 }
 
 /* Estilo acordeón */
+.accordion-button:focus {
+  box-shadow: 0 0 0 0.2rem rgba(171, 194, 148, 0.25);
+}
+
 .accordion-button {
   background-color: #f8f9fa;
   font-weight: 500;
@@ -120,6 +129,22 @@
 
 .autocomplete-dropdown:empty {
   display: none;
+}
+
+.autocomplete-dropdown::-webkit-scrollbar {
+  width: 8px;
+  background-color: var(--color-principal);
+  border-radius: 4px;
+}
+
+.autocomplete-dropdown::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 4px;
+}
+
+.autocomplete-dropdown:focus {
+  outline: none;
+  box-shadow: 0 0 0 0.2rem rgba(171, 194, 148, 0.25);
 }
 
 .autocomplete-item {

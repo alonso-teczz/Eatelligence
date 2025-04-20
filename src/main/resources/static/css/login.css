@@ -5,6 +5,7 @@
 
 body {
   background-color: #f8f9fa;
+  font-family: 'Inter', sans-serif;
 }
 
 .container {
@@ -25,21 +26,35 @@ body {
 }
 
 .card .form-control:focus {
-  border-color: #dc3545;
-  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+  border-color: var(--color-principal);
+  box-shadow: 0 0 0 0.2rem rgba(171, 194, 148, 0.25);
 }
 
 .btn-success {
-  background-color: #abc294;
-  border-color: #1d6448;
+  background-color: var(--color-principal);
+  border-color: var(--color-principal);
 }
 
 .btn-success:hover {
-  background-color: #174f39;
-  border-color: #174f39;
+  background-color: #174f39 !important;
+  border-color: #174f39 !important;
+}
+
+.btn-success:focus {
+  border-color: var(--color-principal);
+  background-color: var(--color-secundario);
+  box-shadow: 0 0 0 0.2rem rgba(171, 194, 148, 0.25);
 }
 
 label {
   color: var(--color-secundario);
   font-weight: 600;
+}
+
+.is-invalid {
+  border-color: #dc3545 !important;
+}
+
+.is-invalid:focus {
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
 }

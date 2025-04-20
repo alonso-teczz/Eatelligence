@@ -193,7 +193,7 @@ public class UsuarioController {
 
     @GetMapping("/acceso-denegado")
     public String mostrarAccesoDenegado() {
-        return "errors/accesoDenegado";
+        return "error/access-denied";
     }
     
 }

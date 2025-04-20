@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   let timeout;
 
-
   /**
    * Sincroniza los campos de dos formularios: origen y destino.
    * - Los campos de dirección (calle, numCalle, ciudad, provincia, código postal) se sincronizan

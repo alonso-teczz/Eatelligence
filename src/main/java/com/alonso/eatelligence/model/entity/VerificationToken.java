@@ -34,7 +34,10 @@ public class VerificationToken {
     private TipoVerificacion tipo;
 
     @ManyToOne
-    @JoinColumn(name = "usuario_id", nullable = true)
+    @JoinColumn(name = "usuario_id", nullable = true, foreignKey = @ForeignKey(
+        name = "FK_verification_token_usuario",
+        foreignKeyDefinition = "FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE"
+    ))
     private Usuario usuario;    
 
     @OneToOne

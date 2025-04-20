@@ -1,5 +1,6 @@
 body {
   background: linear-gradient(to right, #f8f9fa, #e9f7ef);
+  font-family: 'Inter', sans-serif;
 }
 
 .card {
