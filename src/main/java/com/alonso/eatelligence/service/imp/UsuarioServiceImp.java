@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.alonso.eatelligence.model.dto.ClienteRegistroDTO;
 import com.alonso.eatelligence.model.entity.Direccion;
+import com.alonso.eatelligence.model.entity.Rol.NombreRol;
 import com.alonso.eatelligence.model.entity.Usuario;
 import com.alonso.eatelligence.repository.IUsuarioRepository;
 import com.alonso.eatelligence.service.IEntitableClient;
@@ -19,6 +20,9 @@ public class UsuarioServiceImp implements IUsuarioService, IEntitableClient {
 
     @Autowired
     private IUsuarioRepository usuarioRepository;
+
+    @Autowired
+    private RolServiceImp rolService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -40,6 +44,11 @@ public class UsuarioServiceImp implements IUsuarioService, IEntitableClient {
             .email(cliente.getEmail())
             .telefonoMovil(cliente.getTelefonoMovil())
             .password(this.encodePassword(cliente.getPassword()))
+            .roles(
+                List.of(
+                    this.rolService.findByNombre(NombreRol.CLIENTE).orElseThrow()
+                )
+            )
             .build();
 
         usuario.getDirecciones().add(
@@ -88,10 +97,12 @@ public class UsuarioServiceImp implements IUsuarioService, IEntitableClient {
         return this.usuarioRepository.existsByUsername(nombre);
     }
 
+    @Override
     public Usuario findByUsername(String username) {
         return this.usuarioRepository.findByUsername(username);
     }
 
+    @Override
     public boolean checkPassword(Usuario u, String password) {
         return this.matchesPassword(password, u.getPassword());
     }

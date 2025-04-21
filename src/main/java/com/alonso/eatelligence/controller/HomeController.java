@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 
 @Controller
-public class EntradaController {
+public class HomeController {
 
     @GetMapping("/")
     public String goIndex() {

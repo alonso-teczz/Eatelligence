@@ -16,57 +16,6 @@ body {
   margin-left: 1rem;
 }
 
-.profile-toggle {
-  transition: 0.4s ease;
-}
-
-.settings-link , .logout-link {
-  transition: background-color 0.3s ease;
-}
-
-.profile-toggle:hover, .profile-toggle:focus {
-  background-color: #d8e8d0 !important;
-  color: #356859 !important;
-}
-
-.settings-link:hover {
-  background-color: #d6e6ff !important;
-  color: #0d6efd !important;
-  font-weight: 500;
-}
-
-.settings-link:focus {
-  background-color: #d6e6ff !important;
-  color: #0d6efd !important;
-  font-weight: 500;
-  outline: none !important;
-  box-shadow: 0 0 0 0.1rem #0d6efd !important;
-  border: none !important;
-}
-
-.logout-link:hover {
-  background-color: #f8d7da !important;
-  color: #dc3545 !important;
-  font-weight: 500;
-}
-
-.logout-link:focus {
-  background-color: #f8d7da !important;
-  color: #dc3545 !important;
-  font-weight: 500;
-  outline: none !important;
-  box-shadow: 0 0 0 0.1rem #dc3545 !important;
-  border: none !important;
-}
-
-.settings-link:hover i {
-    color: #0d6efd !important;
-}
-
-.logout-link:hover i {
-    color: #dc3545 !important;
-}
-
 .nav-link {
   border-radius: 0.7rem !important;
 }
@@ -80,6 +29,133 @@ body {
   border-radius: 0.7rem !important;
 }
 
+.profile-toggle {
+  transition: 0.4s ease;
+}
+
+.profile-toggle:hover, .profile-toggle:focus {
+  background-color: #d8e8d0 !important;
+  color: #356859 !important;
+}
+
 .dropdown-item {
   color: #356859 !important;
+}
+
+.settings-link,
+.logout-link,
+.historial-link,
+.admin-link,
+.rutas-link,
+.pedidos-link {
+  transition: background-color 0.3s ease;
+}
+
+/* Ajustes - Primary */
+.settings-link:hover,
+.settings-link:focus {
+  background-color: #d6e6ff !important; /* primary soft */
+  color: #0d6efd !important;
+  font-weight: 500;
+  outline: none !important;
+  border: none !important;
+}
+.settings-link:focus {
+  box-shadow: 0 0 0 0.1rem #0d6efd !important;
+}
+.settings-link:hover i {
+  color: #0d6efd !important;
+}
+
+/* Cerrar sesión - Danger */
+.logout-link:hover,
+.logout-link:focus {
+  background-color: #f8d7da !important; /* danger soft */
+  color: #dc3545 !important;
+  font-weight: 500;
+  outline: none !important;
+  border: none !important;
+}
+.logout-link:focus {
+  box-shadow: 0 0 0 0.1rem #dc3545 !important;
+}
+.logout-link:hover i {
+  color: #dc3545 !important;
+}
+
+/* Historial - Secondary */
+.historial-link:hover,
+.historial-link:focus {
+  background-color: #e2e3e5 !important; /* secondary soft */
+  color: #6c757d !important;
+  font-weight: 500;
+  outline: none !important;
+  border: none !important;
+}
+.historial-link:focus {
+  box-shadow: 0 0 0 0.1rem #6c757d !important;
+}
+.historial-link:hover i {
+  color: #6c757d !important;
+}
+
+/* Panel de control - Info */
+.admin-link:hover,
+.admin-link:focus {
+  background-color: #fff3cd !important; /* warning soft */
+  color: #ffc107 !important; /* warning */
+  font-weight: 500;
+  outline: none !important;
+  border: none !important;
+}
+
+.admin-link:focus {
+  box-shadow: 0 0 0 0.1rem #ffc107 !important; /* warning */
+}
+
+.admin-link:hover i {
+  color: #ffc107 !important; /* warning */
+}
+
+/* Rutas - Success */
+.rutas-link:hover,
+.rutas-link:focus {
+  background-color: #d1e7dd !important; /* success soft */
+  color: #198754 !important;
+  font-weight: 500;
+  outline: none !important;
+  border: none !important;
+}
+.rutas-link:focus {
+  box-shadow: 0 0 0 0.1rem #198754 !important;
+}
+.rutas-link:hover i {
+  color: #198754 !important;
+}
+
+/* Pedidos - Warning */
+.pedidos-link:hover,
+.pedidos-link:focus {
+  background-color: #fff3cd !important; /* warning soft */
+  color: #ffc107 !important;
+  font-weight: 500;
+  outline: none !important;
+  border: none !important;
+}
+.pedidos-link:focus {
+  box-shadow: 0 0 0 0.1rem #ffc107 !important;
+}
+.pedidos-link:hover i {
+  color: #ffc107 !important;
+}
+
+/* Animaciones para iconos dentro del menú de usuario */
+.dropdown-item i {
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+/* Escala y color al hacer hover */
+.dropdown-item:hover i,
+.dropdown-item:focus i {
+  transform: scale(1.2);
 }

@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
+import com.alonso.eatelligence.email.EmailService;
 import com.alonso.eatelligence.model.dto.ClienteRegistroDTO;
 import com.alonso.eatelligence.model.dto.RestauranteRegistroDTO;
 import com.alonso.eatelligence.model.entity.Restaurante;
 import com.alonso.eatelligence.model.entity.Usuario;
 import com.alonso.eatelligence.model.entity.VerificationToken;
-import com.alonso.eatelligence.service.EmailService;
 import com.alonso.eatelligence.service.imp.ResturanteServiceImp;
 import com.alonso.eatelligence.service.imp.UsuarioServiceImp;
 import com.alonso.eatelligence.service.imp.VerificationTokenServiceImp;

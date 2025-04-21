@@ -11,6 +11,7 @@ import com.alonso.eatelligence.model.dto.ClienteRegistroDTO;
 import com.alonso.eatelligence.model.dto.RestauranteRegistroDTO;
 import com.alonso.eatelligence.model.entity.Direccion;
 import com.alonso.eatelligence.model.entity.Restaurante;
+import com.alonso.eatelligence.model.entity.Rol.NombreRol;
 import com.alonso.eatelligence.model.entity.Usuario;
 import com.alonso.eatelligence.repository.IRestauranteRepository;
 import com.alonso.eatelligence.service.IEntitableClient;
@@ -20,7 +21,10 @@ import com.alonso.eatelligence.service.IRestauranteService;
 public class ResturanteServiceImp implements IRestauranteService, IEntitableClient {
 
     @Autowired
-    private IRestauranteRepository restauranteRepository;
+    private IRestauranteRepository  restauranteRepository;
+
+    @Autowired
+    private RolServiceImp rolService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -42,6 +46,12 @@ public class ResturanteServiceImp implements IRestauranteService, IEntitableClie
             .email(cliente.getEmail())
             .telefonoMovil(cliente.getTelefonoMovil())
             .password(this.encodePassword(cliente.getPassword()))
+            .roles(
+                List.of(
+                    this.rolService.findByNombre(NombreRol.CLIENTE).orElseThrow(),
+                    this.rolService.findByNombre(NombreRol.ADMIN).orElseThrow()
+                )
+            )
             .build();
 
         if (cliente.getDireccion() != null) {

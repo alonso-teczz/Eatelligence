@@ -1,16 +1,20 @@
 package com.alonso.eatelligence.model.entity;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
 @Table(name = "roles")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString(exclude = {"usuarios", "opciones", "usuarioRoles"})
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Rol {
 
     @Id
@@ -32,12 +36,12 @@ public class Rol {
         inverseJoinColumns = @JoinColumn(name = "opcion_id")
     )
     @EqualsAndHashCode.Exclude
-    private List<OpcionMenu> opciones;
+    @Builder.Default
+    private List<OpcionMenu> opciones = new ArrayList<>();
 
     @OneToMany(mappedBy = "rol", cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
     private List<UsuarioRol> usuarioRoles;
-
 
     public enum NombreRol {
         ADMIN,

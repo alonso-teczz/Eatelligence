@@ -6,13 +6,13 @@ import org.springframework.stereotype.Component;
 
 import com.alonso.eatelligence.model.entity.Alergeno;
 import com.alonso.eatelligence.model.entity.Alergeno.NombreAlergeno;
-import com.alonso.eatelligence.service.imp.AlergenoServiceImp;
+import com.alonso.eatelligence.service.IAlergenoService;
 
 @Component
 public class AlergenoDataLoader implements CommandLineRunner {
 
     @Autowired
-    private AlergenoServiceImp alergenoService;
+    private IAlergenoService alergenoService;
 
     @Override
     public void run(String... args) {

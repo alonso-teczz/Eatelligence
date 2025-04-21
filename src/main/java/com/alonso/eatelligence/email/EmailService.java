@@ -1,4 +1,4 @@
-package com.alonso.eatelligence.service;
+package com.alonso.eatelligence.email;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;

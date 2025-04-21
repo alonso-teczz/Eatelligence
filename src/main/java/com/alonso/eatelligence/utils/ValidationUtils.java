@@ -9,7 +9,6 @@ import java.util.*;
 
 public class ValidationUtils {
 
-    // Mapa con el orden de prioridad de anotaciones
     private static final Map<Class<? extends Annotation>, Integer> ANNOTATION_ORDER;
 
     static {

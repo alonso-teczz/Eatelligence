@@ -25,4 +25,8 @@ public interface IUsuarioService {
 
     //! DELETE
     void deleteById(Long id);
+
+    Usuario findByUsername(String username);
+
+    boolean checkPassword(Usuario u, String password);
 }

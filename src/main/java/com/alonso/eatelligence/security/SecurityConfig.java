@@ -3,7 +3,6 @@ package com.alonso.eatelligence.security;
 import java.io.IOException;
 import java.util.List;
 
-import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -44,7 +43,12 @@ public class SecurityConfig {
                     "/registro-exitoso",
                     "/verificar",
                     "/login",
-                    "/acceso-denegado"
+                    "/acceso-denegado",
+                    "/settings",
+                    "/historial",
+                    "/admin",
+                    "/rutas",
+                    "/pedidos"
                 )
                 .permitAll()
                 .requestMatchers(HttpMethod.POST,

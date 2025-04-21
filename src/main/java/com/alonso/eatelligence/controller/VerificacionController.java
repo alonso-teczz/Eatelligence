@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alonso.eatelligence.email.EmailService;
 import com.alonso.eatelligence.model.entity.Restaurante;
 import com.alonso.eatelligence.model.entity.Usuario;
 import com.alonso.eatelligence.model.entity.VerificationToken;
-import com.alonso.eatelligence.service.EmailService;
 import com.alonso.eatelligence.service.imp.ResturanteServiceImp;
 import com.alonso.eatelligence.service.imp.UsuarioServiceImp;
 import com.alonso.eatelligence.service.imp.VerificationTokenServiceImp;

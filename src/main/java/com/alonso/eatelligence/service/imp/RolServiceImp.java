@@ -25,4 +25,9 @@ public class RolServiceImp implements IRolService {
         return this.rolRepository.save(rol);
     }
 
+    @Override
+    public Optional<Rol> findByNombreConOpciones(NombreRol nombreRol) {
+        return this.rolRepository.findByNombreConOpciones(nombreRol);
+    }
+
 }
