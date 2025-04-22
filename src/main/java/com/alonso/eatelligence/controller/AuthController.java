@@ -6,6 +6,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -47,6 +54,12 @@ public class AuthController {
 
     @GetMapping("/login")
     public String mostrarLogin() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        
+        if (auth != null && auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken)) {
+            return "redirect:/";
+        }
+
         return "login";
     }
 
@@ -59,7 +72,8 @@ public class AuthController {
     public String procesarLogin(
         @Valid @ModelAttribute("loginDTO") LoginDTO formLogin,
         BindingResult result,
-        Model model
+        Model model,
+        HttpServletRequest request
     ) {
         if (result.hasErrors()) {
             ValidationUtils.getFirstOrderedErrorFromBindingResult(result, formLogin.getClass())
@@ -70,8 +84,8 @@ public class AuthController {
         
         Usuario u = this.usuarioService.findByUsername(formLogin.getUsername());
 
-        if (!this.usuarioService.checkPassword(u, formLogin.getPassword())) {
-            model.addAttribute("loginError", "Usuario o contraseña incorrectos");
+        if (u == null || !this.usuarioService.checkPassword(u, formLogin.getPassword())) {
+            model.addAttribute("globalError", "Usuario o contraseña incorrectos");
             return "login";
         }
 
@@ -89,6 +103,25 @@ public class AuthController {
 
         model.addAttribute("usuario", u);
         model.addAttribute("menu", menuPorSeccion);
+
+        Authentication auth = new UsernamePasswordAuthenticationToken(
+            u,
+            null,
+            u.getRoles().stream()
+                .map(rol -> new SimpleGrantedAuthority("ROLE_" + rol.getNombre().name()))
+                .toList()
+        );
+        SecurityContextHolder.getContext().setAuthentication(auth);
+
+        SecurityContext context = SecurityContextHolder.createEmptyContext();
+        context.setAuthentication(auth);
+        SecurityContextHolder.setContext(context);
+
+        request.getSession().setAttribute(
+            HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
+            context
+        );
+
         return "redirect:/";
     }
 
@@ -96,6 +129,7 @@ public class AuthController {
     public String logout(SessionStatus session, HttpServletRequest request, RedirectAttributes ra) {
         session.setComplete();
         request.getSession().invalidate();
+        SecurityContextHolder.clearContext();
         ra.addFlashAttribute("logoutSuccess", true);
         return "redirect:/login";
     }

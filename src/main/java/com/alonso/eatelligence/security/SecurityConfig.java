@@ -43,12 +43,7 @@ public class SecurityConfig {
                     "/registro-exitoso",
                     "/verificar",
                     "/login",
-                    "/acceso-denegado",
-                    "/settings",
-                    "/historial",
-                    "/admin",
-                    "/rutas",
-                    "/pedidos"
+                    "/acceso-denegado"
                 )
                 .permitAll()
                 .requestMatchers(HttpMethod.POST,
@@ -59,15 +54,21 @@ public class SecurityConfig {
                     "/logout"
                 )
                 .permitAll()
+                .requestMatchers("/settings", "/historial").authenticated()
+                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/rutas").hasRole("REPARTIDOR")
+                .requestMatchers("/pedidos").hasRole("COCINERO")
                 .requestMatchers(
                     "/css/**",
                     "/js/**",
+                    "/assets/**",
                     "/img/**",
                     "/error/**"
                 )
                 .permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().denyAll()
             )
+            .formLogin(form -> form.disable())
             .logout(logout -> logout.disable())
             .exceptionHandling(ex -> ex
                 .accessDeniedHandler((req, res, authEx) -> res.sendRedirect("/acceso-denegado"))

@@ -52,18 +52,18 @@ body {
 }
 
 /* Ajustes - Primary */
-.settings-link:hover,
-.settings-link:focus {
+.historial-link:hover,
+.historial-link:focus {
   background-color: #d6e6ff !important; /* primary soft */
   color: #0d6efd !important;
   font-weight: 500;
   outline: none !important;
   border: none !important;
 }
-.settings-link:focus {
+.historial-link:focus {
   box-shadow: 0 0 0 0.1rem #0d6efd !important;
 }
-.settings-link:hover i {
+.historial-link:hover i {
   color: #0d6efd !important;
 }
 
@@ -84,18 +84,18 @@ body {
 }
 
 /* Historial - Secondary */
-.historial-link:hover,
-.historial-link:focus {
+.settings-link:hover,
+.settings-link:focus {
   background-color: #e2e3e5 !important; /* secondary soft */
   color: #6c757d !important;
   font-weight: 500;
   outline: none !important;
   border: none !important;
 }
-.historial-link:focus {
+.settings-link:focus {
   box-shadow: 0 0 0 0.1rem #6c757d !important;
 }
-.historial-link:hover i {
+.settings-link:hover i {
   color: #6c757d !important;
 }
 

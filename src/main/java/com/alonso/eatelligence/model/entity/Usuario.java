@@ -13,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PreRemove;
 import jakarta.persistence.Table;
@@ -56,6 +57,11 @@ public class Usuario {
 
     @Column(nullable = false)
     private String password;
+
+    @ManyToOne
+    @JoinColumn(name = "restaurante_id", nullable = true)
+    @Builder.Default
+    private Restaurante restauranteAsignado = null;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.REMOVE, orphanRemoval = true)
     @EqualsAndHashCode.Exclude
