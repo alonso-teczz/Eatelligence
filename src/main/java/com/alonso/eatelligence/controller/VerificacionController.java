@@ -12,12 +12,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.alonso.eatelligence.email.EmailService;
 import com.alonso.eatelligence.model.entity.Restaurante;
 import com.alonso.eatelligence.model.entity.Usuario;
 import com.alonso.eatelligence.model.entity.VerificationToken;
-import com.alonso.eatelligence.service.imp.ResturanteServiceImp;
+import com.alonso.eatelligence.service.imp.RestauranteServiceImp;
 import com.alonso.eatelligence.service.imp.UsuarioServiceImp;
 import com.alonso.eatelligence.service.imp.VerificationTokenServiceImp;
 
@@ -30,7 +31,7 @@ public class VerificacionController {
 
     private final VerificationTokenServiceImp tokenService;
     private final UsuarioServiceImp usuarioService;
-    private final ResturanteServiceImp restauranteService;
+    private final RestauranteServiceImp restauranteService;
     private final EmailService emailService;
 
     @GetMapping("/verificar")
@@ -159,5 +160,63 @@ public class VerificacionController {
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Error al reenviar el correo: " + e.getMessage());
         }
+    }
+
+    @GetMapping("/verificacion-pendiente")
+    public String mostrarPaginaVerificacion(
+        @SessionAttribute(value = "restaurante", required = false) Restaurante restaurante,
+        @SessionAttribute(value = "usuario", required = false) Usuario usuario,
+        Model model
+    ) {
+        // Sin sesión: redirigir
+        if (restaurante == null && usuario == null) {
+            return "redirect:/login";
+        }
+    
+        // Sesión como restaurante
+        if (restaurante != null) {
+            Usuario propietario = restaurante.getPropietario();
+            boolean restVerificado = restaurante.isVerificado();
+            boolean propietarioVerificado = propietario != null && propietario.isVerificado();
+    
+            VerificationToken tokenRestaurante = tokenService.findByRestaurante(restaurante).orElse(null);
+            VerificationToken tokenPropietario = (propietario != null)
+                ? tokenService.findByUsuario(propietario).orElse(null)
+                : null;
+    
+            // Si ambos están verificados, redirigir
+            if (restVerificado && propietarioVerificado) {
+                return "redirect:/";
+            }
+    
+            model.addAttribute("tipo", "RESTAURANTE");
+            model.addAttribute("verificadoRestaurante", restVerificado);
+            model.addAttribute("verificadoPropietario", propietarioVerificado);
+    
+            if (tokenRestaurante != null) model.addAttribute("tokenRestaurante", tokenRestaurante);
+            if (tokenPropietario != null) model.addAttribute("tokenPropietario", tokenPropietario);
+    
+            return "feedback/verificacionPendiente";
+        }
+    
+        // Sesión como usuario
+        if (usuario != null) {
+            if (usuario.isVerificado()) {
+                return "redirect:/";
+            }
+    
+            VerificationToken lastToken = tokenService.findByUsuario(usuario).orElse(null);
+    
+            model.addAttribute("tipo", "USUARIO");
+            model.addAttribute("verificadoUsuario", false); // útil si lo quieres en vista
+    
+            if (lastToken != null) model.addAttribute("lastToken", lastToken);
+    
+            return "feedback/verificacionPendiente";
+        }
+    
+        // Fallback (no debería alcanzarse)
+        return "redirect:/login";
     }    
+
 }

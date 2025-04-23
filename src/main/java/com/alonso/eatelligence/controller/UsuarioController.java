@@ -24,7 +24,7 @@ import com.alonso.eatelligence.model.dto.RestauranteRegistroDTO;
 import com.alonso.eatelligence.model.entity.Restaurante;
 import com.alonso.eatelligence.model.entity.Usuario;
 import com.alonso.eatelligence.model.entity.VerificationToken;
-import com.alonso.eatelligence.service.imp.ResturanteServiceImp;
+import com.alonso.eatelligence.service.imp.RestauranteServiceImp;
 import com.alonso.eatelligence.service.imp.UsuarioServiceImp;
 import com.alonso.eatelligence.service.imp.VerificationTokenServiceImp;
 import com.alonso.eatelligence.utils.ValidationUtils;
@@ -40,7 +40,7 @@ public class UsuarioController {
     private UsuarioServiceImp usuarioService;
 
     @Autowired
-    private ResturanteServiceImp restauranteService;
+    private RestauranteServiceImp restauranteService;
 
     @Autowired
     private VerificationTokenServiceImp tokenService;
@@ -190,8 +190,8 @@ public class UsuarioController {
     }
 
     @GetMapping("/registro-exitoso")
-    public String mostrarRegistroExitoso(HttpServletRequest req) {
-        Map<String, ?> flash = RequestContextUtils.getInputFlashMap(req);
+    public String mostrarRegistroExitoso(HttpServletRequest request) {
+        Map<String, ?> flash = RequestContextUtils.getInputFlashMap(request);
 
         if (flash == null || !flash.containsKey("token")) {
             return "redirect:/register";

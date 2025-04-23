@@ -100,4 +100,12 @@ public class VerificationTokenServiceImp implements IVerificationService, Tokeni
     public void delete(VerificationToken token) {
         this.tokenRepository.delete(token);
     }
+
+    public Optional<VerificationToken> findByUsuario(Usuario usuario) {
+        return this.tokenRepository.findByUsuario(usuario);
+    }
+    
+    public Optional<VerificationToken> findByRestaurante(Restaurante restaurante) {
+        return this.tokenRepository.findByRestaurante(restaurante);
+    }
 }

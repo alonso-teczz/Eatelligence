@@ -2,13 +2,15 @@ package com.alonso.eatelligence.bootstrap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import com.alonso.eatelligence.model.entity.Rol;
 import com.alonso.eatelligence.model.entity.Rol.NombreRol;
 import com.alonso.eatelligence.service.IRolService;
 
-@Component
+@Component("rolDataLoader")
+@Order(1)
 public class RolDataLoader implements CommandLineRunner {
 
     @Autowired

@@ -59,12 +59,11 @@ public class Usuario {
     private String password;
 
     @ManyToOne
-    @JoinColumn(name = "restaurante_id", nullable = true)
+    @JoinColumn(nullable = true)
     @Builder.Default
     private Restaurante restauranteAsignado = null;
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<Direccion> direcciones = new ArrayList<>();
 
@@ -74,7 +73,6 @@ public class Usuario {
         joinColumns = @JoinColumn(name = "usuario_id"),
         inverseJoinColumns = @JoinColumn(name = "rol_id")
     )
-    @EqualsAndHashCode.Exclude
     private List<Rol> roles;
 
     @Column(nullable = false, columnDefinition = "TINYINT(1)")
@@ -86,11 +84,9 @@ public class Usuario {
     private LocalDateTime fechaRegistro = LocalDateTime.now();
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
-    @EqualsAndHashCode.Exclude
     private List<Pedido> pedidos;
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
-    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UsuarioRol> usuarioRoles;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -101,6 +97,10 @@ public class Usuario {
     private void preRemove() {
         tokens.forEach(t -> t.setUsuario(null));
         tokens.clear();
+
+        if (roles != null) roles.clear();
+        if (tokens != null) tokens.forEach(t -> t.setUsuario(null));
+        if (usuarioRoles != null) usuarioRoles.forEach(ur -> ur.setUsuario(null));
     }
 
 }

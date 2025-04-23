@@ -23,7 +23,7 @@
         
                 <form th:if="${opcion.url == '/logout'}"
                       th:action="@{/logout}" method="post" class="w-100">
-                  <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                  <div th:replace="fragments/csrf :: csrf-fields"></div>
                   <button type="submit"
                           th:class="'dropdown-item d-flex align-items-center fs-5 fw-semibold ' +
                                     (stat.first ? 'rounded-top ' : '') +

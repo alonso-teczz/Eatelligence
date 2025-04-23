@@ -18,7 +18,7 @@ import com.alonso.eatelligence.service.IEntitableClient;
 import com.alonso.eatelligence.service.IRestauranteService;
 
 @Service
-public class ResturanteServiceImp implements IRestauranteService, IEntitableClient {
+public class RestauranteServiceImp implements IRestauranteService, IEntitableClient {
 
     @Autowired
     private IRestauranteRepository  restauranteRepository;

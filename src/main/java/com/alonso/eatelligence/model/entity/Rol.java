@@ -26,7 +26,6 @@ public class Rol {
     private NombreRol nombre;
 
     @ManyToMany(mappedBy = "roles")
-    @EqualsAndHashCode.Exclude
     private List<Usuario> usuarios;
 
     @ManyToMany
@@ -35,12 +34,10 @@ public class Rol {
         joinColumns = @JoinColumn(name = "rol_id"),
         inverseJoinColumns = @JoinColumn(name = "opcion_id")
     )
-    @EqualsAndHashCode.Exclude
     @Builder.Default
     private List<OpcionMenu> opciones = new ArrayList<>();
 
     @OneToMany(mappedBy = "rol", cascade = CascadeType.ALL)
-    @EqualsAndHashCode.Exclude
     private List<UsuarioRol> usuarioRoles;
 
     public enum NombreRol {

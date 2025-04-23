@@ -3,6 +3,9 @@ package com.alonso.eatelligence.bootstrap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.DependsOn;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import com.alonso.eatelligence.model.entity.OpcionMenu;
@@ -11,12 +14,10 @@ import com.alonso.eatelligence.model.entity.Rol.NombreRol;
 import com.alonso.eatelligence.service.IMenuService;
 import com.alonso.eatelligence.service.IRolService;
 
-import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
-
 @Component
-@RequiredArgsConstructor
-public class MenuDataLoader {
+@DependsOn("rolDataLoader")
+@Order(3)
+public class MenuDataLoader implements CommandLineRunner {
 
     @Autowired
     private IMenuService menuService;
@@ -24,8 +25,12 @@ public class MenuDataLoader {
     @Autowired
     private IRolService rolService;
 
-    @PostConstruct
-    public void cargarOpciones() {
+    @Override
+    public void run(String... args) {
+        cargarOpciones();
+    }
+
+    private void cargarOpciones() {
         List<OpcionMenu> opciones = List.of(
             crearOpcion("Ajustes", "/settings", "Mi Cuenta", 1),
             crearOpcion("Cerrar sesión", "/logout", "Mi Cuenta", 2),

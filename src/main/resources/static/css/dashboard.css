@@ -40,12 +40,14 @@
   /* Botón de toggle del sidebar */
   #sidebarToggle {
     color: white;
-    transition: transform var(--transition-speed), color var(--transition-speed);
+    transition: all var(--transition-speed);
+    /* transition: transform var(--transition-speed), color var(--transition-speed); */
   }
   
   #sidebarToggle:hover {
     color: var(--color-principal);
-    transform: rotate(180deg);
+    transform: translateX(5px);
+    /* transform: rotate(180deg); */
   }
   
   #sidebarToggle:focus {
