@@ -24,19 +24,34 @@ public class Alergeno {
     private Boolean oficial = true;
 
     public enum NombreAlergeno {
-        GLUTEN,
-        CRUSTACEOS,
-        HUEVOS,
-        PESCADO,
-        CACAHUETES,
-        SOJA,
-        LACTEOS,
-        FRUTOS_DE_CASCARA,
-        APIO,
-        MOSTAZA,
-        SESAMO,
-        SULFITOS,
-        ALTRAMUCES,
-        MOLUSCOS
+        GLUTEN("Gluten"),
+        CRUSTACEOS("Crustáceos"),
+        HUEVOS("Huevos"),
+        PESCADO("Pescado"),
+        CACAHUETES("Cacahuetes"),
+        SOJA("Soja"),
+        LACTEOS("Lácteos"),
+        FRUTOS_DE_CASCARA("Frutos de cáscara"),
+        APIO("Apio"),
+        MOSTAZA("Mostaza"),
+        SESAMO("Sésamo"),
+        SULFITOS("Sulfitos"),
+        ALTRAMUCES("Altramuces"),
+        MOLUSCOS("Moluscos");
+    
+        private final String serialName;
+    
+        NombreAlergeno(String serialName) {
+            this.serialName = serialName;
+        }
+    
+        public String getSerialName() {
+            return serialName;
+        }
+    }
+
+    public String getSerialName() {
+        return this.nombre.getSerialName();
     }    
+       
 }

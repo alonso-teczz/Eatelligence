@@ -1,6 +1,7 @@
 package com.alonso.eatelligence.service.imp;
 
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,11 @@ public class AlergenoServiceImp implements IAlergenoService {
 
     public int count() {
         return (int) this.alergenoRepository.count();
+    }
+
+    @Override
+    public Set<Alergeno> getAll() {
+        return Set.copyOf(this.alergenoRepository.findAll());
     }
     
 }

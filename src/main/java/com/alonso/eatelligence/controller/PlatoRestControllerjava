@@ -1,0 +1,32 @@
+package com.alonso.eatelligence.controller.rest;
+
+import com.alonso.eatelligence.model.dto.PlatoDTO;
+import com.alonso.eatelligence.service.PlatoService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/plates")
+@RequiredArgsConstructor
+public class PlatoRestController {
+
+    private final PlatoService platoService;
+
+    // Actualizar plato
+    @PutMapping("/{id}")
+    public ResponseEntity<PlatoDTO> updatePlato(@PathVariable Long id, @Valid @RequestBody PlatoDTO platoActualizado) {
+        PlatoDTO actualizado = platoService.actualizarDesdeDTO(id, platoActualizado);
+        return ResponseEntity.ok(actualizado);
+    }
+
+    // Eliminar plato
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletePlato(@PathVariable Long id) {
+        platoService.eliminar(id);
+        return ResponseEntity.noContent().build();
+    }
+}

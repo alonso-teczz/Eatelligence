@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const btnRegistro = document.getElementById("btn-registro");
 
   let timeout;
+  let passwordVisible = false;
 
   /**
    * Sincroniza los campos de dos formularios: origen y destino.
@@ -92,10 +93,14 @@ document.addEventListener("DOMContentLoaded", function () {
     const formularioVisible = formUsuario.classList.contains("mostrar") ? formUsuario : formRestaurante;
     const formularioOculto = esRestaurante ? formRestaurante : formUsuario;
   
-    // Siempre sincroniza del formulario visible al nuevo que se va a mostrar
+    // Guardar el estado de visibilidad actual de la contraseña
+    const passwordActual = formularioVisible.querySelector('[name$="password"]');
+    if (passwordActual) {
+      passwordVisible = passwordActual.type === "text";
+    }
+  
     sincronizarCampos(formularioVisible, formularioOculto);
   
-    // Oculta ambos
     formUsuario.classList.remove("mostrar");
     formRestaurante.classList.remove("mostrar");
     containerUsuario.classList.remove("mostrar");
@@ -114,6 +119,7 @@ document.addEventListener("DOMContentLoaded", function () {
       botonAcordeon.style.pointerEvents = "none";
   
       configurarTogglePassword(formRestaurante);
+      aplicarVisibilidadPassword(formRestaurante);
     } else {
       formUsuario.classList.add("mostrar");
       containerUsuario.classList.add("mostrar");
@@ -125,7 +131,19 @@ document.addEventListener("DOMContentLoaded", function () {
       new bootstrap.Collapse(acordeonContenido, { toggle: false }).hide();
   
       configurarTogglePassword(formUsuario);
+      aplicarVisibilidadPassword(formUsuario);
     }
+  }
+  
+  function aplicarVisibilidadPassword(form) {
+    const password = form.querySelector('[name$="password"]');
+    const icono = form.querySelector("#iconoPassword");
+    if (!password || !icono) return;
+  
+    password.type = passwordVisible ? "text" : "password";
+  
+    icono.classList.remove("bi-eye", "bi-eye-slash");
+    icono.classList.add(passwordVisible ? "bi-eye-slash" : "bi-eye");
   }  
   
   /**
