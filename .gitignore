@@ -1,33 +1,64 @@
-HELP.md
-target/
+# --- Java ---
+*.class
+*.log
+*.ctxt
+*.jar
+*.war
+*.ear
+*.iml
+
+# --- Maven ---
+/target/
 !.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
+# --- Gradle ---
+/build/
+/.gradle/
+!gradle/wrapper/gradle-wrapper.jar
 
-### IntelliJ IDEA ###
-.idea
+# --- IDEs ---
+# IntelliJ
+.idea/
 *.iws
 *.iml
 *.ipr
 
-### NetBeans ###
+# Eclipse
+.project
+.classpath
+.csettings
+.settings/
+.metadata/
+bin/
+
+# NetBeans
 /nbproject/private/
+/build/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
 
-### VS Code ###
+# VS Code
 .vscode/
+
+# --- Sistema operativo ---
+.DS_Store        # macOS
+Thumbs.db        # Windows
+ehthumbs.db      # Windows
+desktop.ini      # Windows
+
+# --- Logs ---
+*.log
+logs/
+*.out
+
+# --- Archivos de entorno/local ---
+.env
+*.env
+application.properties
+application.yml
+application-local.properties
+application-local.yml
+application-dev.properties
+application-dev.yml
