@@ -1,5 +1,8 @@
 package com.alonso.eatelligence.model.entity;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -13,7 +16,9 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(name = "direcciones")
@@ -50,6 +55,9 @@ public class Direccion {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id", nullable = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Usuario usuario;
 
     @OneToOne(mappedBy = "direccion")

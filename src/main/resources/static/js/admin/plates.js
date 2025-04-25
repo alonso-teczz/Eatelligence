@@ -97,7 +97,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Inicializa SortableJS en todos los modales de edición de alérgenos
     document.querySelectorAll('[id^="seleccionados-"]').forEach(lista => {
         const id = lista.id.split('-')[1];
-        const input = document.getElementById(`inputAlergenos-${id}`);
         new Sortable(lista, {
             group: 'alergenos-edit',
             animation: 150,

@@ -167,7 +167,6 @@
     color: var(--color-principal) !important;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 1px;
     padding-top: 1rem;
   }
   

@@ -23,14 +23,13 @@
 <body class="sb-nav-fixed" th:fragment="header">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
         <!-- Navbar Brand-->
-        <a class="navbar-brand ps-3" href="/admin" th:if="${restaurante != null}" th:text="${restaurante.getNombreComercial()}"></a>
-        <a class="navbar-brand ps-3" href="/admin" th:if="${restaurante == null}">Eatelligence</a>
+        <a class="navbar-brand ps-3" href="/admin">Eatelligence</a>
         <!-- Sidebar Toggle-->
         <button class="btn btn-link btn-lg order-1 order-lg-0 me-4" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
 
         <div class="d-flex ms-auto me-3">
             <a href="/" class="btn btn-primary d-flex align-items-center fw-bold">
-                <i class="fas fa-home me-2"></i> Inicio
+                <i class="fas fa-home my-1"></i>
             </a>
         </div>             
     </nav>

@@ -4,6 +4,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -67,13 +70,14 @@ public class Usuario {
     @Builder.Default
     private List<Direccion> direcciones = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(
         name = "usuario_rol",
         joinColumns = @JoinColumn(name = "usuario_id"),
         inverseJoinColumns = @JoinColumn(name = "rol_id")
     )
-    private List<Rol> roles;
+    @Builder.Default
+    private List<Rol> roles = new ArrayList<>();    
 
     @Column(nullable = false, columnDefinition = "TINYINT(1)")
     @Builder.Default
@@ -87,6 +91,7 @@ public class Usuario {
     private List<Pedido> pedidos;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<UsuarioRol> usuarioRoles;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -95,12 +100,18 @@ public class Usuario {
 
     @PreRemove
     private void preRemove() {
-        tokens.forEach(t -> t.setUsuario(null));
-        tokens.clear();
-
-        if (roles != null) roles.clear();
-        if (tokens != null) tokens.forEach(t -> t.setUsuario(null));
-        if (usuarioRoles != null) usuarioRoles.forEach(ur -> ur.setUsuario(null));
-    }
+        if (tokens != null && !tokens.isEmpty()) {
+            tokens.forEach(t -> t.setUsuario(null));
+            tokens.clear();
+        }
+    
+        if (roles != null && !roles.isEmpty()) {
+            roles.clear();
+        }
+    
+        if (usuarioRoles != null && !usuarioRoles.isEmpty()) {
+            usuarioRoles.clear();
+        }
+    }    
 
 }

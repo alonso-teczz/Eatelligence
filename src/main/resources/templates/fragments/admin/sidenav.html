@@ -41,8 +41,8 @@
         </div>
         <div class="sb-sidenav-footer">
             <div class="small fw-bold">Logged in as:</div>
-            <span th:if="${restaurante != null}" th:text="${restaurante.getPropietario().getUsername()}"></span>
-            <span th:if="${restaurante == null}">Admin</span>
+            <span th:if="${session.restaurante != null}" th:text="${session.restaurante.getPropietario().getUsername()}"></span>
+            <span th:if="${session.restaurante == null}">Unknown</span>
         </div>
     </nav>
 </div>
