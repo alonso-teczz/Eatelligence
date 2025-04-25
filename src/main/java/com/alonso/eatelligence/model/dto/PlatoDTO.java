@@ -25,6 +25,8 @@ public class PlatoDTO {
 
     @NotNull(message = "El precio es obligatorio")
     @Positive(message = "El precio debe ser un número positivo")
+    @Digits(integer = 5, fraction = 2, message = "El precio debe tener un máximo de 5 dígitos enteros y 2 decimales")
+    @DecimalMin(value = "0.50", message = "El precio mínimo es 0.50")
     private Double precio;
 
     private Set<Long> alergenos;

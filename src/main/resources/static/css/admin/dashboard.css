@@ -26,6 +26,7 @@
     color: white;
     font-weight: 600;
     transition: transform var(--transition-speed);
+    max-width: min-content;
   }
   
   .sb-topnav .navbar-brand:hover {
@@ -46,7 +47,7 @@
   
   #sidebarToggle:hover {
     color: var(--color-principal);
-    transform: translateX(5px);
+    transform: translateX(-5px);
     /* transform: rotate(180deg); */
   }
   
