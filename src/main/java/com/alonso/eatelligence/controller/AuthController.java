@@ -101,8 +101,8 @@ public class AuthController {
         Map<String, List<OpcionMenu>> menuPorSeccion = opciones.stream()
             .collect(Collectors.groupingBy(OpcionMenu::getSeccion));
 
-        model.addAttribute("usuario", u);
         model.addAttribute("menu", menuPorSeccion);
+        model.addAttribute("usuario", u);
 
         Authentication auth = new UsernamePasswordAuthenticationToken(
             u,

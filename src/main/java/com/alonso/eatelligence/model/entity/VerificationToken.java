@@ -38,7 +38,7 @@ public class VerificationToken {
         name = "FK_verification_token_usuario",
         foreignKeyDefinition = "FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE"
     ))
-    private Usuario usuario;    
+    private Usuario usuario;
 
     @OneToOne
     @JoinColumn(name = "restaurante_id", nullable = true)

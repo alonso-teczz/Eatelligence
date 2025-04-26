@@ -1,48 +1,74 @@
 <div id="layoutSidenav_nav" th:fragment="sidenav">
     <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
-        <div class="sb-sidenav-menu">
-            <div class="nav">
-                <div class="sb-sidenav-menu-heading fs-6">Administración</div>
-                <a class="nav-link" href="/admin/dashboard">
-                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt me-1"></i></div>
-                    Panel de control
-                </a>
-                <a class="nav-link" href="/admin/plates">
-                    <div class="sb-nav-link-icon"><i class="fas fa-utensils me-1"></i></div>
-                    Platos
-                </a>                
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts">
-                    <div class="sb-nav-link-icon"><i class="fas fa-users me-1"></i></div>
-                    Plantilla                    
-                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down me-1"></i></div>
-                </a>
-                <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                    <nav class="sb-sidenav-menu-nested nav">
-                        <a class="nav-link" href="#">
-                            <div class="sb-nav-link-icon"><i class="fas fa-concierge-bell me-1"></i></div>
-                            Cocineros
-                        </a>
-                        <a class="nav-link" href="#">
-                            <div class="sb-nav-link-icon"><i class="fas fa-motorcycle me-1"></i></div>
-                            Repartidores
-                        </a>
-                    </nav>
+      <div class="sb-sidenav-menu">
+        <div class="nav">
+  
+          <!-- Iterar solo las secciones permitidas -->
+          <th:block th:each="entry : ${session.menu.?[ key=='Administración' or key=='Plantilla' or key=='Estadísticas' ]}">
+  
+            <!-- Cabecera -->
+            <div class="sb-sidenav-menu-heading fs-6"
+                 th:text="${entry.key}">Sección</div>
+  
+            <!-- Sección Plantilla (colapsable) -->
+            <th:block th:if="${entry.key=='Plantilla'}">
+              <a class="nav-link collapsed" href="#"
+                 data-bs-toggle="collapse"
+                 th:attr="data-bs-target='#collapse__' + ${#strings.replace(entry.key,' ','')}">
+                <div class="sb-nav-link-icon"><i class="fas fa-users me-1"></i></div>
+                <span th:text="${entry.key}">Plantilla</span>
+                <div class="sb-sidenav-collapse-arrow">
+                  <i class="fas fa-angle-down me-1"></i>
                 </div>
-                <div class="sb-sidenav-menu-heading fs-6">Estadísticas</div>
-                <a class="nav-link" href="/admin/charts">
-                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area me-1"></i></div>
-                    Gráficos
-                </a>
-                <a class="nav-link" href="/admin/tables">
-                    <div class="sb-nav-link-icon"><i class="fas fa-table me-1"></i></div>
-                    Tablas
-                </a>
-            </div>
+              </a>
+              <div class="collapse"
+                   th:attr="id='collapse__' + ${#strings.replace(entry.key,' ','')}"
+                   data-bs-parent="#sidenavAccordion">
+                <nav class="sb-sidenav-menu-nested nav">
+                  <a class="nav-link"
+                     th:each="opt : ${entry.value}"
+                     th:href="@{${opt.url}}">
+                    <div class="sb-nav-link-icon">
+                      <i th:class="${ 
+                            #strings.contains(opt.url,'cocineros')    ? 'fas fa-concierge-bell me-1' :
+                            #strings.contains(opt.url,'repartidores') ? 'fas fa-motorcycle me-1' :
+                            'fas fa-link me-1'
+                      }"></i>
+                    </div>
+                    <span th:text="${opt.nombre}">Opción</span>
+                  </a>
+                </nav>
+              </div>
+            </th:block>
+  
+            <!-- Secciones Administración y Estadísticas -->
+            <th:block th:if="${entry.key!='Plantilla'}">
+              <a class="nav-link"
+                 th:each="opt : ${entry.value}"
+                 th:href="@{${opt.url}}">
+                <div class="sb-nav-link-icon">
+                  <i th:class="${ 
+                        entry.key=='Administración' and #strings.contains(opt.url,'dashboard') ? 'fas fa-tachometer-alt me-1' :
+                        entry.key=='Administración' and #strings.contains(opt.url,'plates')    ? 'fas fa-utensils me-1' :
+                        entry.key=='Estadísticas'  and #strings.contains(opt.url,'charts')     ? 'fas fa-chart-area me-1' :
+                        entry.key=='Estadísticas'  and #strings.contains(opt.url,'tables')     ? 'fas fa-table me-1' :
+                        'fas fa-link me-1'
+                  }"></i>
+                </div>
+                <span th:text="${opt.nombre}">Opción</span>
+              </a>
+            </th:block>
+  
+          </th:block>
+  
         </div>
-        <div class="sb-sidenav-footer">
-            <div class="small fw-bold">Logged in as:</div>
-            <span th:if="${session.restaurante != null}" th:text="${session.restaurante.getPropietario().getUsername()}"></span>
-            <span th:if="${session.restaurante == null}">Unknown</span>
-        </div>
+      </div>
+      <div class="sb-sidenav-footer">
+        <div class="small fw-bold">Logged in as:</div>
+        <span th:if="${session.restaurante != null}"
+              th:text="${session.restaurante.propietario.username}">usuario</span>
+        <span th:if="${session.restaurante == null}">Unknown</span>
+      </div>
     </nav>
-</div>
+  </div>
+  

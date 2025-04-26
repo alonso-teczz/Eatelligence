@@ -19,12 +19,11 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http, VerificationFilter verificationFilter) throws Exception {
 
         http
+            .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**"))
             .addFilterBefore(new NoCacheFilter(), UsernamePasswordAuthenticationFilter.class)
             .addFilterBefore(verificationFilter, UsernamePasswordAuthenticationFilter.class)
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers(HttpMethod.GET,
-                    "/api/users/exists"
-                )
+                .requestMatchers("/api/**")
                 .access((authentication, context) -> {
                     return new AuthorizationDecision("XMLHttpRequest".equals(context.getRequest().getHeader("X-Requested-With")));
                 })

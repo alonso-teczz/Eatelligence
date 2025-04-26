@@ -116,7 +116,7 @@ public class VerificacionController {
                     newVT.setUltimoIntento(LocalDateTime.now());
                     newVT = tokenService.save(newVT);
     
-                    this.emailService.sendVerificationEmail(
+                    this.emailService.sendEmail(
                         u.getEmail(),
                         "Reenvío de verificación",
                         "verificacion",
@@ -138,7 +138,7 @@ public class VerificacionController {
                     newVT.setUltimoIntento(LocalDateTime.now());
                     newVT = tokenService.save(newVT);
     
-                    this.emailService.sendVerificationEmail(
+                    this.emailService.sendEmail(
                         r.getEmailEmpresa(),
                         "Reenvío de verificación",
                         "verificacion",

@@ -32,13 +32,26 @@ public class MenuDataLoader implements CommandLineRunner {
 
     private void cargarOpciones() {
         List<OpcionMenu> opciones = List.of(
-            crearOpcion("Ajustes", "/settings", "Mi Cuenta", 1),
-            crearOpcion("Cerrar sesión", "/logout", "Mi Cuenta", 2),
-            crearOpcion("Historial de pedidos", "/historial", "Mi Cuenta", 3),
-            crearOpcion("Panel de control", "/admin", "Mi Cuenta", 4),
-            crearOpcion("Rutas", "/rutas", "Mi Cuenta", 5),
-            crearOpcion("Pedidos", "/pedidos", "Mi Cuenta", 6)
-        );
+            // --- Mi Cuenta ---
+            crearOpcion("Ajustes",             "/settings",         "Mi Cuenta",      1),
+            crearOpcion("Cerrar sesión",       "/logout",           "Mi Cuenta",      2),
+            crearOpcion("Historial de pedidos","/historial",        "Mi Cuenta",      3),
+            crearOpcion("Pedidos",             "/pedidos",          "Mi Cuenta",      4),
+            crearOpcion("Rutas",               "/rutas",            "Mi Cuenta",      5),
+        
+            // --- Administración ---
+            crearOpcion("Panel de control",    "/admin/dashboard",  "Administración", 1),
+            crearOpcion("Platos",              "/admin/plates",     "Administración", 2),
+            crearOpcion("Plantilla",           "#",                 "Administración", 3),
+        
+            // --- Plantilla (submenú) ---
+            crearOpcion("Cocineros",           "/admin/cocineros",  "Plantilla",      1),
+            crearOpcion("Repartidores",        "/admin/repartidores","Plantilla",     2),
+        
+            // --- Estadísticas ---
+            crearOpcion("Gráficos",            "/admin/charts",     "Estadísticas",   1),
+            crearOpcion("Tablas",              "/admin/tables",     "Estadísticas",   2)
+        );        
 
         for (OpcionMenu opcion : opciones) {
             this.menuService.findByUrl(opcion.getUrl()).ifPresentOrElse(
@@ -47,7 +60,7 @@ public class MenuDataLoader implements CommandLineRunner {
             );
         }
 
-        asignarOpciones(NombreRol.ADMIN, "/settings", "/logout", "/historial", "/admin");
+        asignarOpciones(NombreRol.ADMIN, "/settings", "/logout", "/historial", "/admin", "/admin/dashboard", "/admin/plates", "/admin/charts", "/admin/tables", "/admin/cocineros", "/admin/repartidores");
         asignarOpciones(NombreRol.REPARTIDOR, "/settings", "/logout", "/historial", "/rutas");
         asignarOpciones(NombreRol.COCINERO, "/settings", "/logout", "/historial", "/pedidos");
         asignarOpciones(NombreRol.CLIENTE, "/settings", "/logout", "/historial");

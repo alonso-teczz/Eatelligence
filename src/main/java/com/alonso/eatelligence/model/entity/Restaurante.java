@@ -1,6 +1,9 @@
 package com.alonso.eatelligence.model.entity;
 
 import java.util.List;
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
@@ -62,7 +65,8 @@ public class Restaurante {
 
     @OneToMany(mappedBy = "restaurante", cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
-    private List<Plato> platos;
+    @JsonIgnoreProperties("restaurante")
+    private Set<Plato> platos;
 
     @OneToMany(mappedBy = "restaurante", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<VerificationToken> tokens;

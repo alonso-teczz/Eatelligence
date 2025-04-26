@@ -30,4 +30,9 @@ public class RolServiceImp implements IRolService {
         return this.rolRepository.findByNombreConOpciones(nombreRol);
     }
 
+    @Override
+    public Optional<Rol> findByNombreConUsuarios(NombreRol cocinero) {
+        return this.rolRepository.findByNombreConUsuarios(cocinero);
+    }
+
 }

@@ -1,148 +1,275 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // Inicializa la tabla con Simple-DataTables
-    const tabla = document.querySelector('#tablaPlatos');
-    if (tabla) {
-        new simpleDatatables.DataTable(tabla);
-    }
+document.addEventListener("DOMContentLoaded", () => {
+  const tablaEl = document.querySelector("#tablaPlatos");
+  if (tablaEl) {
+    dataTable = new simpleDatatables.DataTable(tablaEl);
+  }
 
-    // Validación del modal de creación
-    const form = document.querySelector('#modalNuevoPlato form');
-    if (form) {
-        form.addEventListener('submit', function (e) {
-            const primerInvalido = form.querySelector(':invalid');
-            if (primerInvalido) {
-                e.preventDefault();
-                e.stopPropagation();
-                form.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
-                primerInvalido.classList.add('is-invalid');
-                primerInvalido.focus();
-                primerInvalido.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            } else {
-                actualizarHiddenInput();
+  try {
+    document
+      .querySelectorAll('[data-bs-toggle="tooltip"]')
+      .forEach((el) => new bootstrap.Tooltip(el, { container: "body" }));
+  } catch (e) {
+    console.error("Error tooltips:", e);
+  }
+
+  const disponibles = document.getElementById("alergenosDisponibles");
+  const seleccionados = document.getElementById("alergenosSeleccionados");
+  if (disponibles && seleccionados) {
+    new Sortable(disponibles, { group: "alergenos", animation: 150 });
+    new Sortable(seleccionados, {
+      group: "alergenos",
+      animation: 150,
+      onAdd: actualizarHiddenInput,
+      onRemove: actualizarHiddenInput,
+      onSort: actualizarHiddenInput,
+    });
+  }
+
+  const newForm = document.querySelector("#modalNuevoPlato form");
+  if (newForm) {
+    newForm.addEventListener("submit", (e) => {
+      const invalido = newForm.querySelector(":invalid");
+      if (invalido) {
+        e.preventDefault();
+        newForm
+          .querySelectorAll(".is-invalid")
+          .forEach((x) => x.classList.remove("is-invalid"));
+        invalido.classList.add("is-invalid");
+        invalido.focus();
+        return;
+      }
+      actualizarHiddenInput();
+    });
+
+    document
+      .getElementById("modalNuevoPlato")
+      .addEventListener("hidden.bs.modal", () => {
+        newForm.reset();
+        newForm
+          .querySelectorAll(".is-invalid")
+          .forEach((x) => x.classList.remove("is-invalid"));
+        document.getElementById("alergenosSeleccionados").innerHTML = "";
+      });
+  }
+
+  function actualizarHiddenInput() {
+    const ids = Array.from(
+      document.getElementById("alergenosSeleccionados").children
+    ).map((li) => li.dataset.id);
+    document.getElementById("alergenosInput").value = ids.join(",");
+  }
+
+  document.querySelectorAll('[id^="seleccionados-"]').forEach((lista) => {
+    const id = lista.id.split("-")[1];
+    new Sortable(lista, {
+      group: "alergenos-edit",
+      animation: 150,
+      onAdd: () => actualizarInput(id),
+      onRemove: () => actualizarInput(id),
+      onSort: () => actualizarInput(id),
+    });
+  });
+  document.querySelectorAll('[id^="disponibles-"]').forEach((lista) => {
+    new Sortable(lista, {
+      group: "alergenos-edit",
+      animation: 150,
+    });
+  });
+  function actualizarInput(platoId) {
+    const ul = document.getElementById(`seleccionados-${platoId}`);
+    const input = document.getElementById(`inputAlergenos-${platoId}`);
+    const ids = Array.from(ul.children).map((li) => li.dataset.id);
+    input.value = ids.join(",");
+  }
+
+  document.querySelectorAll('[id^="edit-seleccionados-"]').forEach((lista) => {
+    const platoId = lista.id.split("-")[2];
+    new Sortable(lista, {
+      group: "alergenos-edit",
+      animation: 150,
+      onAdd: () => actualizarEditInput(platoId),
+      onRemove: () => actualizarEditInput(platoId),
+      onSort: () => actualizarEditInput(platoId),
+    });
+  });
+  document.querySelectorAll('[id^="edit-disponibles-"]').forEach((lista) => {
+    new Sortable(lista, {
+      group: "alergenos-edit",
+      animation: 150,
+    });
+  });
+
+  function actualizarEditInput(platoId) {
+    const ul = document.getElementById(`edit-seleccionados-${platoId}`);
+    const input = document.getElementById(`edit-alergenosInput-${platoId}`);
+    const ids = Array.from(ul.children).map((li) => li.dataset.id);
+    input.value = ids.join(",");
+  }
+
+  document
+    .querySelectorAll('div[id^="modalEditarPlato-"]')
+    .forEach((modalEl) => {
+      const form = modalEl.querySelector("form");
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const platoId = modalEl.id.replace("modalEditarPlato-", "");
+        const fd = new FormData(form);
+        const payload = {
+          id: Number(platoId),
+          nombre: fd.get("nombre").trim(),
+          descripcion: fd.get("descripcion").trim(),
+          ingredientes: fd.get("ingredientes").trim(),
+          precio: parseFloat(fd.get("precio")),
+          alergenos: fd.get("alergenos")
+            ? fd
+                .get("alergenos")
+                .split(",")
+                .map((x) => Number(x))
+            : [],
+        };
+
+        try {
+          const res = await fetch(`/api/plates/${platoId}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              "X-Requested-With": "XMLHttpRequest",
+            },
+            body: JSON.stringify(payload),
+          });
+
+          if (res.ok) {
+            const updated = await res.json();
+            const row = document.querySelector(`tr[data-id="${platoId}"]`);
+            if (row) {
+              row.querySelector('[data-field="nombre"]').textContent =
+                updated.nombre;
+              row.querySelector('[data-field="descripcion"]').textContent =
+                updated.descripcion;
+              row.querySelector('[data-field="precio"]').textContent =
+                updated.precio % 1 === 0
+                  ? updated.precio.toFixed(0)
+                  : updated.precio.toString();
+              row.querySelector('[data-field="ingredientes"]').textContent =
+                updated.ingredientes;
+              const alTd = row.querySelector('.editable-alergenos');
+              alTd.innerHTML = '';
+
+              payload.alergenos.forEach(id => {
+                const originalLi = document.querySelector(
+                  `#modalEditarPlato-${platoId} #edit-seleccionados-${platoId} li[data-id="${id}"]`
+                );
+                const text = originalLi
+                  ? originalLi.textContent.trim()
+                  : String(id);
+              
+                const slug = text
+                  .normalize('NFD')
+                  .replace(/[\u0300-\u036f]/g, '')
+                  .toLowerCase()
+                  .replace(/\s+/g, '-')
+                  .replace(/_/g, '-')
+                  .replace(/[^\w-]/g, '');
+              
+                const span = document.createElement('span');
+                span.classList.add('badge', 'me-1', `alergeno-${slug}`);
+                span.textContent = text;
+                alTd.appendChild(span);
+              });              
             }
-        });
-
-        // Limpiar formulario al cerrar el modal
-        const modal = document.getElementById('modalNuevoPlato');
-        modal.addEventListener('hidden.bs.modal', function () {
-            form.classList.remove('was-validated');
-            form.reset();
-            form.querySelectorAll('.is-invalid, .is-valid').forEach(el => el.classList.remove('is-invalid', 'is-valid'));
-            document.getElementById('alergenosSeleccionados').innerHTML = '';
-        });
-    }
-
-    // Mostrar modal si hay error de backend
-    const errorPresente = document.querySelector('.alert.alert-danger');
-    if (errorPresente) {
-        setTimeout(() => {
-            const modal = new bootstrap.Modal(document.getElementById('modalNuevoPlato'));
-            modal.show();
-        }, 350);
-    }
-
-    // Función para inline editing (nombre, descripcion, precio)
-    document.querySelectorAll('.editable').forEach(celda => {
-        celda.addEventListener('dblclick', () => {
-            const original = celda.textContent.trim();
-            const field = celda.dataset.field;
-            const platoId = celda.closest('tr').dataset.id;
-
-            const input = document.createElement('input');
-            input.type = field === 'precio' ? 'number' : 'text';
-            input.value = original;
-            input.className = 'form-control';
-            input.style.minWidth = '120px';
-
-            input.addEventListener('keydown', async (e) => {
-                if (e.key === 'Enter') {
-                    const nuevoValor = input.value;
-                    try {
-                        const response = await fetch(`/admin/plates/update-field/${platoId}`, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({ campo: field, valor: nuevoValor })
-                        });
-                        if (response.ok) {
-                            celda.textContent = nuevoValor;
-                        } else {
-                            alert('Error al actualizar el campo');
-                        }
-                    } catch (err) {
-                        alert('Error de red al actualizar');
-                    }
-                }
-                if (e.key === 'Escape') {
-                    celda.textContent = original;
-                }
+            
+            bootstrap.Modal.getInstance(modalEl).hide();
+            
+            Swal.fire({
+              icon: "success",
+              title: "¡Plato actualizado!",
+              text: "Se guardaron los cambios correctamente.",
+              timer: 2000,
+              showConfirmButton: false,
             });
-
-            celda.textContent = '';
-            celda.appendChild(input);
-            input.focus();
-        });
+          } else if (res.status === 400) {
+            const msg = await res.text();
+            Swal.fire({
+              icon: "error",
+              title: "Error de validación",
+              text: msg,
+            });
+          } else {
+            const msg = await res.text();
+            Swal.fire({ icon: "error", title: "Error", text: msg });
+          }
+        } catch (err) {
+          Swal.fire({
+            icon: "error",
+            title: "Error de red",
+            text: "No se pudo conectar al servidor",
+          });
+          console.error(err);
+        }
+      });
     });
 
-    // Abrir modal al hacer click en los alérgenos
-    document.querySelectorAll('.editable-alergenos').forEach(celda => {
-        celda.addEventListener('click', () => {
-            const id = celda.dataset.id;
-            const modal = new bootstrap.Modal(document.getElementById(`modalEditarAlergenos-${id}`));
-            modal.show();
+    // 1) Selecciona TODOS los formularios de borrado
+    document.querySelectorAll('.form-eliminar-plato').forEach(form => {
+      form.addEventListener('submit', async e => {
+        e.preventDefault();
+        const row = form.closest('tr');
+        const id  = row.dataset.id;
+
+        // 3) Confirmación
+        const { isConfirmed } = await Swal.fire({
+          title: "¿Eliminar este plato?",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Sí, eliminar",
+          cancelButtonText: "Cancelar",
         });
+        if (!isConfirmed) return;
+
+        // 4) Llamada DELETE
+        try {
+          const res = await fetch(`/api/plates/${id}`, {
+            method: "DELETE",
+            headers: {
+              "X-Requested-With": "XMLHttpRequest"
+            },
+            // no necesitas Content-Type para DELETE sin body
+          });
+
+          if (res.ok) {
+            // 5) Eliminamos la fila del DOM
+            row.remove();
+            Swal.fire({
+              toast: true,
+              position: "top-end",
+              icon: "success",
+              title: "Plato eliminado correctamente",
+              showConfirmButton: false,
+              timer: 3000,
+            });
+          } else {
+            const msg = await res.text();
+            Swal.fire({
+              toast: true,
+              position: "top-end",
+              icon: "error",
+              title: "Error al eliminar",
+              text: msg,
+              showConfirmButton: false,
+              timer: 3000,
+            });
+          }
+        } catch (err) {
+          Swal.fire({
+            toast: true,
+            position: "top-end",
+            icon: "error",
+            title: "Error de red",
+            text: "No se pudo conectar al servidor",
+            showConfirmButton: false,
+            timer: 3000,
+          });
+        }
+      });
     });
-
-    // Inicializa SortableJS en todos los modales de edición de alérgenos
-    document.querySelectorAll('[id^="seleccionados-"]').forEach(lista => {
-        const id = lista.id.split('-')[1];
-        new Sortable(lista, {
-            group: 'alergenos-edit',
-            animation: 150,
-            onSort: () => actualizarInput(id),
-            onAdd: () => actualizarInput(id),
-            onRemove: () => actualizarInput(id)
-        });
-    });
-
-    document.querySelectorAll('[id^="disponibles-"]').forEach(lista => {
-        new Sortable(lista, {
-            group: 'alergenos-edit',
-            animation: 150
-        });
-    });
-
-    function actualizarInput(platoId) {
-        const ul = document.getElementById(`seleccionados-${platoId}`);
-        const input = document.getElementById(`inputAlergenos-${platoId}`);
-        const ids = Array.from(ul.children).map(li => li.dataset.id);
-        input.value = ids.join(',');
-    }
-
-    function actualizarHiddenInput() {
-        const seleccionados = document.getElementById('alergenosSeleccionados');
-        const hiddenInput = document.getElementById('alergenosInput');
-        const ids = Array.from(seleccionados.children).map(li => li.dataset.id);
-        hiddenInput.value = ids.join(',');
-    }
-
-    // Inicializa drag & drop para el modal de creación
-    const disponibles = document.getElementById('alergenosDisponibles');
-    const seleccionados = document.getElementById('alergenosSeleccionados');
-    const hiddenInput = document.getElementById('alergenosInput');
-
-    if (disponibles && seleccionados && hiddenInput) {
-        new Sortable(disponibles, {
-            group: 'alergenos',
-            animation: 150
-        });
-        new Sortable(seleccionados, {
-            group: 'alergenos',
-            animation: 150,
-            onSort: actualizarHiddenInput,
-            onAdd: actualizarHiddenInput,
-            onRemove: actualizarHiddenInput
-        });
-    }
-});
+  });

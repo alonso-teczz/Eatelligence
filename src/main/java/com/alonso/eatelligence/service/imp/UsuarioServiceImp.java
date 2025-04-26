@@ -4,16 +4,20 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.alonso.eatelligence.model.dto.ClienteRegistroDTO;
 import com.alonso.eatelligence.model.entity.Direccion;
+import com.alonso.eatelligence.model.entity.Rol;
 import com.alonso.eatelligence.model.entity.Rol.NombreRol;
 import com.alonso.eatelligence.model.entity.Usuario;
 import com.alonso.eatelligence.repository.IUsuarioRepository;
 import com.alonso.eatelligence.service.IEntitableClient;
 import com.alonso.eatelligence.service.IUsuarioService;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class UsuarioServiceImp implements IUsuarioService, IEntitableClient {
@@ -99,12 +103,30 @@ public class UsuarioServiceImp implements IUsuarioService, IEntitableClient {
 
     @Override
     public Usuario findByUsername(String username) {
-        return this.usuarioRepository.findByUsername(username);
+        return this.usuarioRepository.findByUsername(username).get();
     }
 
     @Override
     public boolean checkPassword(Usuario u, String password) {
         return this.matchesPassword(password, u.getPassword());
+    }
+
+    @Override
+    public Optional<Usuario> findByUsernameAndEmail(String username, String email) {
+        return this.usuarioRepository.findByUsernameAndEmail(username, email);
+    }
+
+    @Transactional
+    @Override
+    public void addRoleToUser(String username, NombreRol rolNombre) {
+        Usuario user = this.usuarioRepository.findByUsername(username)
+            .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username));
+
+        Rol rol = this.rolService.findByNombre(rolNombre)
+            .orElseThrow(() -> new IllegalArgumentException("Rol no existe: " + rolNombre));
+
+        user.getRoles().add(rol);
+        this.usuarioRepository.save(user);
     }
 
 }

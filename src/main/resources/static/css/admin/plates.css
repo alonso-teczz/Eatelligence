@@ -2,7 +2,7 @@
     background-color: #f94144;
 }
 
-.alergeno-crustáceos {
+.alergeno-crustaceos {
     background-color: #f3722c;
 }
 
@@ -22,11 +22,11 @@
     background-color: #577590;
 }
 
-.alergeno-lácteos {
+.alergeno-lacteos {
     background-color: #277da1;
 }
 
-.alergeno-frutos-de-cáscara {
+.alergeno-frutos-de-cascara {
     background-color: #9b5de5;
 }
 
@@ -36,10 +36,9 @@
 
 .alergeno-mostaza {
     background-color: #fee440;
-    color: #000;
 }
 
-.alergeno-sésamo {
+.alergeno-sesamo {
     background-color: #00bbf9;
 }
 
@@ -89,17 +88,8 @@
     color: #212529 !important;
 }
 
-.tooltip-inner {
-    background-color: #157548 !important;
-    color: #fff !important;
-    border: 1px solid #cce5ff !important;
-    padding: 0.5rem 0.25rem;
+form label {
+    color: #157548 !important;
+    font-weight: bold !important;
+    margin-bottom: 0.5rem !important;
 }
-
-.tooltip-arrow::before {
-    border-top-color: #157548 !important;
-}
-.tooltip-arrow::after {
-    border-top-color: #157548 !important;
-}
-  

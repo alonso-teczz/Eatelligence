@@ -13,8 +13,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
@@ -68,12 +66,6 @@ public class UsuarioController {
 
         return "register";
     }
-
-    @GetMapping("/api/users/exists")
-    @ResponseBody
-    public boolean comprobarUsername(@RequestParam String username) {
-        return this.usuarioService.existsByUsername(username);
-    }
     
     @PostMapping("/validate-client-reg")
     public String validateClientRegister(
@@ -100,7 +92,7 @@ public class UsuarioController {
         boolean correoUsuarioFallido = false;
         
         try {
-            this.emailService.sendVerificationEmail(
+            this.emailService.sendEmail(
                 u.getEmail(),
                 "Verificar cuenta",
                 "verificacion",
@@ -150,7 +142,7 @@ public class UsuarioController {
         boolean correoRestauranteFallido = false;
     
         try {
-            this.emailService.sendVerificationEmail(
+            this.emailService.sendEmail(
                 r.getPropietario().getEmail(),
                 "Verificar cuenta de usuario del propietario",
                 "verificacion",
@@ -165,7 +157,7 @@ public class UsuarioController {
         }
     
         try {
-            this.emailService.sendVerificationEmail(
+            this.emailService.sendEmail(
                 r.getEmailEmpresa(),
                 "Verificar cuenta del restaurante",
                 "verificacion",

@@ -22,7 +22,7 @@ public class EmailService {
     @Autowired
     private TemplateEngine emailTemplateEngine;
 
-    public void sendVerificationEmail(String to, String subject, String template, Map<String, Object> data) throws MessagingException, UnsupportedEncodingException {
+    public void sendEmail(String to, String subject, String template, Map<String, Object> data) throws MessagingException, UnsupportedEncodingException {
         Context context = new Context();
         context.setVariables(data);
         String htmlContent = this.emailTemplateEngine.process(template, context);

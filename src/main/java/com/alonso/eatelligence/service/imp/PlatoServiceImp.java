@@ -32,7 +32,7 @@ public class PlatoServiceImp implements IPlatoService {
     @Override
     public Plato findyById(Long id) {
         return this.platoRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Plato no encontrado con ID: " + id));
+            .orElseThrow(() -> new EntityNotFoundException("Plato no encontrado con ID: " + id));
     }
 
     @Override
@@ -43,10 +43,11 @@ public class PlatoServiceImp implements IPlatoService {
     @Override
     public Plato updateFromDTO(Long id, PlatoDTO plato) {
         Plato existente = this.platoRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Plato no encontrado con ID: " + id));
+            .orElseThrow(() -> new EntityNotFoundException("Plato no encontrado con ID: " + id));
 
         existente.setNombre(plato.getNombre());
         existente.setDescripcion(plato.getDescripcion());
+        existente.setIngredientes(plato.getIngredientes());
         existente.setPrecio(plato.getPrecio());
 
         Set<Alergeno> alergenos = this.alergenoRepository.findByIdIn(plato.getAlergenos());
@@ -67,12 +68,17 @@ public class PlatoServiceImp implements IPlatoService {
         Set<Alergeno> alergenos = this.alergenoRepository.findByIdIn(plato.getAlergenos());
 
         return Plato.builder()
-                .nombre(plato.getNombre())
-                .descripcion(plato.getDescripcion())
-                .precio(plato.getPrecio())
-                .alergenos(alergenos)
-                .restaurante(restaurante)
-                .ingredientes(plato.getIngredientes())
-                .build();
+            .nombre(plato.getNombre())
+            .descripcion(plato.getDescripcion())
+            .precio(plato.getPrecio())
+            .alergenos(alergenos)
+            .restaurante(restaurante)
+            .ingredientes(plato.getIngredientes())
+            .build();
+    }
+
+    @Override
+    public long countAll() {
+        return this.platoRepository.count();
     }
 }
