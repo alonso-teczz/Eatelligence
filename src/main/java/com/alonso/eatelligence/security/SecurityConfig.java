@@ -34,7 +34,8 @@ public class SecurityConfig {
                     "/verificar",
                     "/login",
                     "/acceso-denegado",
-                    "/verificacion-pendiente"
+                    "/verificacion-pendiente",
+                    "/recruit"
                 )
                 .permitAll()
                 .requestMatchers(HttpMethod.POST,

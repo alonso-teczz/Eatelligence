@@ -11,7 +11,7 @@ import com.alonso.eatelligence.model.dto.ClienteRegistroDTO;
 import com.alonso.eatelligence.model.dto.RestauranteRegistroDTO;
 import com.alonso.eatelligence.model.entity.Direccion;
 import com.alonso.eatelligence.model.entity.Restaurante;
-import com.alonso.eatelligence.model.entity.Rol.NombreRol;
+import com.alonso.eatelligence.model.entity.NombreRol;
 import com.alonso.eatelligence.model.entity.Usuario;
 import com.alonso.eatelligence.repository.IRestauranteRepository;
 import com.alonso.eatelligence.service.IEntitableClient;

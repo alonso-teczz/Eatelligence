@@ -40,10 +40,4 @@ public class Rol {
     @OneToMany(mappedBy = "rol", cascade = CascadeType.ALL)
     private List<UsuarioRol> usuarioRoles;
 
-    public enum NombreRol {
-        ADMIN,
-        REPARTIDOR,
-        COCINERO,
-        CLIENTE
-    }
 }

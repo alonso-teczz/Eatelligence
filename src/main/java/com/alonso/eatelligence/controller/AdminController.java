@@ -2,6 +2,7 @@ package com.alonso.eatelligence.controller;
 
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Optional;
 
@@ -12,20 +13,21 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.alonso.eatelligence.email.EmailService;
 import com.alonso.eatelligence.model.dto.EmpleadoDTO;
 import com.alonso.eatelligence.model.dto.PlatoDTO;
+import com.alonso.eatelligence.model.entity.NombreRol;
 import com.alonso.eatelligence.model.entity.RecruitmentToken;
 import com.alonso.eatelligence.model.entity.Restaurante;
 import com.alonso.eatelligence.model.entity.Usuario;
-import com.alonso.eatelligence.model.entity.Rol.NombreRol;
 import com.alonso.eatelligence.service.IAlergenoService;
 import com.alonso.eatelligence.service.IPedidoService;
 import com.alonso.eatelligence.service.IPlatoService;
 import com.alonso.eatelligence.service.IRecruitmentService;
-import com.alonso.eatelligence.service.IRolService;
 import com.alonso.eatelligence.service.IUsuarioService;
 import com.alonso.eatelligence.utils.ValidationUtils;
 
@@ -33,14 +35,11 @@ import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 
 @Controller
-// @RequestMapping("/admin")
+@RequestMapping("/admin")
 public class AdminController {
 
     @Autowired
     private IAlergenoService alergenoService;
-
-    @Autowired
-    private IRolService rolService;
 
     @Autowired
     private IPlatoService platoService;
@@ -57,41 +56,44 @@ public class AdminController {
     @Autowired
     private IRecruitmentService recruitmentService;
 
-    @GetMapping({"/admin", "/admin/dashboard"})
-    public String goAdmin(Model model) {
-        // Total de platos
-        long totalPlatos = this.platoService.countAll();
 
-        // Nº de cocineros activos
-        long totalCocineros = this.rolService.findByNombreConUsuarios(NombreRol.COCINERO)
-            .map(r -> r.getUsuarios().size()).orElse(0);
+    @ModelAttribute
+    public void addDashboardStats(
+        Model model,
+        @SessionAttribute("restaurante") Restaurante restaurante
+    ) {
+        long totalPlatos = this.platoService.countByRestaurante(restaurante);
 
-        // Nº de repartidores activos
-        long totalRepartidores = this.rolService.findByNombreConUsuarios(NombreRol.REPARTIDOR)
-            .map(r -> r.getUsuarios().size()).orElse(0);
+        long totalCocineros = this.usuarioService
+        .countByRestauranteAsignadoAndRol(restaurante, NombreRol.COCINERO);
 
-        // Pedidos realizados hoy
-        LocalDate hoy = LocalDate.now();
-        long pedidosHoy = this.pedidoService.countPedidosRealizadosEntre(
-            hoy.atStartOfDay(),
-            hoy.plusDays(1).atStartOfDay()
+        long totalRepartidores = this.usuarioService
+        .countByRestauranteAsignadoAndRol(restaurante, NombreRol.REPARTIDOR);
+
+        long pedidosHoy = this.pedidoService
+        .countPedidosRealizadosEntre(
+            restaurante,
+            LocalDate.now().atStartOfDay(),
+            LocalDate.now().plusDays(1).atStartOfDay()
         );
 
-        // Añadimos al modelo
         model.addAttribute("totalPlatos", totalPlatos);
         model.addAttribute("totalCocineros", totalCocineros);
         model.addAttribute("totalRepartidores", totalRepartidores);
         model.addAttribute("pedidosHoy", pedidosHoy);
+    }
 
+    @GetMapping({"", "/", "/dashboard"})
+    public String goAdmin() {
         return "admin/dashboard";
     }
 
-    @GetMapping("/admin/charts")
+    @GetMapping("/charts")
     public String goCharts() {
         return "admin/charts";
     }
 
-    @GetMapping("/admin/tables")
+    @GetMapping("/tables")
     public String goTables() {
         return "admin/tables";
     }
@@ -101,14 +103,14 @@ public class AdminController {
         return new PlatoDTO();
     }
 
-    @GetMapping("/admin/plates")
+    @GetMapping("/plates")
     public String goPlates(Model model) {
         model.addAttribute("platos", this.platoService.getAll());
         model.addAttribute("alergenosDisponibles", this.alergenoService.getAll());
         return "admin/plates";
     }
 
-    @PostMapping("/admin/plates/add")
+    @PostMapping("/plates/add")
     public String guardarPlato(
         @SessionAttribute("restaurante") Restaurante restaurante,
         @Valid @ModelAttribute("nuevoPlato") PlatoDTO nuevoPlato,
@@ -132,66 +134,75 @@ public class AdminController {
         return new EmpleadoDTO();
     }
 
-    @PostMapping("/admin/recruit")
+    @PostMapping("/recruit")
     public String reclutarEmpleado(
         @SessionAttribute("restaurante") Restaurante restaurante,
         @Valid @ModelAttribute("nuevoEmpleado") EmpleadoDTO nuevoEmpleado,
         BindingResult result,
-        Model model
+        Model model,
+        RedirectAttributes ra
     ) {
         if (result.hasErrors()) {
             ValidationUtils.getFirstOrderedErrorFromBindingResult(result, nuevoEmpleado.getClass())
                 .ifPresent(error -> model.addAttribute("error", error.getDefaultMessage()));
-            return "admin/recruit";
+            return "admin/dashboard";
         }
 
-        if (nuevoEmpleado.getRol() != NombreRol.COCINERO && nuevoEmpleado.getRol() != NombreRol.REPARTIDOR) {
+        try {
+            NombreRol.valueOf(nuevoEmpleado.getRol());
+        } catch (IllegalArgumentException e) {
             model.addAttribute("error", "Debes seleccionar un rol válido");
-            return "admin/recruit";
+            return "admin/dashboard";
         }
 
         Optional<Usuario> u = this.usuarioService.findByUsernameAndEmail(nuevoEmpleado.getUsername(), nuevoEmpleado.getEmail());
 
         if (u.isEmpty()) {
             model.addAttribute("error", "Usuario no encontrado.");
-            return "admin/recruit";
+            return "admin/dashboard";
         }
 
         if (!u.get().isVerificado()) {
             model.addAttribute("error", "Pide al usuario que verifique su cuenta antes de invitarlo.");
-            return "admin/recruit";
+            return "admin/dashboard";
         }
 
         if (u.get().getRestauranteAsignado() != null) {
-            model.addAttribute("error", "El usuario ya está asignado a un restaurante.");
-            return "admin/recruit";
+            model.addAttribute("error", "El usuario ya tiene un restaurante asignado.");
+            return "admin/dashboard";
         }
 
-        if (this.recruitmentService.findByUsername(u.get().getUsername()) != null) {
+        if (this.recruitmentService.findValidTokenByUsername(u.get().getUsername()) != null) {
             model.addAttribute("error", "El usuario ya tiene una invitación pendiente.");
-            return "admin/recruit";
+            return "admin/dashboard";
         }
 
-        RecruitmentToken rt = this.recruitmentService.save(this.recruitmentService.createToken(nuevoEmpleado));
+        RecruitmentToken expiredToken = this.recruitmentService.findTokenByUsername(u.get().getUsername());
+        if (expiredToken != null && expiredToken.getFechaExpiracion().isBefore(LocalDateTime.now())) {
+            this.recruitmentService.delete(expiredToken);
+        }
+
+        RecruitmentToken rt = this.recruitmentService.save(this.recruitmentService.create(nuevoEmpleado, restaurante));
 
         try {
             this.emailService.sendEmail(
                 nuevoEmpleado.getEmail(),
-                restaurante.getNombreComercial() + " te invita a unirte a su equipo como " + nuevoEmpleado.getRol().name().toLowerCase(),
+                "Eatelligence - " + restaurante.getNombreComercial() + " te invita a unirte a su equipo como " + nuevoEmpleado.getRol().toLowerCase(),
                 "reclutamiento",
                 Map.of(
                     "username", nuevoEmpleado.getUsername(),
                     "restaurantName", restaurante.getNombreComercial(),
-                    "role", nuevoEmpleado.getRol().name().toLowerCase(),
+                    "role", nuevoEmpleado.getRol().toLowerCase(),
                     "invitationUrl", "http://localhost:8080/recruit?token=" + rt.getToken()
                 )
             );
         } catch (UnsupportedEncodingException | MessagingException e) {
             model.addAttribute("error", "Error al enviar el correo de verificación. Inténtalo más tarde.");
-            return "admin/recruit";
+            return "admin/dashboard";
         }
 
-        return "redirect:/admin/recruit";
+        ra.addFlashAttribute("success", "Invitación enviada correctamente a " + nuevoEmpleado.getEmail() + ".");
+        return "redirect:/admin/dashboard";
     }
 
 }

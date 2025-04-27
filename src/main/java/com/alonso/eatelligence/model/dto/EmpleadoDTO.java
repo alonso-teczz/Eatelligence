@@ -1,7 +1,5 @@
 package com.alonso.eatelligence.model.dto;
 
-import com.alonso.eatelligence.model.entity.Rol.NombreRol;
-
 import jakarta.validation.constraints.*;
 
 import lombok.*;
@@ -21,5 +19,5 @@ public class EmpleadoDTO {
     private String email;
 
     @NotNull(message = "Debes seleccionar un rol")
-    private NombreRol rol;
+    private String rol;
 }

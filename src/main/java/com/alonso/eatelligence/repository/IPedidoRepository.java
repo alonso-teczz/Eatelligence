@@ -6,8 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.alonso.eatelligence.model.entity.Pedido;
+import com.alonso.eatelligence.model.entity.Restaurante;
 
 @Repository
 public interface IPedidoRepository extends JpaRepository<Pedido, Long> {
-    long countByFechaRealizadoBetween(LocalDateTime start, LocalDateTime end);
+    long countByRestauranteAndFechaRealizadoBetween(Restaurante restaurante, LocalDateTime start, LocalDateTime end);
 }

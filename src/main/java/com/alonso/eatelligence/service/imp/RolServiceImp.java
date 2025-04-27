@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alonso.eatelligence.model.entity.Rol;
-import com.alonso.eatelligence.model.entity.Rol.NombreRol;
+import com.alonso.eatelligence.model.entity.NombreRol;
 import com.alonso.eatelligence.repository.IRolRepository;
 import com.alonso.eatelligence.service.IRolService;
 

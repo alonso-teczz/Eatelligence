@@ -3,11 +3,11 @@ package com.alonso.eatelligence.service;
 import java.util.Optional;
 
 import com.alonso.eatelligence.model.entity.Rol;
-import com.alonso.eatelligence.model.entity.Rol.NombreRol;
+import com.alonso.eatelligence.model.entity.NombreRol;
 
 public interface IRolService {
-    Optional<Rol> findByNombre(Rol.NombreRol nombreRol);
-    Optional<Rol> findByNombreConOpciones(Rol.NombreRol nombreRol);
     Rol save(Rol rol);
+    Optional<Rol> findByNombre(NombreRol nombreRol);
+    Optional<Rol> findByNombreConOpciones(NombreRol nombreRol);
     Optional<Rol> findByNombreConUsuarios(NombreRol cocinero);
 }

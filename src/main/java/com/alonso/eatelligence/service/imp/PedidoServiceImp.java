@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alonso.eatelligence.model.entity.Restaurante;
 import com.alonso.eatelligence.repository.IPedidoRepository;
 import com.alonso.eatelligence.service.IPedidoService;
 
@@ -19,9 +20,8 @@ public class PedidoServiceImp implements IPedidoService {
     private final IPedidoRepository pedidoRepository;
 
     @Override
-    public long countPedidosRealizadosEntre(LocalDateTime desde, LocalDateTime hasta) {
-        return this.pedidoRepository.countByFechaRealizadoBetween(desde, hasta);
+    public long countPedidosRealizadosEntre(Restaurante restaurante, LocalDateTime desde, LocalDateTime hasta) {
+        return pedidoRepository.countByRestauranteAndFechaRealizadoBetween(restaurante, desde, hasta);
     }
-
 
 }

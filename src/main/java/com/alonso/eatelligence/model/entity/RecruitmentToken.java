@@ -3,7 +3,6 @@ package com.alonso.eatelligence.model.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
-import com.alonso.eatelligence.model.entity.Rol.NombreRol;
 
 @Entity
 @Table
@@ -30,12 +29,16 @@ public class RecruitmentToken {
     @Column(nullable = false, length = 20)
     private NombreRol rol;
 
+    /** Restaurante que crea esta invitación */
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "restaurante_id", nullable = false)
+    private Restaurante restaurante;
+
     /** Fecha y hora en que se generó el token */
-    @Column(name = "created_at", nullable = false)
+    @Column(nullable = false)
     private LocalDateTime fechaCreacion;
 
     /** Fecha y hora de expiración (p. ej. 48h después) */
-    @Column(name = "expires_at", nullable = false)
+    @Column(nullable = false)
     private LocalDateTime fechaExpiracion;
-
 }

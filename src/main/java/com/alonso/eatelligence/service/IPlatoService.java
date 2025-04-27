@@ -13,4 +13,5 @@ public interface IPlatoService {
     Plato updateFromDTO(Long id, PlatoDTO dto);
     void delete(Long id);
     long countAll();
+    long countByRestaurante(Restaurante restaurante);
 }

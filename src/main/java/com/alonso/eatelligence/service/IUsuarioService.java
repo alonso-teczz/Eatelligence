@@ -3,7 +3,8 @@ package com.alonso.eatelligence.service;
 import java.util.List;
 import java.util.Optional;
 
-import com.alonso.eatelligence.model.entity.Rol.NombreRol;
+import com.alonso.eatelligence.model.entity.NombreRol;
+import com.alonso.eatelligence.model.entity.Restaurante;
 import com.alonso.eatelligence.model.entity.Usuario;
 
 public interface IUsuarioService {
@@ -35,4 +36,7 @@ public interface IUsuarioService {
 
     void addRoleToUser(String username, NombreRol rol);
 
+    void asignarRestaurante(Usuario usuario, Restaurante r);
+
+    long countByRestauranteAsignadoAndRol(Restaurante restaurante, NombreRol rol);
 }

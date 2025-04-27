@@ -6,7 +6,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import com.alonso.eatelligence.model.entity.Rol;
-import com.alonso.eatelligence.model.entity.Rol.NombreRol;
+import com.alonso.eatelligence.model.entity.NombreRol;
 import com.alonso.eatelligence.service.IRolService;
 
 @Component("rolDataLoader")

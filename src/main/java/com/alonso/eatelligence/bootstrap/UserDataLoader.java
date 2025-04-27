@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.alonso.eatelligence.model.entity.Direccion;
 import com.alonso.eatelligence.model.entity.Restaurante;
-import com.alonso.eatelligence.model.entity.Rol.NombreRol;
+import com.alonso.eatelligence.model.entity.NombreRol;
 import com.alonso.eatelligence.model.entity.Usuario;
 import com.alonso.eatelligence.service.imp.RestauranteServiceImp;
 import com.alonso.eatelligence.service.imp.RolServiceImp;
@@ -37,7 +37,7 @@ public class UserDataLoader implements CommandLineRunner {
             Usuario admin = Usuario.builder()
                 .username("alonso-admin")
                 .password(this.usuarioService.encodePassword("admin"))
-                .email("diezgarciaalonso@gmail.com")
+                .email("admin@demo.com")
                 .nombre("Alonso")
                 .apellidos("Diez Garcia")
                 .telefonoMovil("666666666")
@@ -88,7 +88,7 @@ public class UserDataLoader implements CommandLineRunner {
             Usuario cliente = Usuario.builder()
                 .username("cliente-demo")
                 .password(this.usuarioService.encodePassword("cliente"))
-                .email("cliente@demo.com")
+                .email("diezgarciaalonso@gmail.com")
                 .nombre("Lucía")
                 .apellidos("Gómez Pérez")
                 .telefonoMovil("644444444")

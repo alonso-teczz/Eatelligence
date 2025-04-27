@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.alonso.eatelligence.model.entity.OpcionMenu;
 import com.alonso.eatelligence.model.entity.Rol;
-import com.alonso.eatelligence.model.entity.Rol.NombreRol;
+import com.alonso.eatelligence.model.entity.NombreRol;
 import com.alonso.eatelligence.service.IMenuService;
 import com.alonso.eatelligence.service.IRolService;
 
@@ -38,6 +38,7 @@ public class MenuDataLoader implements CommandLineRunner {
             crearOpcion("Historial de pedidos","/historial",        "Mi Cuenta",      3),
             crearOpcion("Pedidos",             "/pedidos",          "Mi Cuenta",      4),
             crearOpcion("Rutas",               "/rutas",            "Mi Cuenta",      5),
+            crearOpcion("Administración",    "/admin",  "Mi Cuenta", 6),
         
             // --- Administración ---
             crearOpcion("Panel de control",    "/admin/dashboard",  "Administración", 1),

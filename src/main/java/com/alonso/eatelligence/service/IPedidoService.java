@@ -2,6 +2,8 @@ package com.alonso.eatelligence.service;
 
 import java.time.LocalDateTime;
 
+import com.alonso.eatelligence.model.entity.Restaurante;
+
 public interface IPedidoService {
-    long countPedidosRealizadosEntre(LocalDateTime desde, LocalDateTime hasta);
+    long countPedidosRealizadosEntre(Restaurante restaurante, LocalDateTime desde, LocalDateTime hasta);
 }

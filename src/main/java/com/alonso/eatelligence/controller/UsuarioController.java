@@ -94,7 +94,7 @@ public class UsuarioController {
         try {
             this.emailService.sendEmail(
                 u.getEmail(),
-                "Verificar cuenta",
+                "Eatelligence - Verificar cuenta",
                 "verificacion",
                 Map.of(
                     "nombre", u.getNombre(),
@@ -144,7 +144,7 @@ public class UsuarioController {
         try {
             this.emailService.sendEmail(
                 r.getPropietario().getEmail(),
-                "Verificar cuenta de usuario del propietario",
+                "Eatelligence - Verificar cuenta de usuario del propietario",
                 "verificacion",
                 Map.of(
                     "nombre", r.getPropietario().getNombre(),
@@ -159,7 +159,7 @@ public class UsuarioController {
         try {
             this.emailService.sendEmail(
                 r.getEmailEmpresa(),
-                "Verificar cuenta del restaurante",
+                "Eatelligence - Verificar cuenta del restaurante",
                 "verificacion",
                 Map.of(
                     "nombre", r.getNombreComercial(),

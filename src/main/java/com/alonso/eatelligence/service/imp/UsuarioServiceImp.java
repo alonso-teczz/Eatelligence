@@ -4,14 +4,14 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.alonso.eatelligence.model.dto.ClienteRegistroDTO;
 import com.alonso.eatelligence.model.entity.Direccion;
+import com.alonso.eatelligence.model.entity.NombreRol;
+import com.alonso.eatelligence.model.entity.Restaurante;
 import com.alonso.eatelligence.model.entity.Rol;
-import com.alonso.eatelligence.model.entity.Rol.NombreRol;
 import com.alonso.eatelligence.model.entity.Usuario;
 import com.alonso.eatelligence.repository.IUsuarioRepository;
 import com.alonso.eatelligence.service.IEntitableClient;
@@ -103,7 +103,7 @@ public class UsuarioServiceImp implements IUsuarioService, IEntitableClient {
 
     @Override
     public Usuario findByUsername(String username) {
-        return this.usuarioRepository.findByUsername(username).get();
+        return this.usuarioRepository.findByUsername(username);
     }
 
     @Override
@@ -119,14 +119,24 @@ public class UsuarioServiceImp implements IUsuarioService, IEntitableClient {
     @Transactional
     @Override
     public void addRoleToUser(String username, NombreRol rolNombre) {
-        Usuario user = this.usuarioRepository.findByUsername(username)
-            .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username));
+        Usuario user = this.usuarioRepository.findByUsername(username);
 
         Rol rol = this.rolService.findByNombre(rolNombre)
             .orElseThrow(() -> new IllegalArgumentException("Rol no existe: " + rolNombre));
 
         user.getRoles().add(rol);
         this.usuarioRepository.save(user);
+    }
+
+    @Override
+    public void asignarRestaurante(Usuario usuario, Restaurante r) {
+        usuario.setRestauranteAsignado(r);
+        this.usuarioRepository.save(usuario);
+    }
+
+    @Override
+    public long countByRestauranteAsignadoAndRol(Restaurante restaurante, NombreRol rol) {
+        return this.usuarioRepository.countByRestauranteAsignadoAndRol(restaurante, rol);
     }
 
 }

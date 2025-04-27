@@ -81,4 +81,9 @@ public class PlatoServiceImp implements IPlatoService {
     public long countAll() {
         return this.platoRepository.count();
     }
+
+    @Override
+    public long countByRestaurante(Restaurante restaurante) {
+        return this.platoRepository.countByRestaurante(restaurante);
+    }
 }

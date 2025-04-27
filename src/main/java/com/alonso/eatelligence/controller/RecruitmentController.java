@@ -30,22 +30,22 @@ public class RecruitmentController {
 
         if (opt.isEmpty()) {
             model.addAttribute("error", "Token inválido.");
-            return "reclutamientoFallido";
+            return "feedback/reclutamientoFallido";
         }
 
         RecruitmentToken rt = opt.get();
 
         if (rt.getFechaExpiracion().isBefore(LocalDateTime.now())) {
             model.addAttribute("error", "Token expirado.");
-            return "reclutamientoFallido";
+            return "feedback/reclutamientoFallido";
         }
 
         this.usuarioService.addRoleToUser(rt.getUsername(), rt.getRol());
-
+        this.usuarioService.asignarRestaurante(this.usuarioService.findByUsername(rt.getUsername()), rt.getRestaurante());
         this.recruitmentService.delete(rt);
 
-        model.addAttribute("username", rt.getUsername());
+        model.addAttribute("nombreRestaurante", rt.getRestaurante().getNombreComercial());
         model.addAttribute("rol", rt.getRol().name());
-        return "reclutamientoExitoso";
+        return "feedback/reclutamientoExitoso";
     }
 }

@@ -118,7 +118,7 @@ public class VerificacionController {
     
                     this.emailService.sendEmail(
                         u.getEmail(),
-                        "Reenvío de verificación",
+                        "Eatelligence - Reenvío de verificación",
                         "verificacion",
                         Map.of(
                             "nombre", u.getNombre(),
@@ -140,7 +140,7 @@ public class VerificacionController {
     
                     this.emailService.sendEmail(
                         r.getEmailEmpresa(),
-                        "Reenvío de verificación",
+                        "Eatelligence - Reenvío de verificación",
                         "verificacion",
                         Map.of(
                             "nombre", r.getNombreComercial(),

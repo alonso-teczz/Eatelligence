@@ -8,13 +8,13 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.alonso.eatelligence.model.entity.Rol;
-import com.alonso.eatelligence.model.entity.Rol.NombreRol;
+import com.alonso.eatelligence.model.entity.NombreRol;
 
 @Repository
 public interface IRolRepository extends JpaRepository<Rol, Long> {
     Optional<Rol> findByNombre(NombreRol nombre);
     @Query("SELECT r FROM Rol r LEFT JOIN FETCH r.opciones WHERE r.nombre = :nombre")
-    Optional<Rol> findByNombreConOpciones(Rol.NombreRol nombre);
+    Optional<Rol> findByNombreConOpciones(NombreRol nombre);
 
     @Query("""
       SELECT r
