@@ -2,6 +2,7 @@ package com.alonso.eatelligence.service.imp;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -49,7 +50,7 @@ public class UsuarioServiceImp implements IUsuarioService, IEntitableClient {
             .telefonoMovil(cliente.getTelefonoMovil())
             .password(this.encodePassword(cliente.getPassword()))
             .roles(
-                List.of(
+                Set.of(
                     this.rolService.findByNombre(NombreRol.CLIENTE).orElseThrow()
                 )
             )
@@ -117,15 +118,19 @@ public class UsuarioServiceImp implements IUsuarioService, IEntitableClient {
     }
 
     @Transactional
-    @Override
     public void addRoleToUser(String username, NombreRol rolNombre) {
         Usuario user = this.usuarioRepository.findByUsername(username);
 
-        Rol rol = this.rolService.findByNombre(rolNombre)
-            .orElseThrow(() -> new IllegalArgumentException("Rol no existe: " + rolNombre));
+        if (user == null) {
+            throw new IllegalArgumentException("El usuario no existe");
+        }
 
-        user.getRoles().add(rol);
-        this.usuarioRepository.save(user);
+        Rol rol = this.rolService.findByNombre(rolNombre)
+            .orElseThrow(() -> new IllegalArgumentException("Rol no existe"));
+    
+        if (user.getRoles().add(rol)) {
+            this.usuarioRepository.save(user);
+        }
     }
 
     @Override

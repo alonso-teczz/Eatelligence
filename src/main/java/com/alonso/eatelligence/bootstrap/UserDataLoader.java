@@ -1,6 +1,6 @@
 package com.alonso.eatelligence.bootstrap;
 
-import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -42,7 +42,7 @@ public class UserDataLoader implements CommandLineRunner {
                 .apellidos("Diez Garcia")
                 .telefonoMovil("666666666")
                 .verificado(true)
-                .roles(List.of(
+                .roles(Set.of(
                     this.rolService.findByNombre(NombreRol.ADMIN).orElseThrow(),
                     this.rolService.findByNombre(NombreRol.CLIENTE).orElseThrow()
                 ))
@@ -93,7 +93,7 @@ public class UserDataLoader implements CommandLineRunner {
                 .apellidos("Gómez Pérez")
                 .telefonoMovil("644444444")
                 .verificado(true)
-                .roles(List.of(
+                .roles(Set.of(
                     this.rolService.findByNombre(NombreRol.CLIENTE).orElseThrow()
                 ))
                 .build();

@@ -2,10 +2,9 @@ package com.alonso.eatelligence.model.entity;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -20,6 +19,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PreRemove;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -36,7 +36,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString(exclude = {"roles", "usuarioRoles", "tokens", "pedidos", "direcciones"})
+@ToString(exclude = {"roles", "tokens", "pedidos", "direcciones"})
 public class Usuario {
 
     @Id
@@ -74,10 +74,11 @@ public class Usuario {
     @JoinTable(
         name = "usuario_rol",
         joinColumns = @JoinColumn(name = "usuario_id"),
-        inverseJoinColumns = @JoinColumn(name = "rol_id")
+        inverseJoinColumns = @JoinColumn(name = "rol_id"),
+        uniqueConstraints = @UniqueConstraint(columnNames = { "usuario_id", "rol_id" })
     )
     @Builder.Default
-    private List<Rol> roles = new ArrayList<>();    
+    private Set<Rol> roles = new HashSet<>();   
 
     @Column(nullable = false, columnDefinition = "TINYINT(1)")
     @Builder.Default
@@ -91,27 +92,14 @@ public class Usuario {
     private List<Pedido> pedidos;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<UsuarioRol> usuarioRoles;
-
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<VerificationToken> tokens = new ArrayList<>();
 
     @PreRemove
-    private void preRemove() {
-        if (tokens != null && !tokens.isEmpty()) {
-            tokens.forEach(t -> t.setUsuario(null));
-            tokens.clear();
-        }
-    
-        if (roles != null && !roles.isEmpty()) {
-            roles.clear();
-        }
-    
-        if (usuarioRoles != null && !usuarioRoles.isEmpty()) {
-            usuarioRoles.clear();
-        }
-    }    
+    private void detachTokens() {
+        tokens.forEach(t -> t.setUsuario(null));
+        tokens.clear();
+        roles.clear();
+    }   
 
 }

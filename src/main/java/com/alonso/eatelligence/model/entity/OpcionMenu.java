@@ -1,6 +1,7 @@
 package com.alonso.eatelligence.model.entity;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -44,7 +45,8 @@ public class OpcionMenu {
     private Boolean activo = true;
 
     @ManyToMany(mappedBy = "opciones")
+    @Builder.Default
     @EqualsAndHashCode.Exclude
-    private List<Rol> roles;
+    private Set<Rol> roles = new HashSet<>();
 
 }

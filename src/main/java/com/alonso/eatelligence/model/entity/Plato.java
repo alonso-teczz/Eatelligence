@@ -16,6 +16,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -48,13 +49,14 @@ public class Plato {
 
     @ManyToMany
     @JoinTable(
-        name = "plato_alergenos",
-        joinColumns = @JoinColumn(name = "plato_id"),
-        inverseJoinColumns = @JoinColumn(name = "alergeno_id")
+        name              = "plato_alergenos",
+        joinColumns       = @JoinColumn(name = "plato_id"),
+        inverseJoinColumns= @JoinColumn(name = "alergeno_id"),
+        uniqueConstraints = @UniqueConstraint(columnNames = { "plato_id", "alergeno_id" })
     )
-    @EqualsAndHashCode.Exclude
     @Builder.Default
     @JsonIgnoreProperties("platos")
+    @EqualsAndHashCode.Exclude
     private Set<Alergeno> alergenos = new HashSet<>();
 
     @ManyToOne(optional = false)
