@@ -127,5 +127,9 @@ public class RestauranteServiceImp implements IRestauranteService, IEntitableCli
     public void deleteById(Long id) {
         this.restauranteRepository.deleteById(id);
     }
+
+    public List<Restaurante> findAll() {
+        return this.restauranteRepository.findAll();
+    }
     
 }

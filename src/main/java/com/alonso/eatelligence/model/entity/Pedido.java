@@ -48,7 +48,7 @@ public class Pedido {
     @Column(name = "nota_cliente", length = 500)
     private String notaCliente;
 
-    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     @EqualsAndHashCode.Exclude
     private List<PedidoPlato> pedidoPlatos;
 

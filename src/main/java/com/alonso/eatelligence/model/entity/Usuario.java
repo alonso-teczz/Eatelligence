@@ -88,7 +88,7 @@ public class Usuario {
     @Builder.Default
     private LocalDateTime fechaRegistro = LocalDateTime.now();
 
-    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.PERSIST)
     private List<Pedido> pedidos;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)

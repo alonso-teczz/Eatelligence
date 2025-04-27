@@ -3,6 +3,7 @@ package com.alonso.eatelligence.model.entity;
 import java.util.HashSet;
 import java.util.Set;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -38,6 +39,7 @@ public class Rol {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @EqualsAndHashCode.Include
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, unique = true)
     private NombreRol nombre;
@@ -46,7 +48,7 @@ public class Rol {
     @Builder.Default
     private Set<Usuario> usuarios = new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(
         name = "rol_opciones",
         joinColumns = @JoinColumn(name = "rol_id"),

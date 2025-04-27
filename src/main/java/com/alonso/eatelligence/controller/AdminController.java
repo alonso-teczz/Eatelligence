@@ -1,7 +1,6 @@
 package com.alonso.eatelligence.controller;
 
 import java.io.UnsupportedEncodingException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Optional;
@@ -70,12 +69,7 @@ public class AdminController {
         long totalRepartidores = this.usuarioService
         .countByRestauranteAsignadoAndRol(restaurante, NombreRol.REPARTIDOR);
 
-        long pedidosHoy = this.pedidoService
-        .countPedidosRealizadosEntre(
-            restaurante,
-            LocalDate.now().atStartOfDay(),
-            LocalDate.now().plusDays(1).atStartOfDay()
-        );
+        long pedidosHoy = this.pedidoService.getPedidosHoy(restaurante);
 
         model.addAttribute("totalPlatos", totalPlatos);
         model.addAttribute("totalCocineros", totalCocineros);
