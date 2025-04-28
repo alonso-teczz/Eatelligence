@@ -1,4 +1,4 @@
-document.querySelectorAll('.form-eliminar-empleado').forEach(form => {
+document.querySelectorAll('.form-eliminar-repartidor').forEach(form => {
     form.addEventListener('submit', async e => {
       e.preventDefault();
       const row = form.closest('tr');

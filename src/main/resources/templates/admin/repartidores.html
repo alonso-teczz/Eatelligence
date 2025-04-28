@@ -10,7 +10,7 @@
                 <div class="container-fluid px-4">
                     <h1 class="mt-4">Gestión de Repartidores</h1>
                     <ol class="breadcrumb mb-4">
-                        <li class="breadcrumb-item"><a th:href="@{/admin}">Panel de administración</a></li>
+                        <li class="breadcrumb-item"><a th:href="@{/admin}">Panel de control</a></li>
                         <li class="breadcrumb-item active">Repartidores</li>
                     </ol>
 
@@ -32,12 +32,20 @@
                                 <td th:text="${r.nombre}"/>
                                 <td th:text="${r.apellidos}"/>
                                 <td th:text="${r.email}"/>
-                                <td th:text="${r.telefonoMovil}"/>
-                                <td th:text="${r.fechaReclutamiento}"/>
+                                <td th:text="
+                                    ${#strings.substring(r.telefonoMovil,0,3)
+                                    + ' '
+                                    + #strings.substring(r.telefonoMovil,3,5)
+                                    + ' '
+                                    + #strings.substring(r.telefonoMovil,5,7)
+                                    + ' '
+                                    + #strings.substring(r.telefonoMovil,7,9)
+                                    }"/>                                                           
+                                <td th:text="${#temporals.format(r.fechaReclutamiento, 'dd/MM/yyyy')}"></td>
                                 <td class="text-center align-middle">
                                     <form
-                                        th:action="@{/api/employees/{id}(id=${r.id})}"
-                                        class="form-eliminar-empleado d-inline-flex align-items-center text-nowrap">
+                                        th:action="@{/api/employees/deliveryman/{id}(id=${r.id})}"
+                                        class="form-eliminar-repartidor d-inline-flex align-items-center text-nowrap">
                                         <button type="submit" class="btn btn-sm btn-danger">
                                             <i class="fas fa-trash me-1"></i> Eliminar
                                         </button>
@@ -58,6 +66,6 @@
     
     <script src="/js/admin/datatables-simple.js"></script>
     <script src="/js/admin/sidebar-toggle.js"></script>
-    <script src="/js/admin/empleados.js"></script>
+    <script src="/js/admin/repartidores.js"></script>
 </body>
 </html>

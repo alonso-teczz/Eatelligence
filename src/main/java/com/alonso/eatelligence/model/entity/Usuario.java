@@ -100,8 +100,7 @@ public class Usuario {
     private List<VerificationToken> tokens = new ArrayList<>();
 
     @PreRemove
-    private void detachTokens() {
-        tokens.forEach(t -> t.setUsuario(null));
+    private void preRemoveUsuario() {
         tokens.clear();
         roles.clear();
     }   

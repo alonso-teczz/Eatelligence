@@ -10,7 +10,7 @@
                 <div class="container-fluid px-4">
                     <h1 class="mt-4">Gestión de Cocineros</h1>
                     <ol class="breadcrumb mb-4">
-                        <li class="breadcrumb-item"><a th:href="@{/admin}">Panel de administración</a></li>
+                        <li class="breadcrumb-item"><a th:href="@{/admin}">Panel de control</a></li>
                         <li class="breadcrumb-item active">Cocineros</li>
                     </ol>
 
@@ -32,12 +32,20 @@
                                 <td th:text="${c.nombre}"/>
                                 <td th:text="${c.apellidos}"/>
                                 <td th:text="${c.email}"/>
-                                <td th:text="${c.telefonoMovil}"/>
-                                <td th:text="${c.fechaReclutamiento}"/>
+                                <td th:text="
+                                    ${#strings.substring(c.telefonoMovil,0,3)
+                                    + ' '
+                                    + #strings.substring(c.telefonoMovil,3,5)
+                                    + ' '
+                                    + #strings.substring(c.telefonoMovil,5,7)
+                                    + ' '
+                                    + #strings.substring(c.telefonoMovil,7,9)
+                                    }"/>                                                            
+                                <td th:text="${#temporals.format(c.fechaReclutamiento, 'dd/MM/yyyy')}"></td>
                                 <td class="text-center align-middle">
                                     <form
-                                        th:action="@{/api/empleados/{id}(id=${r.id})}"
-                                        class="form-eliminar-empleado d-inline-flex align-items-center text-nowrap">
+                                        th:action="@{/api/employees/cook/{id}(id=${c.id})}"
+                                        class="form-eliminar-cocinero d-inline-flex align-items-center text-nowrap">
                                         <button type="submit" class="btn btn-sm btn-danger">
                                             <i class="fas fa-trash me-1"></i> Eliminar
                                         </button>
@@ -58,6 +66,6 @@
     
     <script src="/js/admin/datatables-simple.js"></script>
     <script src="/js/admin/sidebar-toggle.js"></script>
-    <script src="/js/admin/empleados.js"></script>
+    <script src="/js/admin/cocineros.js"></script>
 </body>
 </html>
