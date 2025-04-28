@@ -66,6 +66,10 @@ public class Usuario {
     @Builder.Default
     private Restaurante restauranteAsignado = null;
 
+    @Column(nullable = true)
+    @Builder.Default
+    private LocalDateTime fechaReclutamiento = null;
+
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<Direccion> direcciones = new ArrayList<>();
@@ -78,7 +82,7 @@ public class Usuario {
         uniqueConstraints = @UniqueConstraint(columnNames = { "usuario_id", "rol_id" })
     )
     @Builder.Default
-    private Set<Rol> roles = new HashSet<>();   
+    private Set<Rol> roles = new HashSet<>();
 
     @Column(nullable = false, columnDefinition = "TINYINT(1)")
     @Builder.Default

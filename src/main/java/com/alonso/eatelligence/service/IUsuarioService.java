@@ -9,34 +9,25 @@ import com.alonso.eatelligence.model.entity.Usuario;
 
 public interface IUsuarioService {
 
-    // Método para comprobar la existencia de un usuario por su nombre
+    //? READ
+    Usuario findByUsername(String username);
+    Optional<Usuario> findById(Long id);
+    Optional<Usuario> findByUsernameAndEmail(String username, String email);    
+    List<Usuario> getAllUsers();
+    List<Usuario> findAllByRestauranteAsignadoAndRol(Restaurante restaurante, NombreRol rol);
+    long countByRestauranteAsignadoAndRol(Restaurante restaurante, NombreRol rol);
     boolean existsByUsername(String username);
-
     boolean checkPassword(Usuario u, String password);
     
-    //? READ
-    // Método para buscar un usuario por su ID
-    Optional<Usuario> findById(Long id);
-
-    Usuario findByUsername(String username);
-
-    Optional<Usuario> findByUsernameAndEmail(String username, String email);
-
-    // Método para listar todos los usuarios registrados
-    List<Usuario> getAllUsers();
-
     //# CREATE
     Usuario save(Usuario usuario);
-
+    
     //+ UPDATE
     void update(Usuario usuario); 
-
+    void addRoleToUser(String username, NombreRol rol);
+    void asignarRestaurante(Usuario usuario, Restaurante r);
+    
     //! DELETE
     void deleteById(Long id);
-
-    void addRoleToUser(String username, NombreRol rol);
-
-    void asignarRestaurante(Usuario usuario, Restaurante r);
-
-    long countByRestauranteAsignadoAndRol(Restaurante restaurante, NombreRol rol);
+    
 }

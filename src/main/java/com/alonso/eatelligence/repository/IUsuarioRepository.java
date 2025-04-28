@@ -1,5 +1,6 @@
 package com.alonso.eatelligence.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,18 +14,20 @@ import com.alonso.eatelligence.model.entity.Usuario;
 
 @Repository
 public interface IUsuarioRepository extends JpaRepository<Usuario, Long> {
-    boolean existsByUsername(String username);
-    Usuario findByUsername(String username);
-    Optional<Usuario> findByUsernameAndEmail(String username, String email);
-    @Query("""
-      SELECT COUNT(u) 
-      FROM Usuario u 
-      JOIN u.roles r 
-      WHERE u.restauranteAsignado = :restaurante 
-        AND r.nombre = :rol
-    """)
-    long countByRestauranteAsignadoAndRol(
-      @Param("restaurante") Restaurante restaurante,
-      @Param("rol") NombreRol rol
-    );
+  boolean existsByUsername(String username);
+  Usuario findByUsername(String username);
+  Optional<Usuario> findByUsernameAndEmail(String username, String email);
+  @Query("""
+    SELECT COUNT(u) 
+    FROM Usuario u 
+    JOIN u.roles r 
+    WHERE u.restauranteAsignado = :restaurante 
+    AND r.nombre = :rol
+  """)
+  long countByRestauranteAsignadoAndRol(
+    @Param("restaurante") Restaurante restaurante,
+    @Param("rol") NombreRol rol
+  );
+
+  List<Usuario> findAllByRestauranteAsignadoAndRolesNombre(Restaurante restauranteAsignado, NombreRol rol);
 }

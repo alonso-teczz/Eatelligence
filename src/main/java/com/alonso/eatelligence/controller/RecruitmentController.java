@@ -42,6 +42,7 @@ public class RecruitmentController {
 
         this.usuarioService.addRoleToUser(rt.getUsername(), rt.getRol());
         this.usuarioService.asignarRestaurante(this.usuarioService.findByUsername(rt.getUsername()), rt.getRestaurante());
+        this.usuarioService.findByUsername(rt.getUsername()).setFechaReclutamiento(LocalDateTime.now());
         this.recruitmentService.delete(rt);
 
         model.addAttribute("nombreRestaurante", rt.getRestaurante().getNombreComercial());

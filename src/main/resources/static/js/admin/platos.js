@@ -1,9 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const tablaEl = document.querySelector("#tablaPlatos");
-  if (tablaEl) {
-    dataTable = new simpleDatatables.DataTable(tablaEl);
-  }
-
   try {
     document
       .querySelectorAll('[data-bs-toggle="tooltip"]')
@@ -214,8 +209,7 @@ document.addEventListener("DOMContentLoaded", () => {
       form.addEventListener('submit', async e => {
         e.preventDefault();
         const row = form.closest('tr');
-        const id  = row.dataset.id;
-
+        const url = form.action;
         // 3) Confirmación
         const { isConfirmed } = await Swal.fire({
           title: "¿Eliminar este plato?",
@@ -228,7 +222,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // 4) Llamada DELETE
         try {
-          const res = await fetch(`/api/plates/${id}`, {
+          const res = await fetch(url, {
             method: "DELETE",
             headers: {
               "X-Requested-With": "XMLHttpRequest"

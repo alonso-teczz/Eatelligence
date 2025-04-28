@@ -144,4 +144,9 @@ public class UsuarioServiceImp implements IUsuarioService, IEntitableClient {
         return this.usuarioRepository.countByRestauranteAsignadoAndRol(restaurante, rol);
     }
 
+    @Override
+    public List<Usuario> findAllByRestauranteAsignadoAndRol(Restaurante restaurante, NombreRol rol) {
+        return this.usuarioRepository.findAllByRestauranteAsignadoAndRolesNombre(restaurante, rol);
+    }
+
 }

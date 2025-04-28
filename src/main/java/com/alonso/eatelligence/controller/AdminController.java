@@ -101,7 +101,7 @@ public class AdminController {
     public String goPlates(Model model) {
         model.addAttribute("platos", this.platoService.getAll());
         model.addAttribute("alergenosDisponibles", this.alergenoService.getAll());
-        return "admin/plates";
+        return "admin/platos";
     }
 
     @PostMapping("/plates/add")
@@ -116,11 +116,11 @@ public class AdminController {
             model.addAttribute("alergenosDisponibles", this.alergenoService.getAll());
             ValidationUtils.getFirstOrderedErrorFromBindingResult(result, nuevoPlato.getClass())
                 .ifPresent(error -> model.addAttribute("globalError", error.getDefaultMessage()));
-            return "admin/plates";
+            return "admin/platos";
         }
 
         this.platoService.saveFromDTO(nuevoPlato, restaurante);
-        return "redirect:/admin/plates";
+        return "redirect:/admin/platos";
     }
 
     @ModelAttribute("nuevoEmpleado")
@@ -199,4 +199,27 @@ public class AdminController {
         return "redirect:/admin/dashboard";
     }
 
+    @GetMapping("/cocineros")
+    public String goCocineros(
+        @SessionAttribute("restaurante") Restaurante restaurante,
+        Model model
+    ) {
+        model.addAttribute("cocineros", this.usuarioService.findAllByRestauranteAsignadoAndRol(
+            restaurante,
+            NombreRol.COCINERO
+        ));
+        return "admin/cocineros";
+    }
+
+    @GetMapping("/repartidores")
+    public String goRepartidores(
+        @SessionAttribute("restaurante") Restaurante restaurante,
+        Model model
+    ) {
+        model.addAttribute("repartidores", this.usuarioService.findAllByRestauranteAsignadoAndRol(
+            restaurante,
+            NombreRol.REPARTIDOR
+        ));
+        return "admin/repartidores";
+    }
 }
