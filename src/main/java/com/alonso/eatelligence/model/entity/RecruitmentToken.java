@@ -5,7 +5,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table
+@Table(name = "recruitment_tokens")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

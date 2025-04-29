@@ -50,7 +50,7 @@ public class Rol {
 
     @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(
-        name = "rol_opciones",
+        name = "rol_opcion",
         joinColumns = @JoinColumn(name = "rol_id"),
         inverseJoinColumns = @JoinColumn(name = "opcion_id"),
         uniqueConstraints = @UniqueConstraint(columnNames = {"rol_id","opcion_id"})

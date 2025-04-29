@@ -57,7 +57,7 @@ public class Plato {
 
     @ManyToMany
     @JoinTable(
-        name = "plato_alergenos",
+        name = "plato_alergeno",
         joinColumns = @JoinColumn(name = "plato_id"),
         inverseJoinColumns = @JoinColumn(name = "alergeno_id"),
         uniqueConstraints = @UniqueConstraint(columnNames = { "plato_id", "alergeno_id" })

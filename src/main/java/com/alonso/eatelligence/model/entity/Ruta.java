@@ -7,30 +7,30 @@ import java.time.LocalDateTime;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "rutas_entrega")
+@Table(name = "rutas")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class RutaEntrega {
+public class Ruta {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "tiempo_estimado", nullable = false)
+    @Column(nullable = false)
     private Integer tiempoEstimado;
 
-    @Column(name = "latitud")
+    @Column
     private Double latitud;
 
-    @Column(name = "longitud")
+    @Column
     private Double longitud;
 
-    @Column(name = "hora_inicio")
+    @Column
     private LocalDateTime horaInicio;
 
-    @Column(name = "hora_fin")
+    @Column
     private LocalDateTime horaFin;
 
     @Enumerated(EnumType.STRING)
@@ -38,7 +38,7 @@ public class RutaEntrega {
     private EstadoRuta estado;
 
     public enum EstadoRuta {
-        ASIGNADO, EN_RUTA, ENTREGADO
+        ASIGNADO, EN_RUTA, TERMINADO
     }
 
     @OneToOne

@@ -69,7 +69,7 @@ public class Restaurante {
 
     @ElementCollection
     @CollectionTable(name = "horarios", joinColumns = @JoinColumn(name = "restaurante_id"))
-    private List<Horario> horarios;
+    private Set<Horario> horarios;
 
     @OneToMany(mappedBy = "restaurante", cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude

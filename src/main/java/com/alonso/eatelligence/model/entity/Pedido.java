@@ -33,16 +33,16 @@ public class Pedido {
     private EstadoPedido estado;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "metodo_pago", nullable = false)
+    @Column(nullable = false)
     private MetodoPago metodoPago;
 
-    @Column(name = "fecha_realizado", nullable = false)
+    @Column(nullable = false)
     private LocalDateTime fechaRealizado;
 
-    @Column(name = "fecha_estimada")
-    private LocalDateTime fechaEstimada;
+    // @Column
+    // private LocalDateTime fechaEstimada;
 
-    @Column(name = "fecha_entregado")
+    @Column
     private LocalDateTime fechaEntregado;
 
     @Column(name = "nota_cliente", length = 500)
