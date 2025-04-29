@@ -199,7 +199,7 @@ public class AdminController {
         return "redirect:/admin/dashboard";
     }
 
-    @GetMapping("/cocineros")
+    @GetMapping("/cooks")
     public String goCocineros(
         @SessionAttribute("restaurante") Restaurante restaurante,
         Model model
@@ -211,7 +211,7 @@ public class AdminController {
         return "admin/cocineros";
     }
 
-    @GetMapping("/repartidores")
+    @GetMapping("/deliverymen")
     public String goRepartidores(
         @SessionAttribute("restaurante") Restaurante restaurante,
         Model model

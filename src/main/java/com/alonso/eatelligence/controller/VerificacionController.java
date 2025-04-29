@@ -34,7 +34,7 @@ public class VerificacionController {
     private final RestauranteServiceImp restauranteService;
     private final EmailService emailService;
 
-    @GetMapping("/verificar")
+    @GetMapping("/verify")
     @Transactional
     public String verificar(@RequestParam("token") String token, Model model) {
         VerificationToken vt = this.tokenService.findByToken(token).orElse(null);
@@ -63,7 +63,7 @@ public class VerificacionController {
         return "feedback/verificacionExitosa";
     }
 
-    @PostMapping("/reenviar-verificacion")
+    @PostMapping("/resend-verification")
     @ResponseBody
     public ResponseEntity<?> reenviarVerificacion(
         @RequestParam("token") String token,
@@ -122,7 +122,7 @@ public class VerificacionController {
                         "verificacion",
                         Map.of(
                             "nombre", u.getNombre(),
-                            "urlVerificacion", "http://localhost:8080/verificar?token=" + newVT.getToken(),
+                            "urlVerificacion", "http://localhost:8080/verify?token=" + newVT.getToken(),
                             "proximoIntento", minutosEspera * 2 + " minutos"
                         )
                     );
@@ -144,7 +144,7 @@ public class VerificacionController {
                         "verificacion",
                         Map.of(
                             "nombre", r.getNombreComercial(),
-                            "urlVerificacion", "http://localhost:8080/verificar?token=" + newVT.getToken(),
+                            "urlVerificacion", "http://localhost:8080/verify?token=" + newVT.getToken(),
                             "proximoIntento", minutosEspera * 2 + " minutos"
                         )
                     );
@@ -162,7 +162,7 @@ public class VerificacionController {
         }
     }
 
-    @GetMapping("/verificacion-pendiente")
+    @GetMapping("/pending-verification")
     public String mostrarPaginaVerificacion(
         @SessionAttribute(value = "restaurante", required = false) Restaurante restaurante,
         @SessionAttribute(value = "usuario", required = false) Usuario usuario,

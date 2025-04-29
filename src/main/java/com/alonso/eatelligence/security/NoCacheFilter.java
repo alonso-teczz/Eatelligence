@@ -20,7 +20,7 @@ public class NoCacheFilter implements Filter {
         "/",
         "/login",
         "/register",
-        "/registro-exitoso"
+        "/successful-register"
     );
 
     @Override

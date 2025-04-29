@@ -29,7 +29,7 @@ public class VerificationFilter implements Filter {
     }
 
     private static final List<String> EXCLUDED_PATHS = List.of(
-        "/verificacion-pendiente",
+        "/pending-verification",
         "/logout",
         "/login",
         "/register",
@@ -38,11 +38,18 @@ public class VerificationFilter implements Filter {
 
     private static final List<String> RUTAS_USUARIO_VERIFICADO = List.of(
         "/settings",
-        "/historial"
+        "/order-history"
     );
 
     private static final List<String> RUTAS_RESTAURANTE_VERIFICADO = List.of(
-        "/admin", "/admin/", "/admin/dashboard", "/admin/plates", "/admin/charts", "/admin/tables"
+        "/admin",
+        "/admin/",
+        "/admin/dashboard",
+        "/admin/plates",
+        "/admin/charts",
+        "/admin/tables",
+        "/admin/cooks",
+        "/admin/deliverymen"
     );
 
     @Override
@@ -69,13 +76,13 @@ public class VerificationFilter implements Filter {
 
             if (!usuarioVerificado &&
                 RUTAS_USUARIO_VERIFICADO.stream().anyMatch(path::startsWith)) {
-                res.sendRedirect("/verificacion-pendiente");
+                res.sendRedirect("/pending-verification");
                 return;
             }
 
             if ((!restauranteVerificado || !propietarioVerificado) &&
                 RUTAS_RESTAURANTE_VERIFICADO.stream().anyMatch(path::startsWith)) {
-                res.sendRedirect("/verificacion-pendiente");
+                res.sendRedirect("/pending-verification");
                 return;
             }
         }

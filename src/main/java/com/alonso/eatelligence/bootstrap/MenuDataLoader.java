@@ -35,23 +35,22 @@ public class MenuDataLoader implements CommandLineRunner {
             // --- Mi Cuenta ---
             crearOpcion("Ajustes",             "/settings",         "Mi Cuenta",      1),
             crearOpcion("Cerrar sesión",       "/logout",           "Mi Cuenta",      2),
-            crearOpcion("Historial de pedidos","/historial",        "Mi Cuenta",      3),
-            crearOpcion("Pedidos",             "/pedidos",          "Mi Cuenta",      4),
-            crearOpcion("Rutas",               "/rutas",            "Mi Cuenta",      5),
+            crearOpcion("Historial de pedidos","/order-history",        "Mi Cuenta",      3),
+            crearOpcion("Pedidos",             "/orders",          "Mi Cuenta",      4),
+            crearOpcion("Rutas",               "/routes",            "Mi Cuenta",      5),
             crearOpcion("Administración",    "/admin",  "Mi Cuenta", 6),
         
             // --- Administración ---
-            crearOpcion("Panel de control",    "/admin/dashboard",  "Administración", 1),
-            crearOpcion("Platos",              "/admin/plates",     "Administración", 2),
-            crearOpcion("Plantilla",           "#",                 "Administración", 3),
+            crearOpcion("Inicio",    "/admin/dashboard",  "Gestión", 1),
+            crearOpcion("Menú",              "/admin/plates",     "Gestión", 2),
         
             // --- Plantilla (submenú) ---
-            crearOpcion("Cocineros",           "/admin/cocineros",  "Plantilla",      1),
-            crearOpcion("Repartidores",        "/admin/repartidores","Plantilla",     2),
+            crearOpcion("Equipo de cocina",           "/admin/cooks",  "Personal",      3),
+            crearOpcion("Equipo de reparto",        "/admin/deliverymen","Personal",     4),
         
             // --- Estadísticas ---
-            crearOpcion("Gráficos",            "/admin/charts",     "Estadísticas",   1),
-            crearOpcion("Tablas",              "/admin/tables",     "Estadísticas",   2)
+            crearOpcion("Gráficos",            "/admin/charts",     "Informes",   5),
+            crearOpcion("Registros",              "/admin/tables",     "Informes",   6)
         );        
 
         for (OpcionMenu opcion : opciones) {
@@ -61,10 +60,10 @@ public class MenuDataLoader implements CommandLineRunner {
             );
         }
 
-        asignarOpciones(NombreRol.ADMIN, "/settings", "/logout", "/historial", "/admin", "/admin/dashboard", "/admin/plates", "/admin/charts", "/admin/tables", "/admin/cocineros", "/admin/repartidores");
-        asignarOpciones(NombreRol.REPARTIDOR, "/settings", "/logout", "/historial", "/rutas");
-        asignarOpciones(NombreRol.COCINERO, "/settings", "/logout", "/historial", "/pedidos");
-        asignarOpciones(NombreRol.CLIENTE, "/settings", "/logout", "/historial");
+        asignarOpciones(NombreRol.ADMIN, "/settings", "/logout", "/order-history", "/admin", "/admin/dashboard", "/admin/plates", "/admin/charts", "/admin/tables", "/admin/cooks", "/admin/deliverymen");
+        asignarOpciones(NombreRol.REPARTIDOR, "/settings", "/logout", "/order-history", "/routes");
+        asignarOpciones(NombreRol.COCINERO, "/settings", "/logout", "/order-history", "/orders");
+        asignarOpciones(NombreRol.CLIENTE, "/settings", "/logout", "/order-history");
     }
 
     private OpcionMenu crearOpcion(String nombre, String url, String seccion, int orden) {

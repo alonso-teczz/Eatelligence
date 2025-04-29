@@ -3,6 +3,7 @@ package com.alonso.eatelligence.controller.rest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alonso.eatelligence.model.dto.PlatoDTO;
+import com.alonso.eatelligence.model.entity.Plato;
 import com.alonso.eatelligence.service.IPlatoService;
 import com.alonso.eatelligence.utils.ValidationUtils;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +38,21 @@ public class PlatoRestController {
         }
         
         return ResponseEntity.ok(this.platoService.updateFromDTO(id, platoActualizado));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Void> patchPlato(
+        @PathVariable Long id,
+        @RequestBody JsonNode json
+    ) {
+        if (json.has("activo")) {
+            boolean activo = json.get("activo").asBoolean();
+            Plato p = this.platoService.findyById(id);
+            p.setActivo(activo);
+            this.platoService.save(p);
+        }
+        
+        return ResponseEntity.noContent().build();
     }
 
     // Eliminar plato

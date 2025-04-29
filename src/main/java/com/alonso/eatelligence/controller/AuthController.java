@@ -1,5 +1,6 @@
 package com.alonso.eatelligence.controller;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -39,7 +40,7 @@ import jakarta.validation.Valid;
 @SessionAttributes({
     "usuario",
     "restaurante",
-    "menu"
+    "opcionesMenu"
 })
 public class AuthController {
 
@@ -99,9 +100,9 @@ public class AuthController {
         
         List<OpcionMenu> opciones = this.menuService.obtenerOpcionesParaUsuario(u.getUsername());
         Map<String, List<OpcionMenu>> menuPorSeccion = opciones.stream()
-            .collect(Collectors.groupingBy(OpcionMenu::getSeccion));
+            .collect(Collectors.groupingBy(OpcionMenu::getSeccion, LinkedHashMap::new, Collectors.toList()));
 
-        model.addAttribute("menu", menuPorSeccion);
+        model.addAttribute("opcionesMenu", menuPorSeccion);
         model.addAttribute("usuario", u);
 
         Authentication auth = new UsernamePasswordAuthenticationToken(

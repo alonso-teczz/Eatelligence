@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function reenviarVerificacion(token, tipo, button) {
     button.disabled = true;
 
-    fetch(`/reenviar-verificacion?token=${encodeURIComponent(token)}&tipo=${tipo}`, {
+    fetch(`/resend-verification?token=${encodeURIComponent(token)}&tipo=${tipo}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',

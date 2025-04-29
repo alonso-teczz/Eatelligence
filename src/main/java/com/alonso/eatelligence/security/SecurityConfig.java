@@ -30,26 +30,26 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET,
                     "/",
                     "/register",
-                    "/registro-exitoso",
-                    "/verificar",
+                    "/successful-register",
+                    "/verify",
                     "/login",
-                    "/acceso-denegado",
-                    "/verificacion-pendiente",
+                    "/denied-access",
+                    "/pending-verification",
                     "/recruit"
                 )
                 .permitAll()
                 .requestMatchers(HttpMethod.POST,
                     "/validate-client-reg",
                     "/validate-rest-reg",
-                    "/reenviar-verificacion",
+                    "/resend-verification",
                     "/validate-login",
                     "/logout"
                 )
                 .permitAll()
-                .requestMatchers("/settings", "/historial").authenticated()
+                .requestMatchers("/settings", "/order-history").authenticated()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
-                .requestMatchers("/rutas").hasRole("REPARTIDOR")
-                .requestMatchers("/pedidos").hasRole("COCINERO")
+                .requestMatchers("/routes").hasRole("REPARTIDOR")
+                .requestMatchers("/orders").hasRole("COCINERO")
                 .requestMatchers(
                     "/css/**",
                     "/js/**",
@@ -63,7 +63,7 @@ public class SecurityConfig {
             .formLogin(form -> form.disable())
             .logout(logout -> logout.disable())
             .exceptionHandling(ex -> ex
-                .accessDeniedHandler((req, res, authEx) -> res.sendRedirect("/acceso-denegado"))
+                .accessDeniedHandler((req, res, authEx) -> res.sendRedirect("/denied-access"))
                 .authenticationEntryPoint((req, res, authEx) -> res.sendRedirect("/login"))
             );
 

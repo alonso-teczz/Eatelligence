@@ -109,17 +109,16 @@ document.addEventListener("DOMContentLoaded", () => {
         e.preventDefault();
         const platoId = modalEl.id.replace("modalEditarPlato-", "");
         const fd = new FormData(form);
+        const rawLimit = fd.get("limiteUnidadesDiarias")?.trim();
         const payload = {
           id: Number(platoId),
           nombre: fd.get("nombre").trim(),
           descripcion: fd.get("descripcion").trim(),
           ingredientes: fd.get("ingredientes").trim(),
           precio: parseFloat(fd.get("precio")),
+          limiteUnidadesDiarias: rawLimit ? parseInt(rawLimit, 10) : null,
           alergenos: fd.get("alergenos")
-            ? fd
-                .get("alergenos")
-                .split(",")
-                .map((x) => Number(x))
+            ? fd.get("alergenos").split(",").map(x => Number(x))
             : [],
         };
 
@@ -147,30 +146,25 @@ document.addEventListener("DOMContentLoaded", () => {
                   : updated.precio.toString();
               row.querySelector('[data-field="ingredientes"]').textContent =
                 updated.ingredientes;
+              row.querySelector('[data-field="limiteUnidadesDiarias"]').textContent = updated.limiteUnidadesDiarias != null ? updated.limiteUnidadesDiarias : '';
               const alTd = row.querySelector('.editable-alergenos');
               alTd.innerHTML = '';
 
-              payload.alergenos.forEach(id => {
-                const originalLi = document.querySelector(
-                  `#modalEditarPlato-${platoId} #edit-seleccionados-${platoId} li[data-id="${id}"]`
-                );
-                const text = originalLi
-                  ? originalLi.textContent.trim()
-                  : String(id);
+              updated.alergenos.forEach((alergeno) => {
+                const { serialName } = alergeno; 
               
-                const slug = text
-                  .normalize('NFD')
-                  .replace(/[\u0300-\u036f]/g, '')
+                const slug = serialName
+                  .normalize("NFD")
+                  .replace(/[\u0300-\u036f]/g, "")
                   .toLowerCase()
-                  .replace(/\s+/g, '-')
-                  .replace(/_/g, '-')
-                  .replace(/[^\w-]/g, '');
+                  .replace(/\s+/g, "-")
+                  .replace(/[^\w-]/g, "");
               
-                const span = document.createElement('span');
-                span.classList.add('badge', 'me-1', `alergeno-${slug}`);
-                span.textContent = text;
+                const span = document.createElement("span");
+                span.classList.add("badge", "me-1", `alergeno-${slug}`);
+                span.textContent = serialName;
                 alTd.appendChild(span);
-              });              
+              });             
             }
             
             bootstrap.Modal.getInstance(modalEl).hide();
@@ -227,11 +221,9 @@ document.addEventListener("DOMContentLoaded", () => {
             headers: {
               "X-Requested-With": "XMLHttpRequest"
             },
-            // no necesitas Content-Type para DELETE sin body
           });
 
           if (res.ok) {
-            // 5) Eliminamos la fila del DOM
             row.remove();
             Swal.fire({
               toast: true,
@@ -263,6 +255,45 @@ document.addEventListener("DOMContentLoaded", () => {
             showConfirmButton: false,
             timer: 3000,
           });
+        }
+      });
+    });
+
+    document.querySelectorAll('.checkbox-activo').forEach(chk => {
+      chk.addEventListener('change', async () => {
+        const platoId = chk.dataset.id;
+        try {
+          const res = await fetch(`/api/plates/${platoId}`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify({ activo: chk.checked })
+          });
+          if (!res.ok) throw new Error('Error actualizando estado');
+          else {
+            Swal.fire({
+              icon: 'success',
+              toast: true,
+              position: 'top-end',
+              title: 'Estado del plato actualizado correctamente',
+              timer: 2000,
+              showConfirmButton: false
+            })
+            console.log("Estado del plato actualizado correctamente");
+          }
+        } catch (err) {
+          console.error(err);
+          Swal.fire({
+            icon: 'error',
+            title: 'No se pudo actualizar el estado',
+            toast: true,
+            position: 'top-end',
+            timer: 2000,
+            showConfirmButton: false
+          });
+          chk.checked = !chk.checked;
         }
       });
     });

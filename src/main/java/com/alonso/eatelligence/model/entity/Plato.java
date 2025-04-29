@@ -47,11 +47,19 @@ public class Plato {
     @Column(length = 500)
     private String ingredientes;
 
+    @Column(nullable = false)
+    @Builder.Default
+    private Boolean activo = true;
+
+    @Column(nullable = true)
+    @Builder.Default
+    private Integer limiteUnidadesDiarias = null;
+
     @ManyToMany
     @JoinTable(
-        name              = "plato_alergenos",
-        joinColumns       = @JoinColumn(name = "plato_id"),
-        inverseJoinColumns= @JoinColumn(name = "alergeno_id"),
+        name = "plato_alergenos",
+        joinColumns = @JoinColumn(name = "plato_id"),
+        inverseJoinColumns = @JoinColumn(name = "alergeno_id"),
         uniqueConstraints = @UniqueConstraint(columnNames = { "plato_id", "alergeno_id" })
     )
     @Builder.Default

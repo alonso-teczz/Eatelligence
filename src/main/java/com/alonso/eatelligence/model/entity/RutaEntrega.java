@@ -18,8 +18,8 @@ public class RutaEntrega {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "tiempo_estimado_entrega", nullable = false)
-    private Integer tiempoEstimadoEntrega;
+    @Column(name = "tiempo_estimado", nullable = false)
+    private Integer tiempoEstimado;
 
     @Column(name = "latitud")
     private Double latitud;
@@ -27,11 +27,11 @@ public class RutaEntrega {
     @Column(name = "longitud")
     private Double longitud;
 
-    @Column(name = "hora_inicio_ruta")
-    private LocalDateTime horaInicioRuta;
+    @Column(name = "hora_inicio")
+    private LocalDateTime horaInicio;
 
-    @Column(name = "hora_fin_ruta")
-    private LocalDateTime horaFinRuta;
+    @Column(name = "hora_fin")
+    private LocalDateTime horaFin;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

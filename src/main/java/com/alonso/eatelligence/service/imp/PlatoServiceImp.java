@@ -49,6 +49,7 @@ public class PlatoServiceImp implements IPlatoService {
         existente.setDescripcion(plato.getDescripcion());
         existente.setIngredientes(plato.getIngredientes());
         existente.setPrecio(plato.getPrecio());
+        existente.setLimiteUnidadesDiarias(plato.getLimiteUnidadesDiarias());
 
         Set<Alergeno> alergenos = this.alergenoRepository.findByIdIn(plato.getAlergenos());
         existente.setAlergenos(alergenos);
@@ -74,6 +75,7 @@ public class PlatoServiceImp implements IPlatoService {
             .alergenos(alergenos)
             .restaurante(restaurante)
             .ingredientes(plato.getIngredientes())
+            .limiteUnidadesDiarias(plato.getLimiteUnidadesDiarias())
             .build();
     }
 
@@ -86,4 +88,10 @@ public class PlatoServiceImp implements IPlatoService {
     public long countByRestaurante(Restaurante restaurante) {
         return this.platoRepository.countByRestaurante(restaurante);
     }
+
+    @Override
+    public void save(Plato p) {
+        this.platoRepository.save(p);
+    }
+    
 }

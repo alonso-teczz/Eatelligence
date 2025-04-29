@@ -31,4 +31,8 @@ public class PlatoDTO {
 
     private Set<Long> alergenos;
 
+    @Min(value = 1, message = "El límite diario debe ser al menos 1 unidad")
+    private Integer limiteUnidadesDiarias;
+
+    private Boolean activo;
 }

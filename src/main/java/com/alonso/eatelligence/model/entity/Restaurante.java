@@ -51,9 +51,17 @@ public class Restaurante {
     @Column(nullable = false)
     private String emailEmpresa;
 
+    @Column(nullable = true)
+    @Builder.Default
+    private Double importeMinimo = null;
+
     @Column(nullable = false, columnDefinition = "TINYINT(1)")
     @Builder.Default
     private boolean verificado = false;
+
+    @Column(nullable = false, columnDefinition = "TINYINT(1)")
+    @Builder.Default
+    private boolean activo = true;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "direccion_id", nullable = false)

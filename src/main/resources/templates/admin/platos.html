@@ -8,10 +8,10 @@
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4">Gestión de Platos</h1>
+                    <h1 class="mt-4">Gestión de Menú</h1>
                     <ol class="breadcrumb mb-4">
                         <li class="breadcrumb-item"><a th:href="@{/admin}">Panel de control</a></li>
-                        <li class="breadcrumb-item active">Platos</li>
+                        <li class="breadcrumb-item active">Menú</li>
                     </ol>
 
                     <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#modalNuevoPlato">
@@ -24,16 +24,19 @@
                                 <thead>
                                     <tr>
                                         <th>Nombre</th>
+                                        <th>Límite de unidades diarias</th>
                                         <th>Descripción</th>
                                         <th>Precio (€)</th>
                                         <th>Ingredientes</th>
-                                        <th>Alérgenos</th>                                                                              
+                                        <th>Alérgenos</th>
                                         <th data-sortable="false">Acciones</th>
+                                        <th>Activo</th>                                                                  
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr th:each="plato : ${platos}" th:attr="data-id=${plato.id}">
                                         <td data-field="nombre" th:text="${plato.nombre}"/>
+                                        <td data-field="limiteUnidadesDiarias" th:text="${plato.limiteUnidadesDiarias}"/>
                                         <td data-field="descripcion" th:text="${plato.descripcion}"/>
                                         <td data-field="precio"
                                             th:text="${plato.precio % 1 == 0 ? plato.precio.intValue() : plato.precio}"/>
@@ -52,17 +55,34 @@
                                                 class="btn btn-sm btn-primary"
                                                 data-bs-toggle="modal"
                                                 th:attr="data-bs-target='#modalEditarPlato-' + ${plato.id}">
-                                                <i class="fas fa-edit"></i>
+                                                <i class="fas fa-pen"></i>
                                               </button>
                                               <form
-                                                th:action="@{/api/plates/{id}(id=${plato.id})} .form-eliminar-plato"
-                                                class="d-inline-flex align-items-center text-nowrap">
+                                                th:action="@{/api/plates/{id}(id=${plato.id})}"
+                                                class="d-inline-flex align-items-center text-nowrap form-eliminar-plato">
                                                 <button type="submit" class="btn btn-sm btn-danger">
-                                                  <i class="fas fa-trash"></i>
+                                                  <i class="fas fa-trash-alt"></i>
                                                 </button>
                                               </form>
                                             </div>
-                                        </td>                                                                                                                             
+                                        </td>
+                                        <td class="text-center align-middle">
+                                            <div class="form-check form-switch d-flex align-items-center justify-content-center">
+                                              <input
+                                                class="form-check-input checkbox-activo"
+                                                type="checkbox"
+                                                role="switch"
+                                                th:id="'switchActivo-' + ${plato.id}"
+                                                th:checked="${plato.activo}"
+                                                th:attr="data-id=${plato.id}"
+                                                aria-label="Activo" />
+                                              <label 
+                                                class="form-check-label visually-hidden" 
+                                                th:for="'switchActivo-' + ${plato.id}">
+                                                Activo
+                                              </label>
+                                            </div>
+                                        </td>                                                                                                                                                                 
                                     </tr>
                                 </tbody>
                             </table>
@@ -97,6 +117,24 @@
                                             <label for="ingredientes-[[${plato.id}]]" class="form-label">Ingredientes</label>
                                             <textarea name="ingredientes" th:id="'ingredientes-' + ${plato.id}" class="form-control" maxlength="500" rows="3" th:text="${plato.ingredientes}"></textarea>
                                         </div>
+                                        <div class="mb-3">
+                                            <label
+                                              for="limiteUnidadesDiarias-[[${plato.id}]]"
+                                              class="form-label">
+                                              Límite diario de unidades (opcional)
+                                            </label>
+                                            <input
+                                              type="number"
+                                              name="limiteUnidadesDiarias"
+                                              th:id="'limiteUnidadesDiarias-' + ${plato.id}"
+                                              class="form-control"
+                                              min="1"
+                                              th:value="${plato.limiteUnidadesDiarias}"
+                                              placeholder="Ej. 10" />
+                                            <div class="form-text">
+                                              No rellenes este campo si no quieres establecer un límite a este plato en cada servicio.
+                                            </div>
+                                        </div>                                          
                                         <div class="mb-3">
                                             <label class="form-label">Alérgenos</label>
                                             <div class="row">
@@ -169,7 +207,21 @@
                                                 placeholder="Ej. Harina, tomate, mozzarella..." maxlength="500" rows="3"></textarea>
                                         <div class="invalid-feedback">Los ingredientes no pueden superar los 500 caracteres.</div>
                                     </div>
-
+                                    <div class="mb-3">
+                                        <label for="limiteUnidadesDiarias" class="form-label">
+                                          Límite diario de unidades (opcional)
+                                        </label>
+                                        <input
+                                          type="number"
+                                          th:field="*{limiteUnidadesDiarias}"
+                                          class="form-control"
+                                          id="limiteUnidadesDiarias"
+                                          min="1"
+                                          placeholder="Ej. 10" />
+                                        <div class="form-text">
+                                          No rellenes este campo si no quieres establecer un límite a este plato en cada servicio.
+                                        </div>
+                                    </div>                                      
                                     <div class="mb-3">
                                         <label class="form-label">Alérgenos</label>
                                         <div class="row">

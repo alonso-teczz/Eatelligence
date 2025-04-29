@@ -44,26 +44,26 @@ body {
 
 .settings-link,
 .logout-link,
-.historial-link,
+.order-history-link,
 .admin-link,
-.rutas-link,
+.routes-link,
 .pedidos-link {
   transition: background-color 0.3s ease;
 }
 
 /* Ajustes - Primary */
-.historial-link:hover,
-.historial-link:focus {
+.order-history-link:hover,
+.order-history-link:focus {
   background-color: #d6e6ff !important; /* primary soft */
   color: #0d6efd !important;
   font-weight: 500;
   outline: none !important;
   border: none !important;
 }
-.historial-link:focus {
+.order-history-link:focus {
   box-shadow: 0 0 0 0.1rem #0d6efd !important;
 }
-.historial-link:hover i {
+.order-history-link:hover i {
   color: #0d6efd !important;
 }
 
@@ -118,18 +118,18 @@ body {
 }
 
 /* Rutas - Success */
-.rutas-link:hover,
-.rutas-link:focus {
+.routes-link:hover,
+.routes-link:focus {
   background-color: #d1e7dd !important; /* success soft */
   color: #198754 !important;
   font-weight: 500;
   outline: none !important;
   border: none !important;
 }
-.rutas-link:focus {
+.routes-link:focus {
   box-shadow: 0 0 0 0.1rem #198754 !important;
 }
-.rutas-link:hover i {
+.routes-link:hover i {
   color: #198754 !important;
 }
 

@@ -105,7 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const csrfToken = document.getElementById('csrfToken').value;
       const csrfHeader = document.getElementById('csrfHeader').value;
 
-      fetch(`/reenviar-verificacion?token=${encodeURIComponent(token)}&tipo=${tipo}`, {
+      fetch(`/resend-verification?token=${encodeURIComponent(token)}&tipo=${tipo}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',

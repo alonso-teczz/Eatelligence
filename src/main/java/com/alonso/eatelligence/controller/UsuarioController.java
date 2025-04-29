@@ -98,7 +98,7 @@ public class UsuarioController {
                 "verificacion",
                 Map.of(
                     "nombre", u.getNombre(),
-                    "urlVerificacion", "http://localhost:8080/verificar?token=" + vt.getToken(),
+                    "urlVerificacion", "http://localhost:8080/verify?token=" + vt.getToken(),
                     "proximoIntento", this.tokenService.formatearTiempoEspera(this.tokenService.calcularTiempoBloqueoSegundos(vt.getIntentosReenvio()))
                 )
             );
@@ -148,7 +148,7 @@ public class UsuarioController {
                 "verificacion",
                 Map.of(
                     "nombre", r.getPropietario().getNombre(),
-                    "urlVerificacion", "http://localhost:8080/verificar?token=" + usuarioVT.getToken(),
+                    "urlVerificacion", "http://localhost:8080/verify?token=" + usuarioVT.getToken(),
                     "proximoIntento", this.tokenService.formatearTiempoEspera(this.tokenService.calcularTiempoBloqueoSegundos(usuarioVT.getIntentosReenvio()))
                 )
             );
@@ -163,7 +163,7 @@ public class UsuarioController {
                 "verificacion",
                 Map.of(
                     "nombre", r.getNombreComercial(),
-                    "urlVerificacion", "http://localhost:8080/verificar?token=" + restauranteVT.getToken(),
+                    "urlVerificacion", "http://localhost:8080/verify?token=" + restauranteVT.getToken(),
                     "proximoIntento", this.tokenService.formatearTiempoEspera(this.tokenService.calcularTiempoBloqueoSegundos(restauranteVT.getIntentosReenvio()))
                 )
             );
@@ -181,7 +181,7 @@ public class UsuarioController {
         return "redirect:/registro-exitoso";
     }
 
-    @GetMapping("/registro-exitoso")
+    @GetMapping("/successful-register")
     public String mostrarRegistroExitoso(HttpServletRequest request) {
         Map<String, ?> flash = RequestContextUtils.getInputFlashMap(request);
 
@@ -192,9 +192,9 @@ public class UsuarioController {
         return "feedback/registroExitoso";
     }
 
-    @GetMapping("/acceso-denegado")
+    @GetMapping("/denied-access")
     public String mostrarAccesoDenegado() {
-        return "error/access-denied";
+        return "error/accesoDenegado";
     }
     
 }

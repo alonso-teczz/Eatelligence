@@ -61,6 +61,10 @@ public class Usuario {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
+    @Builder.Default
+    private Integer puntos = 0;
+
     @ManyToOne
     @JoinColumn(nullable = true)
     @Builder.Default
