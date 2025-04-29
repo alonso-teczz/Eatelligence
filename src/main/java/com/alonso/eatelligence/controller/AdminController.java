@@ -120,7 +120,7 @@ public class AdminController {
         }
 
         this.platoService.saveFromDTO(nuevoPlato, restaurante);
-        return "redirect:/admin/platos";
+        return "redirect:/admin/plates";
     }
 
     @ModelAttribute("nuevoEmpleado")
