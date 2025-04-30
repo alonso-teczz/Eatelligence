@@ -69,7 +69,7 @@
 
   <h5 class="mt-4 mb-3 border-bottom pb-2 text-success fw-semibold">Dirección personal</h5>
   <div class="mt-4">
-    <div th:replace="fragments/user/direccionForm :: direccionFields('direccion')"></div>
+    <div th:replace="~{fragments/user/direccionForm :: direccionFields('direccion')}"></div>
   </div>
 
   <input type="hidden" name="latitud" id="latitud">
@@ -136,7 +136,7 @@
   </div>
 
   <h5 class="mt-4 mb-3 border-bottom pb-2 text-success fw-semibold">Dirección personal</h5>
-  <div th:replace="fragments/user/direccionForm :: direccionFields(${prefix + '.direccion'})"></div>
+  <div th:replace="~{fragments/user/direccionForm :: direccionFields(${prefix + '.direccion'})}"></div>
 
   <input type="hidden" th:field="*{__${prefix}__.direccion.latitud}" th:id="${prefix + '.direccion.latitud'}">
   <input type="hidden" th:field="*{__${prefix}__.direccion.longitud}" th:id="${prefix + '.direccion.longitud'}">

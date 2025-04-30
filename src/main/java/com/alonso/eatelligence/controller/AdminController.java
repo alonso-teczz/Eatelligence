@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.alonso.eatelligence.email.EmailService;
@@ -34,6 +35,9 @@ import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 
 @Controller
+@SessionAttributes({
+    "restauranteId"
+})
 @RequestMapping("/admin")
 public class AdminController {
 
@@ -80,16 +84,6 @@ public class AdminController {
     @GetMapping({"", "/", "/dashboard"})
     public String goAdmin() {
         return "admin/dashboard";
-    }
-
-    @GetMapping("/charts")
-    public String goCharts() {
-        return "admin/charts";
-    }
-
-    @GetMapping("/tables")
-    public String goTables() {
-        return "admin/tables";
     }
 
     @ModelAttribute("nuevoPlato")
@@ -222,4 +216,14 @@ public class AdminController {
         ));
         return "admin/repartidores";
     }
+
+    @GetMapping("/schedule")
+    public String goHorario(
+        @SessionAttribute("restaurante") Restaurante restaurante,
+        Model model
+    ) {
+        model.addAttribute("restauranteId", restaurante.getId());
+        return "admin/horarios";
+    }
+    
 }

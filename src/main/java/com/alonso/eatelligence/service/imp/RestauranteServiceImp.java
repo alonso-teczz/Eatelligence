@@ -3,23 +3,32 @@ package com.alonso.eatelligence.service.imp;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.alonso.eatelligence.model.dto.ClienteRegistroDTO;
+import com.alonso.eatelligence.model.dto.HorarioDTO;
 import com.alonso.eatelligence.model.dto.RestauranteRegistroDTO;
 import com.alonso.eatelligence.model.entity.Direccion;
-import com.alonso.eatelligence.model.entity.Restaurante;
+import com.alonso.eatelligence.model.entity.Horario;
 import com.alonso.eatelligence.model.entity.NombreRol;
+import com.alonso.eatelligence.model.entity.Restaurante;
 import com.alonso.eatelligence.model.entity.Usuario;
 import com.alonso.eatelligence.repository.IRestauranteRepository;
 import com.alonso.eatelligence.service.IEntitableClient;
 import com.alonso.eatelligence.service.IRestauranteService;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class RestauranteServiceImp implements IRestauranteService, IEntitableClient {
+
+    private static Logger logger = LogManager.getLogger(RestauranteServiceImp.class);
 
     @Autowired
     private IRestauranteRepository  restauranteRepository;
@@ -130,6 +139,36 @@ public class RestauranteServiceImp implements IRestauranteService, IEntitableCli
 
     public List<Restaurante> findAll() {
         return this.restauranteRepository.findAll();
+    }
+
+    @Override
+    @Transactional
+    public void actualizarHorarios(Long restauranteId, Set<HorarioDTO> horario) {
+        this.restauranteRepository.findById(restauranteId).ifPresent(r -> {
+            Set<Horario> nuevoHorario = horario.stream()
+                .map(h -> Horario.builder()
+                    .dia(h.getDia())
+                    .apertura(h.getApertura())
+                    .cierre(h.getCierre())
+                    .build()
+                ).collect(Collectors.toSet());
+    
+            r.setHorarios(nuevoHorario);
+            this.restauranteRepository.save(r);
+            return;
+        });
+
+        logger.warn("Se intentó actualizar el horario de un restaurante no encontrado");
+        return;
+    }
+
+    @Override
+    @Transactional
+    public Set<HorarioDTO> obtenerHorarios(Long id) {
+      Restaurante r = this.restauranteRepository.findById(id).get();
+      return r.getHorarios().stream()
+        .map(h -> new HorarioDTO(h.getDia(),h.getApertura(),h.getCierre()))
+        .collect(Collectors.toSet());
     }
     
 }

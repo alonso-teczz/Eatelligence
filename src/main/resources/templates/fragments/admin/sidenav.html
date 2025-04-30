@@ -11,7 +11,8 @@
               <div class="sb-nav-link-icon">
                 <i th:class="${ 
                       #strings.contains(opt.url,'dashboard') ? 'fas fa-tachometer-alt me-1' :
-                      #strings.contains(opt.url,'plates')    ? 'fas fa-utensils me-1' :
+                      #strings.contains(opt.url,'plates') ? 'fas fa-utensils me-1' :
+                      #strings.contains(opt.url,'schedule') ? 'fas fa-clock me-1' :
                       'fas fa-link me-1'
                 }"></i>
               </div>

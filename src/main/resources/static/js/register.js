@@ -1,5 +1,7 @@
-document.addEventListener("DOMContentLoaded", function () {
-  const apiKey = "eddca3679eed46f79e25f3aa58c75054";
+document.addEventListener("DOMContentLoaded", async function () {
+  const apiKey = await fetch('/api/apikeys/geoapify', { headers: { "X-Requested-With": "XMLHttpRequest" }})
+    .then(res => res.json())
+    .then(data => data.apiKey);
 
   const formUsuario = document.getElementById("form-usuario");
   const formRestaurante = document.getElementById("form-restaurante");

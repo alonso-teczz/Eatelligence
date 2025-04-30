@@ -43,14 +43,15 @@ public class MenuDataLoader implements CommandLineRunner {
             // --- Administración ---
             crearOpcion("Inicio",    "/admin/dashboard",  "Gestión", 1),
             crearOpcion("Menú",              "/admin/plates",     "Gestión", 2),
+            crearOpcion("Horario", "/admin/schedule", "Gestión", 3),
         
             // --- Plantilla (submenú) ---
-            crearOpcion("Equipo de cocina",           "/admin/cooks",  "Personal",      3),
-            crearOpcion("Equipo de reparto",        "/admin/deliverymen","Personal",     4),
+            crearOpcion("Equipo de cocina",           "/admin/cooks",  "Personal",      1),
+            crearOpcion("Equipo de reparto",        "/admin/deliverymen","Personal",     2),
         
             // --- Estadísticas ---
-            crearOpcion("Gráficos",            "/admin/charts",     "Informes",   5),
-            crearOpcion("Registros",              "/admin/tables",     "Informes",   6)
+            crearOpcion("Gráficos",            "/admin/charts",     "Informes",   3),
+            crearOpcion("Registros",              "/admin/tables",     "Informes",   4)
         );        
 
         for (OpcionMenu opcion : opciones) {
@@ -60,7 +61,7 @@ public class MenuDataLoader implements CommandLineRunner {
             );
         }
 
-        asignarOpciones(NombreRol.ADMIN, "/settings", "/logout", "/order-history", "/admin", "/admin/dashboard", "/admin/plates", "/admin/charts", "/admin/tables", "/admin/cooks", "/admin/deliverymen");
+        asignarOpciones(NombreRol.ADMIN, "/settings", "/logout", "/order-history", "/admin", "/admin/dashboard", "/admin/plates", "/admin/charts", "/admin/tables", "/admin/cooks", "/admin/deliverymen", "/admin/schedule");
         asignarOpciones(NombreRol.REPARTIDOR, "/settings", "/logout", "/order-history", "/routes");
         asignarOpciones(NombreRol.COCINERO, "/settings", "/logout", "/order-history", "/orders");
         asignarOpciones(NombreRol.CLIENTE, "/settings", "/logout", "/order-history");
