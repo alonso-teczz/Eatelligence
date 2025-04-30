@@ -1,79 +1,102 @@
-document.addEventListener('DOMContentLoaded', async () => {
-    const { data: horarios } = await fetch('/api/restaurant/schedule', {
-        headers: { 'X-Requested-With': 'XMLHttpRequest' }})
-        .then(r => r.json());      
+document.addEventListener('DOMContentLoaded', () => {
+    /* ──────────── Referencias DOM ──────────── */
+    const tbody = document.querySelector('#tabla-horarios tbody');
+    const btnGuardar = document.getElementById('btn-guardar');
+    const modal = new bootstrap.Modal(document.getElementById('modalHorario'));
+    const inputApertura = document.getElementById('input-apertura');
+    const inputCierre = document.getElementById('input-cierre');
+    const chkTodos = document.getElementById('chk-aplicar-todos');
 
-    // ---------- FullCalendar ----------
-    const calendar = new FullCalendar.Calendar(document.getElementById('calendar'), {
-        initialView: 'timeGridWeek',
-        slotMinTime: '06:00:00',
-        slotMaxTime: '02:00:00',
-        locale: 'es',
-        editable: true,
-        selectable: true,
-        height: 'auto',
-        events: horarios.map(h => ({
-            id: crypto.randomUUID(),
-            start: dayToDate(h.dia, h.apertura),
-            end: dayToDate(h.dia, h.cierre),
-            display: 'background'
-        })),
-        select: info => abrirModal(null, info),
-        eventClick: info => abrirModal(info.event, null),
-        eventDrop: syncConBackend,
-        eventResize: syncConBackend
+    /* ──────────── Constantes útiles ─────────── */
+    const EN = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'];
+    const ES = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+
+    /* ──────────── Estado in-memory ──────────── */
+    let horarios = {};      // { MONDAY: {apertura:'09:00', cierre:'18:00'}, … }
+    let diaEdit = null;    // Día que se está editando en el modal
+
+    /* ──────────── Carga inicial ──────────── */
+    fetch('/api/restaurant/schedule', { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+        .then(r => r.json())
+        .then(({ data }) => {
+            data.forEach(h => horarios[h.dia] = { apertura: h.apertura, cierre: h.cierre });
+            renderTable();
+        });
+
+    /* ──────────── Render de la tabla ──────────── */
+    function renderTable() {
+        tbody.innerHTML = '';
+        EN.forEach((en, i) => {
+            const h = horarios[en] || {};
+            tbody.insertAdjacentHTML('beforeend', `
+          <tr>
+            <td>${ES[i]}</td>
+            <td>${h.apertura ?? '--'}</td>
+            <td>${h.cierre ?? '--'}</td>
+            <td>
+              <button class="btn btn-sm btn-primary" data-dia="${en}">
+                <i class="fas fa-pen"></i>
+              </button>
+            </td>
+          </tr>
+        `);
+        });
+    }
+
+    /* ──────────── Abrir modal ──────────── */
+    tbody.addEventListener('click', e => {
+        if (!e.target.closest('button[data-dia]')) return;
+
+        diaEdit = e.target.closest('button[data-dia]').dataset.dia;
+        const h = horarios[diaEdit] || {};
+        inputApertura.value = h.apertura ?? '';
+        inputCierre.value = h.cierre ?? '';
+        chkTodos.checked = false;
+
+        modal.show();
     });
-    calendar.render();
 
-    // ---------- Helpers ----------
-    function dayToDate(dia, time) {
-        //Monday
-        const base = dayjs().startOf('week').add(1, 'day');
-        return base.add(dia - 1, 'day').set(time.split(':'));
-    }
+    /* ──────────── Guardar cambios del modal ──────────── */
+    document.querySelector('#modalHorario form')
+        .addEventListener('submit', e => {
+            e.preventDefault();
+            const apertura = inputApertura.value;
+            const cierre = inputCierre.value;
+            if (!apertura || !cierre) return;
 
-    async function abrirModal(evento, info) {
-        const { value: form } = await Swal.fire({
-            title: evento ? 'Editar horario' : 'Nuevo horario',
-            html: `
-          <input id="dia" class="swal2-input" placeholder="LUNES" value="${evento ? evento.start.format('dddd').toUpperCase() : ''}">
-          <input id="desde" type="time" class="swal2-input" value="${evento ? evento.start.format('HH:mm') : ''}">
-          <input id="hasta" type="time" class="swal2-input" value="${evento ? evento.end.format('HH:mm') : ''}">
-        `,
-            focusConfirm: false,
-            preConfirm: () => ({
-                dia: document.getElementById('dia').value,
-                desde: document.getElementById('desde').value,
-                hasta: document.getElementById('hasta').value
-            })
+            if (chkTodos.checked) {
+                EN.forEach(en => horarios[en] = { apertura, cierre });
+            } else {
+                horarios[diaEdit] = { apertura, cierre };
+            }
+
+            modal.hide();
+            renderTable();
         });
-        if (!form) return;
 
-        // Crear o actualizar evento en calendario
-        if (evento) {
-            evento.setStart(dayToDate(form.dia, form.desde));
-            evento.setEnd(dayToDate(form.dia, form.hasta));
-        } else {
-            calendar.addEvent({
-                start: dayToDate(form.dia, form.desde),
-                end: dayToDate(form.dia, form.hasta),
-                id: crypto.randomUUID()
-            });
-        }
-        syncConBackend();
-    }
+    /* ──────────── Persistir en backend ──────────── */
+    btnGuardar.addEventListener('click', () => {
+        const payload = EN.filter(d => horarios[d])
+            .map(d => ({ dia: d, ...horarios[d] }));
 
-    async function syncConBackend() {
-        const payload = calendar.getEvents().map(e => ({
-            dia: DayOfWeek.of(e.start.getDay()).name(),
-            apertura: dayjs(e.start).format('HH:mm'),
-            cierre: dayjs(e.end).format('HH:mm')
-        }));
-        await fetch(`/api/restaurant/schedule`, {
+        fetch('/api/restaurant/schedule', {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
-            body: payload
-        });
-        Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'Horarios guardados', timer: 2000, showConfirmButton: false });
-    }
-});  
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify(payload)
+        })
+            .then(r => {
+                if (r.ok) {
+                    Swal.fire({
+                        toast: true, position: 'top-end', icon: 'success',
+                        title: 'Horarios guardados', timer: 2000, showConfirmButton: false
+                    });
+                } else {
+                    return r.text().then(msg => { throw new Error(msg || r.status); });
+                }
+            })
+            .catch(err => Swal.fire('Error', err.message, 'error'));
+    });
+});

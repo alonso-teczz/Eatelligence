@@ -15,7 +15,7 @@ import com.alonso.eatelligence.service.IPedidoService;
 
 @RestController
 @RequestMapping("/api/orders")
-public class PedidosRestController {
+public class PedidoRestController {
     
     @Autowired
     private IPedidoService pedidoService;

@@ -421,3 +421,8 @@
 .sb-topnav .btn-primary:hover i {
     transform: translateX(3px);
 }
+
+#switchRestaurante:checked {
+  background-color: var(--color-secundario);
+  border-color: var(--color-secundario);
+}

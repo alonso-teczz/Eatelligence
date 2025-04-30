@@ -46,8 +46,8 @@ public class VerificationFilter implements Filter {
         "/admin/",
         "/admin/dashboard",
         "/admin/plates",
-        "/admin/charts",
-        "/admin/tables",
+        // "/admin/charts",
+        // "/admin/tables",
         "/admin/cooks",
         "/admin/deliverymen"
     );

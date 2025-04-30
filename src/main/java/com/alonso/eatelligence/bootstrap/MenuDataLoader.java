@@ -47,11 +47,11 @@ public class MenuDataLoader implements CommandLineRunner {
         
             // --- Plantilla (submenú) ---
             crearOpcion("Equipo de cocina",           "/admin/cooks",  "Personal",      1),
-            crearOpcion("Equipo de reparto",        "/admin/deliverymen","Personal",     2),
+            crearOpcion("Equipo de reparto",        "/admin/deliverymen","Personal",     2)
         
             // --- Estadísticas ---
-            crearOpcion("Gráficos",            "/admin/charts",     "Informes",   3),
-            crearOpcion("Registros",              "/admin/tables",     "Informes",   4)
+            // crearOpcion("Gráficos",            "/admin/charts",     "Informes",   3),
+            // crearOpcion("Registros",              "/admin/tables",     "Informes",   4)
         );        
 
         for (OpcionMenu opcion : opciones) {
@@ -61,7 +61,7 @@ public class MenuDataLoader implements CommandLineRunner {
             );
         }
 
-        asignarOpciones(NombreRol.ADMIN, "/settings", "/logout", "/order-history", "/admin", "/admin/dashboard", "/admin/plates", "/admin/charts", "/admin/tables", "/admin/cooks", "/admin/deliverymen", "/admin/schedule");
+        asignarOpciones(NombreRol.ADMIN, "/settings", "/logout", "/order-history", "/admin", "/admin/dashboard", "/admin/plates", "/admin/cooks", "/admin/deliverymen", "/admin/schedule");
         asignarOpciones(NombreRol.REPARTIDOR, "/settings", "/logout", "/order-history", "/routes");
         asignarOpciones(NombreRol.COCINERO, "/settings", "/logout", "/order-history", "/orders");
         asignarOpciones(NombreRol.CLIENTE, "/settings", "/logout", "/order-history");

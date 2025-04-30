@@ -159,3 +159,30 @@ body {
 .dropdown-item:focus i {
   transform: scale(1.2);
 }
+
+.puntos-container {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background-color: #c2d6a5;
+  padding: 0.4rem 0.8rem;
+  border-radius: 1rem;
+  color: #2f4f2f;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  margin: 0 1rem;
+}
+
+.puntos-container img {
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.puntos-container img:hover {
+  transform: scale(1.2) rotate(10deg);
+}
+
+.puntos-container span {
+  min-width: 2rem;
+  text-align: center;
+}

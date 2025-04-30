@@ -94,7 +94,7 @@ form label {
     margin-bottom: 0.5rem !important;
 }
 
-.checkbox-activo:checked {
+.checkbox-activo:checked, #chk-aplicar-todos:checked {
     background-color: #157548 !important;
     border-color: #157548 !important;
-  }
+}

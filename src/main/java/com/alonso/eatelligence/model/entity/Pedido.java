@@ -19,11 +19,6 @@ public class Pedido {
     private Long id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "usuario_id", nullable = false)
-    @EqualsAndHashCode.Exclude
-    private Usuario cliente;
-
-    @ManyToOne(optional = false)
     @JoinColumn(name = "restaurante_id", nullable = false)
     @EqualsAndHashCode.Exclude
     private Restaurante restaurante;
@@ -32,18 +27,8 @@ public class Pedido {
     @Column(nullable = false)
     private EstadoPedido estado;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private MetodoPago metodoPago;
-
     @Column(nullable = false)
     private LocalDateTime fechaRealizado;
-
-    // @Column
-    // private LocalDateTime fechaEstimada;
-
-    @Column
-    private LocalDateTime fechaEntregado;
 
     @Column(name = "nota_cliente", length = 500)
     private String notaCliente;
@@ -52,11 +37,12 @@ public class Pedido {
     @EqualsAndHashCode.Exclude
     private List<PedidoPlato> pedidoPlatos;
 
+    @ManyToOne
+    @JoinColumn(name = "grupo_id")
+    private PedidoGrupo grupo;
+
     public enum EstadoPedido {
         PENDIENTE, ACEPTADO, EN_CAMINO, ENTREGADO, CANCELADO
     }
 
-    public enum MetodoPago {
-        TARJETA, PAYPAL, EFECTIVO
-    }
 }

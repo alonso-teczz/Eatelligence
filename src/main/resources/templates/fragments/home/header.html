@@ -9,8 +9,11 @@
     </button>
 
     <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <div th:if="${session.usuario != null}" class="puntos-container">
+        <img th:src="@{/img/coin.png}" alt="Puntos" height="41" width="61" class="me-1">
+        <span th:text="${session.usuario.puntos}" class="ms-1 fs-4 fw-bold"></span>
+      </div>
       <ul class="navbar-nav me-3">
-
         <li class="nav-item dropdown" th:if="${session.usuario != null}">
           <a class="nav-link dropdown-toggle d-flex align-items-center rounded fs-5 profile-toggle"
              href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
