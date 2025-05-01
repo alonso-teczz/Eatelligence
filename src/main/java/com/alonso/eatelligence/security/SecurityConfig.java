@@ -43,7 +43,8 @@ public class SecurityConfig {
                     "/validate-rest-reg",
                     "/resend-verification",
                     "/validate-login",
-                    "/logout"
+                    "/logout",
+                    "/set-shipping-address"
                 )
                 .permitAll()
                 .requestMatchers("/settings", "/order-history").authenticated()

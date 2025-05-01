@@ -72,7 +72,7 @@ public class VerificationFilter implements Filter {
             Restaurante restaurante = restauranteService.findByUsuario(usuario).orElse(null);
             boolean restauranteVerificado = restaurante != null && restaurante.isVerificado();
             boolean propietarioVerificado = restaurante != null && restaurante.getPropietario() != null
-                                            && restaurante.getPropietario().isVerificado();
+                && restaurante.getPropietario().isVerificado();
 
             if (!usuarioVerificado &&
                 RUTAS_USUARIO_VERIFICADO.stream().anyMatch(path::startsWith)) {

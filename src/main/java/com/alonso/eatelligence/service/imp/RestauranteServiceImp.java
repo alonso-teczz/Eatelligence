@@ -8,6 +8,9 @@ import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +22,7 @@ import com.alonso.eatelligence.model.entity.Horario;
 import com.alonso.eatelligence.model.entity.NombreRol;
 import com.alonso.eatelligence.model.entity.Restaurante;
 import com.alonso.eatelligence.model.entity.Usuario;
+import com.alonso.eatelligence.model.projection.ResumenProjection;
 import com.alonso.eatelligence.repository.IRestauranteRepository;
 import com.alonso.eatelligence.service.IEntitableClient;
 import com.alonso.eatelligence.service.IRestauranteService;
@@ -31,7 +35,7 @@ public class RestauranteServiceImp implements IRestauranteService, IEntitableCli
     private static Logger logger = LogManager.getLogger(RestauranteServiceImp.class);
 
     @Autowired
-    private IRestauranteRepository  restauranteRepository;
+    private IRestauranteRepository restauranteRepository;
 
     @Autowired
     private RolServiceImp rolService;
@@ -169,6 +173,20 @@ public class RestauranteServiceImp implements IRestauranteService, IEntitableCli
       return r.getHorarios().stream()
         .map(h -> new HorarioDTO(h.getDia(),h.getApertura(),h.getCierre()))
         .collect(Collectors.toSet());
+    }
+    
+    @Override
+    public Page<ResumenProjection> getAllRestaurantsWithFilters(
+        String nombre, Double min, Double max,
+        double lat, double lon, Double radio,
+        boolean anonimo, Pageable pageable
+    ) {
+        Pageable page = anonimo
+            ? PageRequest.of(0, 5)
+            : PageRequest.of(0, 20);
+    
+        return restauranteRepository
+            .getAllRestaurantsWithFilters(nombre, min, max, lat, lon, radio, page);
     }
     
 }

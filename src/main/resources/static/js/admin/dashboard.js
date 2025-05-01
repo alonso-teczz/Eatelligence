@@ -225,6 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (msg) {
       input.nextElementSibling.textContent = msg;
       input.classList.add('is-invalid');
+      input.focus();
       return;                                        // ← IMPORTANTE: aborta
     }
     input.classList.remove('is-invalid');

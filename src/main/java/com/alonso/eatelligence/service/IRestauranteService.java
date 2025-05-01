@@ -4,9 +4,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.alonso.eatelligence.model.dto.HorarioDTO;
 import com.alonso.eatelligence.model.entity.Restaurante;
 import com.alonso.eatelligence.model.entity.Usuario;
+import com.alonso.eatelligence.model.projection.ResumenProjection;
 
 public interface IRestauranteService {
     Optional<Restaurante> findById(Long id);
@@ -14,6 +18,17 @@ public interface IRestauranteService {
     Optional<Restaurante> findByUsuario(Usuario usuario);
 
     List<Restaurante> getAllRestaurants();
+
+    Page<ResumenProjection> getAllRestaurantsWithFilters(
+        String nombre,
+        Double min,
+        Double max,
+        double lat,
+        double lon,
+        Double radio,
+        boolean anonimo,
+        Pageable pageable
+      );
 
     Set<HorarioDTO> obtenerHorarios(Long id);
 
@@ -24,5 +39,4 @@ public interface IRestauranteService {
     void actualizarHorarios(Long id, Set<HorarioDTO> horarios);
 
     void deleteById(Long id);
-
 }

@@ -130,7 +130,7 @@ public class UsuarioController {
             ValidationUtils.getFirstOrderedErrorFromBindingResult(result, formRestaurante.getClass())
                 .ifPresent(error -> model.addAttribute("globalError", error.getDefaultMessage()));
     
-            return "login";
+            return "register";
         }
     
         Restaurante r = this.restauranteService.save(restauranteService.restDTOtoEntity(formRestaurante));

@@ -1,3 +1,106 @@
 <div th:fragment="main">
-    
+  <div class="container-fluid d-flex p-0" style="min-height:100vh">
+
+    <!-- ▸ Panel de filtros (solo si hay sesión) -->
+    <aside
+      th:if="${session.usuario != null}"
+      id="filtros"
+      class="border-end p-3"
+      style="width:280px; overflow-y:auto; max-height:100vh;"
+    >
+      <form id="filtroForm" class="small">
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Buscar por nombre</label>
+          <input name="nombre" type="text" class="form-control" placeholder="Restaurante"/>
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Precio medio (€)</label>
+          <div class="d-flex gap-2">
+            <input name="min" type="number" class="form-control" placeholder="Mín"/>
+            <input name="max" type="number" class="form-control" placeholder="Máx"/>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="radioRange" class="form-label fw-semibold">Radio de búsqueda</label>
+          <input id="radioRange" name="radio" type="range" class="form-range" min="1" max="15" step="1" value="3"/>
+          <div class="text-end"><span id="radioLabel">3</span> km</div>
+        </div>
+        <div class="mb-2">
+          <span class="fw-semibold d-block mb-1">Excluir alérgenos</span>
+          <div class="form-check" th:each="a : ${alergenos}">
+            <input class="form-check-input" type="checkbox" th:id="'alg-'+${a.id}" th:value="${a.id}" name="excluirAlergenos"/>
+            <label th:for="'alg-'+${a.id}" th:text="${a.serialName}" class="form-check-label">Huevo</label>
+          </div>
+        </div>
+      </form>
+    </aside>
+
+    <!-- ▸ Zona de resultados / invitación a login -->
+    <div class="flex-grow-1 d-flex align-items-center justify-content-center bg-white" style="min-height: 100vh;">
+      <div th:if="${session.usuario == null}" class="text-center p-5 border rounded-4 shadow bg-light mx-auto" style="max-width: 600px;">
+        <div>
+          <i class="bi bi-lock-fill text-danger" style="font-size: 6rem;"></i>
+        </div>
+        <h3 class="fw-semibold mb-3">Inicia sesión para empezar a pedir a tus restaurantes favoritos</h3>
+        <a th:href="@{/login}" class="btn btn-outline-success btn-lg px-4">
+          <i class="bi bi-box-arrow-in-right me-2"></i> Iniciar sesión
+        </a>
+      </div>
+  
+      <div th:if="${session.usuario != null}" id="restaurant-cards" class="w-100 p-3">
+        <!-- Aquí se inyectan las cards -->
+      </div>
+  </div>
+
+  <!-- ▸ Modal de selección de dirección -->
+  <div
+    th:if="${session.usuario != null and (session.coordenadasEnvio == null or #lists.size(direcciones) > 1)}"
+    class="modal fade"
+    id="direccionModal"
+    tabindex="-1"
+    aria-labelledby="direccionModalLabel"
+    aria-hidden="true"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content p-4">
+        <h5 id="direccionModalLabel" class="mb-3 text-center">¿Dónde quieres que te lleguen los pedidos?</h5>
+
+        <form method="post" th:action="@{/set-shipping-address}">
+          <div class="d-flex flex-wrap gap-2 justify-content-center">
+            <div th:if="${errorDireccion}">
+              <i class="bi bi-exclamation-circle me-2"></i>
+              <span th:text="${errorDireccion}"></span>
+            </div>
+            <div
+              th:each="d : ${direcciones}"
+              class="card p-2 w-100"
+              style="cursor: pointer;"
+            >
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="direccionId"
+                  th:id="'dir-'+${d.id}"
+                  th:value="${d.id}"
+                />
+                <label
+                  class="form-check-label"
+                  th:for="'dir-'+${d.id}"
+                  th:text="${d.calle + ', ' + d.numCalle + ', ' + d.ciudad}"
+                ></label>
+              </div>
+            </div>
+          </div>
+          <p id="modalError" class="text-danger small mt-2 d-none"></p>
+          <div class="text-end mt-4">
+            <div th:replace="~{fragments/csrf :: csrf-fields}"></div>
+            <button type="submit" class="btn btn-success">Confirmar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
