@@ -55,7 +55,7 @@ public interface IRestauranteRepository extends JpaRepository<Restaurante, Long>
         @Param("max")    Double max,
         @Param("lat")    double lat,
         @Param("lon")    double lon,
-        @Param("radio")  Double radio,
+        @Param("radio")  Integer radio,
         Pageable pageable
     );
     

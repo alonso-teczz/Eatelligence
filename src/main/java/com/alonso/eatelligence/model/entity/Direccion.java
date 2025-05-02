@@ -47,10 +47,10 @@ public class Direccion {
     @Column(nullable = false)
     private String codigoPostal;
 
-    @Column
+    @Column(nullable = false)
     private Double latitud;
 
-    @Column
+    @Column(nullable = false)
     private Double longitud;
 
     @ManyToOne(fetch = FetchType.LAZY)

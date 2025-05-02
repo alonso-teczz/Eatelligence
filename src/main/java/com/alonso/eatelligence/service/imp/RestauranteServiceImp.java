@@ -178,15 +178,11 @@ public class RestauranteServiceImp implements IRestauranteService, IEntitableCli
     @Override
     public Page<ResumenProjection> getAllRestaurantsWithFilters(
         String nombre, Double min, Double max,
-        double lat, double lon, Double radio,
-        boolean anonimo, Pageable pageable
+        double lat, double lon, Integer radio,
+        Pageable pageable
     ) {
-        Pageable page = anonimo
-            ? PageRequest.of(0, 5)
-            : PageRequest.of(0, 20);
-    
         return restauranteRepository
-            .getAllRestaurantsWithFilters(nombre, min, max, lat, lon, radio, page);
+            .getAllRestaurantsWithFilters(nombre, min, max, lat, lon, radio, PageRequest.of(0, 20));
     }
     
 }

@@ -38,12 +38,11 @@ public class RestauranteRestController {
         @RequestParam(required = false) Double max,
         @RequestParam(required = false) double lat,
         @RequestParam(required = false) double lon,
-        @RequestParam(required = false) Double radio,
-        @RequestParam(defaultValue = "false") boolean anonimo,
+        @RequestParam(required = false) Integer radio,
         Pageable pageable
     ) {
         return restauranteService
-            .getAllRestaurantsWithFilters(nombre, min, max, lat, lon, radio, anonimo, pageable
+            .getAllRestaurantsWithFilters(nombre, min, max, lat, lon, radio, pageable
         );
     }
 

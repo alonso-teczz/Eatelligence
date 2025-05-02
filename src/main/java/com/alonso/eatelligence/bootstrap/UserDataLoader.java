@@ -49,11 +49,13 @@ public class UserDataLoader implements CommandLineRunner {
                 .build();
     
             Direccion direccionUsuario = Direccion.builder()
-                .calle("Calle del Desarrollo")
-                .numCalle("33")
-                .ciudad("Zaragoza")
-                .provincia("Zaragoza")
-                .codigoPostal("50001")
+                .calle("Calle San Blas")
+                .numCalle("2")
+                .ciudad("Zamora")
+                .provincia("Zamora")
+                .codigoPostal("49023")
+                .latitud(41.51305690290546)
+                .longitud(-5.7484801677823185)
                 .build();
     
             direccionUsuario.setUsuario(admin);
@@ -61,11 +63,13 @@ public class UserDataLoader implements CommandLineRunner {
     
             // Dirección del restaurante
             Direccion direccionRestaurante = Direccion.builder()
-                .calle("Calle de la Tecnología")
-                .numCalle("42")
-                .ciudad("Madrid")
-                .provincia("Madrid")
-                .codigoPostal("28001")
+                .calle("Calle de Magallanes")
+                .numCalle("22")
+                .ciudad("Zamora")
+                .provincia("Zamora")
+                .codigoPostal("49020")
+                .latitud(41.505774500932446)
+                .longitud(-5.733302320887748)
                 .build();
     
             // Crear restaurante con todo asociado
@@ -99,11 +103,13 @@ public class UserDataLoader implements CommandLineRunner {
                 .build();
     
             Direccion direccionCliente = Direccion.builder()
-                .calle("Calle de la Amistad")
-                .numCalle("15")
-                .ciudad("Barcelona")
-                .provincia("Barcelona")
-                .codigoPostal("08001")
+                .calle("Calle de Arcenillas")
+                .numCalle("5")
+                .ciudad("Zamora")
+                .provincia("Zamora")
+                .codigoPostal("49028")
+                .latitud(41.49769570030578)
+                .longitud(-5.738943647973565)
                 .build();
     
             direccionCliente.setUsuario(cliente);

@@ -25,8 +25,7 @@ public interface IRestauranteService {
         Double max,
         double lat,
         double lon,
-        Double radio,
-        boolean anonimo,
+        Integer radio,
         Pageable pageable
       );
 

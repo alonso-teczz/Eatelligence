@@ -36,8 +36,7 @@ public class HomeController {
         @RequestParam(required = false) Double max,
         @RequestParam(required = false, defaultValue = "0") double lat,
         @RequestParam(required = false, defaultValue = "0") double lon,
-        @RequestParam(required = false) Double radio,
-        @RequestParam(required = false, defaultValue = "false") boolean anonimo,
+        @RequestParam(required = false) Integer radio,
         @RequestParam(required = false, defaultValue = "0") int page,
         @RequestParam(required = false, defaultValue = "10") int size,
         @SessionAttribute(name = "usuario", required = false) Usuario usuario,
@@ -46,7 +45,7 @@ public class HomeController {
         Pageable pageable = PageRequest.of(page, size);
         Page<ResumenProjection> resultados =
             restauranteService.getAllRestaurantsWithFilters(
-                nombre, min, max, lat, lon, radio, anonimo, pageable
+                nombre, min, max, lat, lon, radio, pageable
             );
 
         model.addAttribute("alergenos", this.alergenoService.getAll());
