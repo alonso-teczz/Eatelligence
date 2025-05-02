@@ -36,16 +36,16 @@ public class RestauranteRestController {
         @RequestParam(required = false) String nombre,
         @RequestParam(required = false) Double min,
         @RequestParam(required = false) Double max,
-        @RequestParam(required = false) double lat,
-        @RequestParam(required = false) double lon,
+        @RequestParam double lat,
+        @RequestParam double lon,
         @RequestParam(required = false) Integer radio,
+        @RequestParam(required = false, name = "excluirAlergenos") Set<Long> alergenos,
         Pageable pageable
     ) {
         return restauranteService
-            .getAllRestaurantsWithFilters(nombre, min, max, lat, lon, radio, pageable
-        );
+            .getAllRestaurantsWithFilters(nombre, min, max, lat, lon, radio, alergenos, pageable);
     }
-
+    
     /**
      * GET  /api/restaurant/schedule
      * Ya no usamos @SessionAttribute("restaurante") Restaurante,
@@ -105,4 +105,25 @@ public class RestauranteRestController {
         
         return ResponseEntity.noContent().build();
     }
+
+    @PatchMapping("/preptime")
+    public ResponseEntity<?> patchTiempoPrepEstimado(
+        @RequestBody JsonNode json,
+        @SessionAttribute("restaurante") Restaurante restaurante
+    ) {
+        if (json.has("tiempoPreparacion")) {
+            JsonNode node = json.get("tiempoPreparacion");
+    
+            Integer minutos = node.asInt();
+            if (minutos == null || minutos < 10 || minutos > 60) {
+                return ResponseEntity.badRequest().body("Introduce un número de minutos positivo entre 10 y 60");
+            }
+
+            restaurante.setTiempoPreparacionEstimado(minutos);
+            restauranteService.save(restaurante);
+        }
+    
+        return ResponseEntity.ok(restaurante.getTiempoPreparacionEstimado());
+    }
+    
 }

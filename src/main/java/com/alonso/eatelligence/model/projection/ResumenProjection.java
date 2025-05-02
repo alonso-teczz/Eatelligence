@@ -1,8 +1,15 @@
 package com.alonso.eatelligence.model.projection;
 
+import java.math.BigDecimal;
+
 public interface ResumenProjection {
-    Long   getId();
+    Long getId();
     String getNombreComercial();
     Double getPrecioMedio();
-    Double getDistancia();
+    BigDecimal getImporteMinimo();
+    String getCiudad();
+    String getProvincia();
+    Double getLatitud();
+    Double getLongitud();
+    Integer getTiempoPreparacion();
 }

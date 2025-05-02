@@ -129,6 +129,93 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  // 5. TIEMPO DE PREPARACIÓN
+  const btnTiempo = document.getElementById('btnTiempo');
+  if (!btnTiempo) return;
+
+  const tiempoCardText = btnTiempo.closest('.card-body').querySelector('.card-text');
+  const formFijarTiempo = document.getElementById('formFijarTiempo');
+  const formEditarTiempo = document.getElementById('formEditarTiempo');
+  const inputFijarTiempo = document.getElementById('tiempoEstimado');
+  const inputEditarTiempo = document.getElementById('tiempoEstimadoEdit');  
+
+  let currentTiempo = (() => {
+    const span = document.getElementById('tiempoActual');
+    return span ? parseInt(span.textContent) : null;
+  })();
+
+  const pintaTiempo = () => {
+    if (currentTiempo !== null) {
+      tiempoCardText.classList.remove("fst-italic");
+      tiempoCardText.innerHTML =
+        `Actualmente: <strong><span id="tiempoActual" class="ms-1">${currentTiempo}</span> min.</strong>`;
+      if (!document.getElementById("avisoTiempoText")) {
+        const avisoCalculoText = document.createElement("p");
+        avisoCalculoText.innerHTML = `<p class="form-text text-muted small mb-2">
+        Este tiempo se añadirá al cálculo automático de entrega que verá el cliente al hacer un pedido.
+        </p>`;
+        tiempoCardText.after(avisoCalculoText);
+      }
+      btnTiempo.innerHTML = '<i class="fas fa-stopwatch me-1"></i> Editar tiempo';
+      btnTiempo.dataset.bsTarget = '#modalEditarTiempo';
+    } else {
+      tiempoCardText.innerHTML = '<em>No has fijado ningún tiempo estimado.</em>';
+      btnTiempo.innerHTML = '<i class="fas fa-stopwatch me-1"></i> Fijar tiempo';
+      btnTiempo.dataset.bsTarget = '#modalFijarTiempo';
+    }
+  };
+
+  document.getElementById('modalEditarTiempo')?.addEventListener('show.bs.modal', () => {
+    inputEditarTiempo.value = currentTiempo ?? 10;
+    inputEditarTiempo.classList.remove('is-invalid');
+  });
+  document.getElementById('modalFijarTiempo')?.addEventListener('show.bs.modal', () => {
+    inputFijarTiempo.value = '';
+    inputFijarTiempo.classList.remove('is-invalid');
+  });
+
+  [formFijarTiempo, formEditarTiempo].forEach(f => f.setAttribute('novalidate', ''));
+
+  const procesaTiempo = async input => {
+    const val = parseInt(input.value);
+    let msg = '';
+    if (isNaN(val) || val < 10 || val > 60) {
+      msg = 'El tiempo de preparación debe estar comprendido entre 10 y 60 minutos.';
+    } else if (val === currentTiempo) {
+      msg = 'Debes introducir un tiempo distinto al actual.';
+    }    
+
+    if (msg) {
+      input.nextElementSibling.textContent = msg;
+      input.classList.add('is-invalid');
+      input.focus();
+      return;
+    }
+
+    input.classList.remove('is-invalid');
+
+    try {
+      const res = await fetch('/api/restaurant/preptime', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+        body: JSON.stringify({ tiempoPreparacion: val })
+      });
+      if (!res.ok) throw new Error(await res.text());
+
+      currentTiempo = val;
+      pintaTiempo();
+      bootstrap.Modal.getInstance(input.closest('.modal')).hide();
+      Swal.fire({ icon: 'success', title: 'Tiempo guardado', toast: true, position: 'top-end', timer: 3000, showConfirmButton: false });
+    } catch (err) {
+      Swal.fire({ icon: 'error', title: 'Error', text: err.message, toast: true, position: 'top-end', timer: 3000, showConfirmButton: false });
+    }
+  };
+
+  formFijarTiempo?.addEventListener('submit', e => { e.preventDefault(); procesaTiempo(inputFijarTiempo); });
+  formEditarTiempo?.addEventListener('submit', e => { e.preventDefault(); procesaTiempo(inputEditarTiempo); });
+
+  pintaTiempo();
+
   /* Botón Eliminar */
   let btnDelete = document.getElementById('btnDeleteImporte');
   const toggleBtnDelete = show => {
@@ -226,7 +313,7 @@ document.addEventListener('DOMContentLoaded', () => {
       input.nextElementSibling.textContent = msg;
       input.classList.add('is-invalid');
       input.focus();
-      return;                                        // ← IMPORTANTE: aborta
+      return;
     }
     input.classList.remove('is-invalid');
 

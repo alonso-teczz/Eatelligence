@@ -55,6 +55,9 @@ public class Restaurante {
     @Builder.Default
     private Double importeMinimo = null;
 
+    @Column(name = "tiempo_preparacion_estimado")
+    private Integer tiempoPreparacionEstimado;
+
     @Column(nullable = false, columnDefinition = "TINYINT(1)")
     @Builder.Default
     private boolean verificado = false;

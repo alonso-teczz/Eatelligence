@@ -20,14 +20,15 @@ public interface IRestauranteService {
     List<Restaurante> getAllRestaurants();
 
     Page<ResumenProjection> getAllRestaurantsWithFilters(
-        String nombre,
-        Double min,
-        Double max,
-        double lat,
-        double lon,
-        Integer radio,
-        Pageable pageable
-      );
+      String nombre,
+      Double min,
+      Double max,
+      double lat,
+      double lon,
+      Integer radio,
+      Set<Long> alergenos,
+      Pageable pageable
+    );  
 
     Set<HorarioDTO> obtenerHorarios(Long id);
 

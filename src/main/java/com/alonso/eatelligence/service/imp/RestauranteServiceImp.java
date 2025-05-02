@@ -9,7 +9,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -179,10 +178,10 @@ public class RestauranteServiceImp implements IRestauranteService, IEntitableCli
     public Page<ResumenProjection> getAllRestaurantsWithFilters(
         String nombre, Double min, Double max,
         double lat, double lon, Integer radio,
-        Pageable pageable
+        Set<Long> alergenos, Pageable pageable
     ) {
         return restauranteRepository
-            .getAllRestaurantsWithFilters(nombre, min, max, lat, lon, radio, PageRequest.of(0, 20));
-    }
+            .getAllRestaurantsWithFilters(nombre, min, max, lat, lon, radio, alergenos, pageable);
+    }    
     
 }

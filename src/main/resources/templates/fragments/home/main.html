@@ -1,23 +1,23 @@
 <div th:fragment="main">
-  <div class="container-fluid d-flex p-0" style="min-height:100vh">
+  <div class="container-fluid d-flex p-0 position-relative" style="min-height:100vh">
 
     <!-- ▸ Panel de filtros (solo si hay sesión) -->
     <aside
       th:if="${session.usuario != null}"
       id="filtros"
       class="border-end p-3"
-      style="width:280px; overflow-y:auto; max-height:100vh;"
+      style="width:280px; overflow-y:auto; max-height:100vh; transition: transform 0.3s ease;"
     >
       <form id="filtroForm" class="small">
         <div class="mb-3">
           <label class="form-label fw-semibold">Buscar por nombre</label>
-          <input name="nombre" type="text" class="form-control" placeholder="Restaurante"/>
+          <input name="nombre" type="text" class="form-control" placeholder="Ej.: Bar Caballero"/>
         </div>
         <div class="mb-3">
           <label class="form-label fw-semibold">Precio medio (€)</label>
           <div class="d-flex gap-2">
-            <input name="min" type="number" class="form-control" placeholder="Mín"/>
-            <input name="max" type="number" class="form-control" placeholder="Máx"/>
+            <input name="min" type="number" class="form-control" placeholder="Mín."/>
+            <input name="max" type="number" class="form-control" placeholder="Máx."/>
           </div>
         </div>
         <div class="mb-3">
@@ -28,33 +28,56 @@
         <div class="mb-2">
           <span class="fw-semibold d-block mb-1">Excluir alérgenos</span>
           <div class="form-check" th:each="a : ${alergenos}">
-            <input class="form-check-input" type="checkbox" th:id="'alg-'+${a.id}" th:value="${a.id}" name="excluirAlergenos"/>
+            <input class="form-check-input" type="checkbox"
+                   th:id="'alg-'+${a.id}" th:value="${a.id}"
+                   name="excluirAlergenos"/>
             <label th:for="'alg-'+${a.id}" th:text="${a.serialName}" class="form-check-label">Huevo</label>
           </div>
-        </div>
+        </div>        
       </form>
     </aside>
+    
+    <!-- Botón para mostrar/ocultar filtros con mejor posicionamiento -->
+    <button th:if="${session.usuario != null}" id="toggleFiltros" class="btn btn-outline-secondary toggle-filtros-btn position-absolute" 
+            style="left: 280px; top: 10px; z-index: 1000; transition: left 0.3s ease;">
+      <i class="bi bi-chevron-left"></i>
+    </button>
 
     <!-- ▸ Zona de resultados / invitación a login -->
-    <div class="flex-grow-1 d-flex align-items-center justify-content-center bg-white" style="min-height: 100vh;">
-      <div th:if="${session.usuario == null}" class="text-center p-5 border rounded-4 shadow bg-light mx-auto" style="max-width: 600px;">
+    <div class="flex-grow-1 d-flex flex-column bg-white" style="min-height: 100vh; padding: 20px;">
+      <!-- Mensaje de inicio de sesión si no hay usuario -->
+      <div th:if="${session.usuario == null}" class="d-flex flex-column align-items-center text-center p-5 border border-info rounded-4 bg-info-subtle mx-auto shadow-sm w-75 mt-4">
         <div>
-          <i class="bi bi-lock-fill text-danger" style="font-size: 6rem;"></i>
+          <i class="bi bi-info-circle text-info" style="font-size: 5rem;"></i>
         </div>
-        <h3 class="fw-semibold mb-3">Inicia sesión para empezar a pedir a tus restaurantes favoritos</h3>
-        <a th:href="@{/login}" class="btn btn-outline-success btn-lg px-4">
+        <h4 class="fw-semibold mt-3 mb-2">¿Quieres descubrir restaurantes cerca de ti?</h4>
+        <p class="mb-4">Inicia sesión para ver tus opciones personalizadas</p>
+        <a th:href="@{/login}" class="btn btn-outline-info btn-lg px-4 text-nowrap">
           <i class="bi bi-box-arrow-in-right me-2"></i> Iniciar sesión
         </a>
       </div>
   
-      <div th:if="${session.usuario != null}" id="restaurant-cards" class="w-100 p-3">
-        <!-- Aquí se inyectan las cards -->
-      </div>
+      <!-- Contenedor principal de restaurantes con grid explícito -->
+      <div th:if="${session.usuario != null}" class="container-fluid">
+        <!-- Spinner de carga -->
+        <div id="spinnerCargando" class="d-flex flex-column align-items-center justify-content-center p-5">
+          <div class="spinner-border text-primary" role="status" style="width: 5rem; height: 5rem;">
+            <span class="visually-hidden">Cargando...</span>
+          </div>
+          <p class="mt-2 fs-5">Buscando restaurantes...</p>
+        </div>
+        
+        <!-- Grid de tarjetas de restaurantes -->
+        <div id="restaurant-cards" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+          <!-- Las tarjetas de restaurantes se agregarán aquí dinámicamente -->
+        </div>
+      </div>      
+    </div>
   </div>
 
   <!-- ▸ Modal de selección de dirección -->
   <div
-    th:if="${session.usuario != null and (session.coordenadasEnvio == null or #lists.size(direcciones) > 1)}"
+    th:if="${session.usuario != null and (session.direccionEnvioId == null or #lists.size(direcciones) > 1)}"
     class="modal fade"
     id="direccionModal"
     tabindex="-1"
@@ -65,17 +88,24 @@
   >
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content p-4">
-        <h5 id="direccionModalLabel" class="mb-3 text-center">¿Dónde quieres que te lleguen los pedidos?</h5>
+        <div class="text-center mb-3">
+          <i class="bi bi-geo-alt-fill text-primary" style="font-size: 2.5rem;"></i>
+          <h5 id="direccionModalLabel" class="mt-2 fw-bold">¿Dónde quieres que te lleguen los pedidos?</h5>
+          <p class="text-muted small mb-0">
+            Mostraremos los restaurantes disponibles cerca de la dirección que elijas. Podrás cambiarla más adelante si lo necesitas.
+          </p>
+        </div>
 
         <form method="post" th:action="@{/set-shipping-address}">
-          <div class="d-flex flex-wrap gap-2 justify-content-center">
-            <div th:if="${errorDireccion}">
+          <div class="d-flex flex-column gap-2">
+            <div th:if="${errorDireccion}" class="alert alert-danger p-2 small d-flex align-items-center">
               <i class="bi bi-exclamation-circle me-2"></i>
               <span th:text="${errorDireccion}"></span>
             </div>
+
             <div
               th:each="d : ${direcciones}"
-              class="card p-2 w-100"
+              class="card p-3 border shadow-sm"
               style="cursor: pointer;"
             >
               <div class="form-check">
@@ -89,18 +119,129 @@
                 <label
                   class="form-check-label"
                   th:for="'dir-'+${d.id}"
-                  th:text="${d.calle + ', ' + d.numCalle + ', ' + d.ciudad}"
+                  th:text="${d.calle + ' ' + d.numCalle + ', ' + d.ciudad}"
                 ></label>
               </div>
             </div>
           </div>
+
           <p id="modalError" class="text-danger small mt-2 d-none"></p>
+
           <div class="text-end mt-4">
             <div th:replace="~{fragments/csrf :: csrf-fields}"></div>
-            <button type="submit" class="btn btn-success">Confirmar</button>
+            <button type="submit" class="btn btn-success px-4">
+              <i class="bi bi-check-circle me-1"></i> Confirmar
+            </button>
           </div>
         </form>
       </div>
     </div>
   </div>
+
+  <!-- JavaScript para manejar el panel de filtros y tarjetas de restaurantes -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Variables para el toggle del panel de filtros
+      const filtrosPanel = document.getElementById('filtros');
+      const toggleBtn = document.getElementById('toggleFiltros');
+      const toggleIcon = toggleBtn.querySelector('i');
+      let filtrosVisible = true;
+      
+      // Controlar la visibilidad del panel de filtros
+      toggleBtn.addEventListener('click', function() {
+        if (filtrosVisible) {
+          filtrosPanel.style.transform = 'translateX(-100%)';
+          toggleBtn.style.left = '0';
+          toggleIcon.classList.remove('bi-chevron-left');
+          toggleIcon.classList.add('bi-chevron-right');
+        } else {
+          filtrosPanel.style.transform = 'translateX(0)';
+          toggleBtn.style.left = '280px';
+          toggleIcon.classList.remove('bi-chevron-right');
+          toggleIcon.classList.add('bi-chevron-left');
+        }
+        filtrosVisible = !filtrosVisible;
+      });
+      
+      // Actualizar el label del radio de búsqueda
+      const radioRange = document.getElementById('radioRange');
+      const radioLabel = document.getElementById('radioLabel');
+      
+      if (radioRange) {
+        radioRange.addEventListener('input', function() {
+          radioLabel.textContent = this.value;
+        });
+      }
+      
+      // Función para crear tarjetas de restaurante
+      function createRestaurantCard(restaurant) {
+        const col = document.createElement('div');
+        col.className = 'col';
+        
+        const card = document.createElement('div');
+        card.className = 'card h-100 shadow-sm';
+        
+        const cardBody = document.createElement('div');
+        cardBody.className = 'card-body';
+        
+        const title = document.createElement('h5');
+        title.className = 'card-title';
+        title.textContent = restaurant.nombre;
+        
+        const location = document.createElement('p');
+        location.className = 'card-text text-muted small';
+        location.innerHTML = `<i class="bi bi-geo-alt"></i> ${restaurant.ciudad}`;
+        
+        const price = document.createElement('p');
+        price.className = 'card-text';
+        price.innerHTML = `<strong>Precio medio:</strong> ${restaurant.precioMedio}€`;
+        
+        const orderBtn = document.createElement('a');
+        orderBtn.href = `/restaurante/${restaurant.id}`;
+        orderBtn.className = 'btn btn-primary mt-2';
+        orderBtn.textContent = 'Ver menú';
+        
+        cardBody.appendChild(title);
+        cardBody.appendChild(location);
+        cardBody.appendChild(price);
+        cardBody.appendChild(orderBtn);
+        card.appendChild(cardBody);
+        col.appendChild(card);
+        
+        return col;
+      }
+      
+      // Ejemplo de cómo agregar restaurantes (para demostración)
+      // En una aplicación real, esto vendría de una llamada AJAX
+      function loadDemoRestaurants() {
+        const container = document.getElementById('restaurant-cards');
+        const spinner = document.getElementById('spinnerCargando');
+        
+        if (container && spinner) {
+          // Ocultar spinner
+          spinner.classList.add('d-none');
+          
+          // Datos de ejemplo (en la aplicación real vendrían del backend)
+          const demoRestaurants = [
+            { id: 1, nombre: 'Restaurante Alonso', ciudad: 'Zamora', precioMedio: 15 },
+            { id: 2, nombre: 'La Tapería', ciudad: 'Madrid', precioMedio: 22 },
+            { id: 3, nombre: 'Pizzería Roma', ciudad: 'Barcelona', precioMedio: 18 },
+            { id: 4, nombre: 'El Bodegón', ciudad: 'Sevilla', precioMedio: 25 },
+            { id: 5, nombre: 'Sabores de Asia', ciudad: 'Valencia', precioMedio: 20 },
+            { id: 6, nombre: 'El Rincón Vasco', ciudad: 'Bilbao', precioMedio: 30 }
+          ];
+          
+          // Crear y agregar tarjetas al contenedor
+          demoRestaurants.forEach(restaurant => {
+            const card = createRestaurantCard(restaurant);
+            container.appendChild(card);
+          });
+        }
+      }
+      
+      // En una aplicación real, aquí iría el código para obtener restaurantes del servidor
+      // Para esta demostración, cargamos los restaurantes de ejemplo después de un breve retraso
+      setTimeout(loadDemoRestaurants, 800);
+    });
+  </script>
 </div>

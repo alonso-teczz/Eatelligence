@@ -186,3 +186,97 @@ body {
   min-width: 2rem;
   text-align: center;
 }
+
+.btn-outline-info:hover {
+  color: white;
+}
+
+/* Estilos mejorados para las tarjetas de restaurantes */
+.rest {
+  border-radius: 1rem;
+  box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+.rest:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0.7rem 1.5rem rgba(0,0,0,0.15);
+}
+
+.rest .card-title {
+  color: #356859;
+  font-weight: 600;
+}
+
+.rest .card-body {
+  padding: 1.25rem;
+}
+
+/* Estilo para el botón de ocultar/mostrar filtros */
+#toggleFiltros {
+  transition: all 0.3s ease;
+  position: absolute;
+  right: -40px;
+  top: 10px;
+  z-index: 10;
+  background-color: #abc294;
+  border: none;
+  color: #356859;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 0 0.7rem 0.7rem 0;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+}
+
+#toggleFiltros:hover {
+  background-color: #d8e8d0;
+  transform: scale(1.05);
+}
+
+#toggleFiltros:focus {
+  outline: none;
+  box-shadow: 0 0 0 0.25rem rgba(53, 104, 89, 0.25);
+}
+
+/* Estilos para el panel de filtros */
+#filtros {
+  transition: transform 0.3s ease-in-out;
+  position: relative;
+  background-color: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
+}
+
+/* Ajustes de espaciado para los campos de filtro */
+#filtros h5 {
+  color: #356859;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+#filtros .form-group {
+  margin-bottom: 1.5rem;
+}
+
+#filtros label {
+  font-weight: 500;
+  color: #555;
+  margin-bottom: 0.5rem;
+}
+
+/* Medios para responsividad */
+@media (max-width: 768px) {
+  #toggleFiltros {
+    position: static;
+    margin-bottom: 1rem;
+    width: 100%;
+    border-radius: 0.7rem;
+  }
+  
+  #filtros {
+    margin-bottom: 1.5rem;
+  }
+}

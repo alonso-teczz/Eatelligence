@@ -150,6 +150,39 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="row gy-4 mt-1">
+                        <div class="col-md-6">
+                            <div class="card shadow-sm">
+                                <div class="card-body">
+                                  <h5 class="card-title mb-2">Tiempo estimado de preparación</h5>
+                              
+                                  <div th:if="${session.restaurante.tiempoPreparacionEstimado != null}">
+                                    <p class="card-text">
+                                      Actualmente: <strong><span id="tiempoActual" class="ms-1" th:text="${session.restaurante.tiempoPreparacionEstimado}"></span> min.</strong>
+                                    </p>
+                                    <p class="form-text text-muted small mb-2" id="avisoTiempoText">
+                                      Este tiempo se añadirá al cálculo automático de entrega que verá el cliente al hacer un pedido.
+                                    </p>
+                                  </div>
+                              
+                                  <p class="card-text fst-italic" th:if="${session.restaurante.tiempoPreparacionEstimado == null}">
+                                    No has fijado ningún tiempo estimado.
+                                  </p>
+                              
+                                  <div class="mt-3">
+                                    <button type="button" class="btn btn-outline-primary" id="btnTiempo"
+                                            data-bs-toggle="modal"
+                                            th:attr="data-bs-target=${session.restaurante.tiempoPreparacionEstimado == null ? '#modalFijarTiempo' : '#modalEditarTiempo'}">
+                                      <i class="fas fa-stopwatch me-1"></i>
+                                      <span th:text="${session.restaurante.tiempoPreparacionEstimado == null ? 'Fijar tiempo' : 'Editar tiempo'}">Fijar tiempo</span>
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>                              
+                        </div>
+                    </div>
+
                     <!-- Modal Fijar importe mínimo -->
                     <div class="modal fade" id="modalFijarImporte" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog">
@@ -210,6 +243,52 @@
                             </form>
                         </div>
                     </div>
+
+                    <!-- Modal Fijar tiempo -->
+                    <div class="modal fade" id="modalFijarTiempo" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog">
+                        <form id="formFijarTiempo" class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title">Fijar tiempo estimado</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="tiempoEstimado" class="form-label">Tiempo estimado (minutos)</label>
+                                <input type="number" min="1" id="tiempoEstimado" name="tiempoEstimado" class="form-control" placeholder="Ej. 20"/>
+                                <div class="invalid-feedback">Debes introducir un valor mayor o igual a 1 minuto.</div>
+                            </div>
+                            </div>
+                            <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Fijar tiempo</button>
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                            </div>
+                        </form>
+                        </div>
+                    </div>
+                    
+                    <!-- Modal Editar tiempo -->
+                    <div class="modal fade" id="modalEditarTiempo" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog">
+                        <form id="formEditarTiempo" class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title">Editar tiempo estimado</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="tiempoEstimadoEdit" class="form-label">Tiempo (minutos)</label>
+                                <input type="number" min="1" id="tiempoEstimadoEdit" name="tiempoEstimado" class="form-control" th:value="${session.restaurante.tiempoPreparacionEstimado}"/>
+                                <div class="invalid-feedback">Debes introducir un valor válido.</div>
+                            </div>
+                            </div>
+                            <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Actualizar tiempo</button>
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                            </div>
+                        </form>
+                        </div>
+                    </div>  
                 </div>
             </main>
         </div>

@@ -1,7 +1,5 @@
 package com.alonso.eatelligence.controller;
 
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +13,7 @@ import com.alonso.eatelligence.service.IDireccionService;
 
 @Controller
 @SessionAttributes({
-    "coordenadasEnvio"
+    "direccionEnvioId"
 })
 public class DireccionController {
 
@@ -32,13 +30,9 @@ public class DireccionController {
 
         if (direccion == null) {
             ra.addFlashAttribute("errorDireccion", "No se encontró la dirección seleccionada.");
-            return "redirect:/";
         }
 
-        model.addAttribute("coordenadasEnvio", Map.of(
-            "lat", direccion.getLatitud(),
-            "lon", direccion.getLongitud()
-        ));
+        model.addAttribute("direccionEnvioId", direccionId);
 
         return "redirect:/";
     }
