@@ -1,5 +1,6 @@
 package com.alonso.eatelligence.model.entity;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -14,6 +15,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -74,6 +77,16 @@ public class Restaurante {
     @CollectionTable(name = "horarios", joinColumns = @JoinColumn(name = "restaurante_id"))
     private Set<Horario> horarios;
 
+
+    @ManyToMany
+    @JoinTable(
+        name  = "restaurante_categoria",
+        joinColumns = @JoinColumn(name = "restaurante_id"),
+        inverseJoinColumns = @JoinColumn(name = "categoria_id")
+    )
+    @Builder.Default
+    private Set<Categoria> categorias = new HashSet<>();
+
     @OneToMany(mappedBy = "restaurante", cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
     @JsonIgnoreProperties("restaurante")
@@ -81,4 +94,5 @@ public class Restaurante {
 
     @OneToMany(mappedBy = "restaurante", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<VerificationToken> tokens;
+
 }

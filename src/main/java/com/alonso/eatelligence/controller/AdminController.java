@@ -25,6 +25,7 @@ import com.alonso.eatelligence.model.entity.RecruitmentToken;
 import com.alonso.eatelligence.model.entity.Restaurante;
 import com.alonso.eatelligence.model.entity.Usuario;
 import com.alonso.eatelligence.service.IAlergenoService;
+import com.alonso.eatelligence.service.ICategoriaService;
 import com.alonso.eatelligence.service.IPedidoService;
 import com.alonso.eatelligence.service.IPlatoService;
 import com.alonso.eatelligence.service.IRecruitmentService;
@@ -59,6 +60,9 @@ public class AdminController {
     @Autowired
     private IRecruitmentService recruitmentService;
 
+    @Autowired
+    private ICategoriaService categoriaService;
+
 
     @ModelAttribute
     public void addDashboardStats(
@@ -79,6 +83,7 @@ public class AdminController {
         model.addAttribute("totalCocineros", totalCocineros);
         model.addAttribute("totalRepartidores", totalRepartidores);
         model.addAttribute("pedidosHoy", pedidosHoy);
+        model.addAttribute("categoriasDisponibles", this.categoriaService.getAll());
     }
 
     @GetMapping({"", "/", "/dashboard"})

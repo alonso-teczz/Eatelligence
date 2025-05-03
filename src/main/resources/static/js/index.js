@@ -29,7 +29,7 @@ async function estimarTiempos(lista) {
       el.classList.remove("spinner-border", "spinner-border-sm", "text-secondary");
       el.removeAttribute("role");
       el.removeAttribute("aria-hidden");
-      el.textContent = `${totalMin} min.`;
+      el.textContent = `${totalMin == minutosEntrega ? "No disponible" : totalMin + "min." }`;
     } catch (err) {
       el.classList.remove("spinner-border", "spinner-border-sm", "text-secondary");
       el.textContent = '—';
