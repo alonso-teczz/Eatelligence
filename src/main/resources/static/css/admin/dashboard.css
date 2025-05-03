@@ -426,3 +426,22 @@
   background-color: var(--color-secundario);
   border-color: var(--color-secundario);
 }
+
+/* ---------- Badges de CATEGORÍAS ---------- */
+.categoria-comida-rapida      { background-color:#d62828; color:#fff; }
+.categoria-tradicional        { background-color:#f7830c; color:#fff; }
+.categoria-fusion             { background-color:#e9599e; color:#fff; }
+.categoria-italiano           { background-color:#2b9348; color:#fff; }
+.categoria-chino              { background-color:#55a630; color:#fff; }
+.categoria-japones            { background-color:#1982c4; color:#fff; }
+.categoria-indio              { background-color:#5a189a; color:#fff; }
+.categoria-mexicano           { background-color:#ff6700; color:#fff; }
+.categoria-vegano             { background-color:#78c6a3; color:#fff; }
+.categoria-vegetariano        { background-color:#4caf50; color:#fff; }
+.categoria-mediterraneo       { background-color:#3f88c5; color:#fff; }
+.categoria-americano          { background-color:#8d99ae; color:#fff; }
+.categoria-espanol            { background-color:#e63946; color:#fff; }
+.categoria-arabe              { background-color:#c77dff; color:#fff; }
+.categoria-turco              { background-color:#ff9100; color:#fff; }
+.categoria-marisqueria        { background-color:#264653; color:#fff; }
+.categoria-braseria           { background-color:#bc4749; color:#fff; }

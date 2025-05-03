@@ -3,7 +3,12 @@ body {
 }
 
 .header-nav {
+  justify-content: start !important;
   background-color: #abc294;
+}
+
+.navbar-toggler {
+  justify-self: end !important;
 }
 
 .navbar-toggler:focus {
@@ -20,7 +25,8 @@ body {
   border-radius: 0.7rem !important;
 }
 
-.nav-link:focus, .nav-link:hover {
+.nav-link:focus,
+.nav-link:hover {
   padding-left: 0.7rem;
   background-color: #d8e8d0 !important;
   color: #356859 !important;
@@ -33,7 +39,8 @@ body {
   transition: 0.4s ease;
 }
 
-.profile-toggle:hover, .profile-toggle:focus {
+.profile-toggle:hover,
+.profile-toggle:focus {
   background-color: #d8e8d0 !important;
   color: #356859 !important;
 }
@@ -54,15 +61,18 @@ body {
 /* Ajustes - Primary */
 .order-history-link:hover,
 .order-history-link:focus {
-  background-color: #d6e6ff !important; /* primary soft */
+  background-color: #d6e6ff !important;
+  /* primary soft */
   color: #0d6efd !important;
   font-weight: 500;
   outline: none !important;
   border: none !important;
 }
+
 .order-history-link:focus {
   box-shadow: 0 0 0 0.1rem #0d6efd !important;
 }
+
 .order-history-link:hover i {
   color: #0d6efd !important;
 }
@@ -70,15 +80,18 @@ body {
 /* Cerrar sesión - Danger */
 .logout-link:hover,
 .logout-link:focus {
-  background-color: #f8d7da !important; /* danger soft */
+  background-color: #f8d7da !important;
+  /* danger soft */
   color: #dc3545 !important;
   font-weight: 500;
   outline: none !important;
   border: none !important;
 }
+
 .logout-link:focus {
   box-shadow: 0 0 0 0.1rem #dc3545 !important;
 }
+
 .logout-link:hover i {
   color: #dc3545 !important;
 }
@@ -86,15 +99,18 @@ body {
 /* Historial - Secondary */
 .settings-link:hover,
 .settings-link:focus {
-  background-color: #e2e3e5 !important; /* secondary soft */
+  background-color: #e2e3e5 !important;
+  /* secondary soft */
   color: #6c757d !important;
   font-weight: 500;
   outline: none !important;
   border: none !important;
 }
+
 .settings-link:focus {
   box-shadow: 0 0 0 0.1rem #6c757d !important;
 }
+
 .settings-link:hover i {
   color: #6c757d !important;
 }
@@ -102,33 +118,40 @@ body {
 /* Panel de control - Info */
 .admin-link:hover,
 .admin-link:focus {
-  background-color: #fff3cd !important; /* warning soft */
-  color: #ffc107 !important; /* warning */
+  background-color: #fff3cd !important;
+  /* warning soft */
+  color: #ffc107 !important;
+  /* warning */
   font-weight: 500;
   outline: none !important;
   border: none !important;
 }
 
 .admin-link:focus {
-  box-shadow: 0 0 0 0.1rem #ffc107 !important; /* warning */
+  box-shadow: 0 0 0 0.1rem #ffc107 !important;
+  /* warning */
 }
 
 .admin-link:hover i {
-  color: #ffc107 !important; /* warning */
+  color: #ffc107 !important;
+  /* warning */
 }
 
 /* Rutas - Success */
 .routes-link:hover,
 .routes-link:focus {
-  background-color: #d1e7dd !important; /* success soft */
+  background-color: #d1e7dd !important;
+  /* success soft */
   color: #198754 !important;
   font-weight: 500;
   outline: none !important;
   border: none !important;
 }
+
 .routes-link:focus {
   box-shadow: 0 0 0 0.1rem #198754 !important;
 }
+
 .routes-link:hover i {
   color: #198754 !important;
 }
@@ -136,15 +159,18 @@ body {
 /* Pedidos - Warning */
 .pedidos-link:hover,
 .pedidos-link:focus {
-  background-color: #fff3cd !important; /* warning soft */
+  background-color: #fff3cd !important;
+  /* warning soft */
   color: #ffc107 !important;
   font-weight: 500;
   outline: none !important;
   border: none !important;
 }
+
 .pedidos-link:focus {
   box-shadow: 0 0 0 0.1rem #ffc107 !important;
 }
+
 .pedidos-link:hover i {
   color: #ffc107 !important;
 }
@@ -187,74 +213,46 @@ body {
   text-align: center;
 }
 
-.btn-outline-info:hover {
-  color: white;
-}
-
-/* Estilos mejorados para las tarjetas de restaurantes */
-.rest {
+.cesta-container {
+  background-color: #c2d6a5;
+  padding: 0.4rem 0.8rem;
   border-radius: 1rem;
-  box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  border: 1px solid rgba(0,0,0,0.1);
-  overflow: hidden;
+  color: #2f4f2f;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  cursor: pointer;
 }
 
-.rest:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 0.7rem 1.5rem rgba(0,0,0,0.15);
-}
-
-.rest .card-title {
-  color: #356859;
-  font-weight: 600;
-}
-
-.rest .card-body {
-  padding: 1.25rem;
-}
-
-/* Estilo para el botón de ocultar/mostrar filtros */
-#toggleFiltros {
-  transition: all 0.3s ease;
-  position: absolute;
-  right: -40px;
-  top: 10px;
-  z-index: 10;
-  background-color: #abc294;
-  border: none;
-  color: #356859;
-  font-weight: 500;
-  padding: 0.5rem 1rem;
-  border-radius: 0 0.7rem 0.7rem 0;
-  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-}
-
-#toggleFiltros:hover {
-  background-color: #d8e8d0;
+.cesta-container:hover {
   transform: scale(1.05);
 }
 
-#toggleFiltros:focus {
-  outline: none;
-  box-shadow: 0 0 0 0.25rem rgba(53, 104, 89, 0.25);
+#btnIniciarSesion:hover {
+  --btn-cyan: #00c1f3;
+  color: white;
 }
 
-/* Estilos para el panel de filtros */
+#btnIniciarSesion:active,
+#btnIniciarSesion:focus,
+#btnIniciarSesion:focus-visible {
+  outline: var(--btn-cyan);
+}
+
+/* Panel lateral de filtros */
 #filtros {
-  transition: transform 0.3s ease-in-out;
-  position: relative;
-  background-color: #f8f9fa;
+  min-height: 100vh;
+  max-width: 25vw;
+  background: #f8f9fa;
   padding: 1.5rem;
-  border-radius: 1rem;
-  box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, .1);
+  transition: margin-left .3s ease;
 }
 
-/* Ajustes de espaciado para los campos de filtro */
+/* Títulos y campos */
 #filtros h5 {
   color: #356859;
-  margin-bottom: 1rem;
   font-weight: 600;
+  margin-bottom: 1rem;
 }
 
 #filtros .form-group {
@@ -267,16 +265,75 @@ body {
   margin-bottom: 0.5rem;
 }
 
-/* Medios para responsividad */
-@media (max-width: 768px) {
-  #toggleFiltros {
-    position: static;
-    margin-bottom: 1rem;
-    width: 100%;
-    border-radius: 0.7rem;
-  }
-  
+#toggleFiltros {
+  border: none;
+  border-radius: 0 .6rem .6rem 0;
+  background: #abc294;
+  color: #356859;
+  transition: transform .3s ease, background .3s ease;  
+}
+
+#toggleFiltros:hover {
+  background: #d8e8d0;
+}
+
+#toggleFiltros:focus, #toggleFiltros:active {
+  box-shadow: none;
+}
+
+/* Estilos mejorados para las tarjetas de restaurantes */
+.rest {
+  border-radius: 1rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.rest:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0.7rem 1.5rem rgba(0, 0, 0, 0.15);
+}
+
+.rest .card-title {
+  color: #356859;
+  font-weight: 600;
+}
+
+.rest .card-body {
+  padding: 1.25rem;
+}
+
+@media (max-width: 992px)  { 
   #filtros {
-    margin-bottom: 1.5rem;
+    max-width: 300px !important;
+  }
+}
+
+@media (max-width: 768px)  { 
+  #filtros {
+    max-width: 700px !important;
+  }
+}
+
+@media (max-width: 622px)  { 
+  .main-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  #filtros {
+    max-width: 1000px !important;
+  }
+}
+
+@media (max-width: 400px) {
+  .main-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  #filtros {
+    max-width: 99vw;
   }
 }

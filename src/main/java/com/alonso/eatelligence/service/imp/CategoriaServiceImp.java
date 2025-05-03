@@ -25,5 +25,10 @@ public class CategoriaServiceImp implements ICategoriaService {
     public List<Categoria> getAll() {
         return this.categoriaRepository.findAll();
     }
+
+    @Override
+    public Categoria save(Categoria categoria) {
+       return this.categoriaRepository.save(categoria);
+    }
     
 }

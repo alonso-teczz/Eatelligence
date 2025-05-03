@@ -17,7 +17,7 @@
       <div class="container-usuario mostrar">
         <form id="form-usuario" th:action="@{/validate-client-reg}" th:object="${registroUsuario}" method="post" class="form-registro">
           <div th:replace="~{fragments/csrf :: csrf-fields}"></div>
-          <div th:replace="~{fragments/user/usuarioForm :: clientUserFields}"></div>
+          <div th:replace="~{fragments/register/usuarioForm :: clientUserFields}"></div>
         </form>
       </div>
 
@@ -25,8 +25,8 @@
       <div class="container-restaurante">
         <form id="form-restaurante" th:action="@{/validate-rest-reg}" th:object="${registroRestaurante}" method="post" class="form-registro">
           <div th:replace="~{fragments/csrf :: csrf-fields}"></div>
-          <div th:replace="~{fragments/user/usuarioForm :: restaurantUserFields('propietario')}"></div>
-          <div th:replace="~{fragments/user/restauranteForm :: restaurantFields}"></div>
+          <div th:replace="~{fragments/register/usuarioForm :: restaurantUserFields('propietario')}"></div>
+          <div th:replace="~{fragments/register/restauranteForm :: restaurantFields}"></div>
         </form>
       </div>
 

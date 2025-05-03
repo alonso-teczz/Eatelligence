@@ -1,14 +1,13 @@
 <div th:fragment="main">
-  <div class="container-fluid d-flex p-0 position-relative" style="min-height:100vh">
+  <div class="container-fluid d-flex p-0 position-relative main-container" style="min-height:100vh">
 
     <!-- ▸ Panel de filtros (solo si hay sesión) -->
     <aside
       th:if="${session.usuario != null}"
       id="filtros"
-      class="border-end p-3"
-      style="width:280px; overflow-y:auto; max-height:100vh; transition: transform 0.3s ease;"
+      class="p-3 position-relative"
     >
-      <form id="filtroForm" class="small">
+      <form id="filtrosForm" class="small h-100">
         <div class="mb-3">
           <label class="form-label fw-semibold">Buscar por nombre</label>
           <input name="nombre" type="text" class="form-control" placeholder="Ej.: Bar Caballero"/>
@@ -26,23 +25,34 @@
           <div class="text-end"><span id="radioLabel">3</span> km</div>
         </div>
         <div class="mb-2">
-          <span class="fw-semibold d-block mb-1">Excluir alérgenos</span>
+          <span class="fw-semibold d-block mb-2">Excluir alérgenos</span>
           <div class="form-check" th:each="a : ${alergenos}">
             <input class="form-check-input" type="checkbox"
                    th:id="'alg-'+${a.id}" th:value="${a.id}"
                    name="excluirAlergenos"/>
             <label th:for="'alg-'+${a.id}" th:text="${a.serialName}" class="form-check-label">Huevo</label>
           </div>
-        </div>        
+        </div>
+        <div class="mb-2">
+          <span class="fw-semibold d-block mb-2">Filtrar por categorías</span>
+          <div class="form-check" th:each="c : ${categorias}">
+            <input class="form-check-input"
+                   type="checkbox"
+                   th:id="'cat-'+${c.id}"
+                   th:value="${c.id}"
+                   name="categorias"/>
+            <label class="form-check-label"
+                   th:for="'cat-'+${c.id}"
+                   th:text="${c.serialName}">Vegano</label>
+          </div>
+        </div>      
       </form>
     </aside>
-    
     <!-- Botón para mostrar/ocultar filtros con mejor posicionamiento -->
-    <button th:if="${session.usuario != null}" id="toggleFiltros" class="btn btn-outline-secondary toggle-filtros-btn position-absolute" 
-            style="left: 280px; top: 10px; z-index: 1000; transition: left 0.3s ease;">
-      <i class="bi bi-chevron-left"></i>
+    <button th:if="${session.usuario != null}" id="toggleFiltros" class="btn btn-outline-secondary align-self-start mt-1 p-3">
+      <i class="bi bi-chevron-bar-left fs-5"></i>
     </button>
-
+    
     <!-- ▸ Zona de resultados / invitación a login -->
     <div class="flex-grow-1 d-flex flex-column bg-white" style="min-height: 100vh; padding: 20px;">
       <!-- Mensaje de inicio de sesión si no hay usuario -->
@@ -52,13 +62,13 @@
         </div>
         <h4 class="fw-semibold mt-3 mb-2">¿Quieres descubrir restaurantes cerca de ti?</h4>
         <p class="mb-4">Inicia sesión para ver tus opciones personalizadas</p>
-        <a th:href="@{/login}" class="btn btn-outline-info btn-lg px-4 text-nowrap">
+        <a th:href="@{/login}" class="btn btn-outline-info btn-lg px-4 text-nowrap" id="btnIniciarSesion">
           <i class="bi bi-box-arrow-in-right me-2"></i> Iniciar sesión
         </a>
       </div>
   
       <!-- Contenedor principal de restaurantes con grid explícito -->
-      <div th:if="${session.usuario != null}" class="container-fluid">
+      <div th:if="${session.usuario != null}" class="container-fluid" id="content-container">
         <!-- Spinner de carga -->
         <div id="spinnerCargando" class="d-flex flex-column align-items-center justify-content-center p-5">
           <div class="spinner-border text-primary" role="status" style="width: 5rem; height: 5rem;">
@@ -68,7 +78,7 @@
         </div>
         
         <!-- Grid de tarjetas de restaurantes -->
-        <div id="restaurant-cards" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        <div id="restaurant-cards" class="row row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-4">
           <!-- Las tarjetas de restaurantes se agregarán aquí dinámicamente -->
         </div>
       </div>      
@@ -138,110 +148,14 @@
     </div>
   </div>
 
-  <!-- JavaScript para manejar el panel de filtros y tarjetas de restaurantes -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Variables para el toggle del panel de filtros
-      const filtrosPanel = document.getElementById('filtros');
-      const toggleBtn = document.getElementById('toggleFiltros');
-      const toggleIcon = toggleBtn.querySelector('i');
-      let filtrosVisible = true;
-      
-      // Controlar la visibilidad del panel de filtros
-      toggleBtn.addEventListener('click', function() {
-        if (filtrosVisible) {
-          filtrosPanel.style.transform = 'translateX(-100%)';
-          toggleBtn.style.left = '0';
-          toggleIcon.classList.remove('bi-chevron-left');
-          toggleIcon.classList.add('bi-chevron-right');
-        } else {
-          filtrosPanel.style.transform = 'translateX(0)';
-          toggleBtn.style.left = '280px';
-          toggleIcon.classList.remove('bi-chevron-right');
-          toggleIcon.classList.add('bi-chevron-left');
-        }
-        filtrosVisible = !filtrosVisible;
-      });
-      
-      // Actualizar el label del radio de búsqueda
-      const radioRange = document.getElementById('radioRange');
-      const radioLabel = document.getElementById('radioLabel');
-      
-      if (radioRange) {
-        radioRange.addEventListener('input', function() {
-          radioLabel.textContent = this.value;
-        });
-      }
-      
-      // Función para crear tarjetas de restaurante
-      function createRestaurantCard(restaurant) {
-        const col = document.createElement('div');
-        col.className = 'col';
-        
-        const card = document.createElement('div');
-        card.className = 'card h-100 shadow-sm';
-        
-        const cardBody = document.createElement('div');
-        cardBody.className = 'card-body';
-        
-        const title = document.createElement('h5');
-        title.className = 'card-title';
-        title.textContent = restaurant.nombre;
-        
-        const location = document.createElement('p');
-        location.className = 'card-text text-muted small';
-        location.innerHTML = `<i class="bi bi-geo-alt"></i> ${restaurant.ciudad}`;
-        
-        const price = document.createElement('p');
-        price.className = 'card-text';
-        price.innerHTML = `<strong>Precio medio:</strong> ${restaurant.precioMedio}€`;
-        
-        const orderBtn = document.createElement('a');
-        orderBtn.href = `/restaurante/${restaurant.id}`;
-        orderBtn.className = 'btn btn-primary mt-2';
-        orderBtn.textContent = 'Ver menú';
-        
-        cardBody.appendChild(title);
-        cardBody.appendChild(location);
-        cardBody.appendChild(price);
-        cardBody.appendChild(orderBtn);
-        card.appendChild(cardBody);
-        col.appendChild(card);
-        
-        return col;
-      }
-      
-      // Ejemplo de cómo agregar restaurantes (para demostración)
-      // En una aplicación real, esto vendría de una llamada AJAX
-      function loadDemoRestaurants() {
-        const container = document.getElementById('restaurant-cards');
-        const spinner = document.getElementById('spinnerCargando');
-        
-        if (container && spinner) {
-          // Ocultar spinner
-          spinner.classList.add('d-none');
-          
-          // Datos de ejemplo (en la aplicación real vendrían del backend)
-          const demoRestaurants = [
-            { id: 1, nombre: 'Restaurante Alonso', ciudad: 'Zamora', precioMedio: 15 },
-            { id: 2, nombre: 'La Tapería', ciudad: 'Madrid', precioMedio: 22 },
-            { id: 3, nombre: 'Pizzería Roma', ciudad: 'Barcelona', precioMedio: 18 },
-            { id: 4, nombre: 'El Bodegón', ciudad: 'Sevilla', precioMedio: 25 },
-            { id: 5, nombre: 'Sabores de Asia', ciudad: 'Valencia', precioMedio: 20 },
-            { id: 6, nombre: 'El Rincón Vasco', ciudad: 'Bilbao', precioMedio: 30 }
-          ];
-          
-          // Crear y agregar tarjetas al contenedor
-          demoRestaurants.forEach(restaurant => {
-            const card = createRestaurantCard(restaurant);
-            container.appendChild(card);
-          });
-        }
-      }
-      
-      // En una aplicación real, aquí iría el código para obtener restaurantes del servidor
-      // Para esta demostración, cargamos los restaurantes de ejemplo después de un breve retraso
-      setTimeout(loadDemoRestaurants, 800);
-    });
-  </script>
+  <div th:if="${session.usuario != null}" class="offcanvas offcanvas-end" tabindex="-1" id="cestaOffcanvas" aria-labelledby="cestaOffcanvasLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="cestaOffcanvasLabel">Tu cesta</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+    </div>
+    <div class="offcanvas-body">
+      <!-- Aquí va el contenido de la cesta -->
+      <p>No hay productos en tu cesta.</p>
+    </div>
+  </div>  
 </div>

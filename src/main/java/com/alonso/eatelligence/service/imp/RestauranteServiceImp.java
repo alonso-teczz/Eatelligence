@@ -1,5 +1,6 @@
 package com.alonso.eatelligence.service.imp;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -13,19 +14,23 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.alonso.eatelligence.model.dto.CategoriaDTO;
 import com.alonso.eatelligence.model.dto.ClienteRegistroDTO;
 import com.alonso.eatelligence.model.dto.HorarioDTO;
 import com.alonso.eatelligence.model.dto.RestauranteRegistroDTO;
+import com.alonso.eatelligence.model.entity.Categoria;
 import com.alonso.eatelligence.model.entity.Direccion;
 import com.alonso.eatelligence.model.entity.Horario;
 import com.alonso.eatelligence.model.entity.NombreRol;
 import com.alonso.eatelligence.model.entity.Restaurante;
 import com.alonso.eatelligence.model.entity.Usuario;
 import com.alonso.eatelligence.model.projection.ResumenProjection;
+import com.alonso.eatelligence.repository.ICategoriaRepository;
 import com.alonso.eatelligence.repository.IRestauranteRepository;
 import com.alonso.eatelligence.service.IEntitableClient;
 import com.alonso.eatelligence.service.IRestauranteService;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -38,6 +43,9 @@ public class RestauranteServiceImp implements IRestauranteService, IEntitableCli
 
     @Autowired
     private RolServiceImp rolService;
+
+    @Autowired
+    private ICategoriaRepository categoriaRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -178,10 +186,27 @@ public class RestauranteServiceImp implements IRestauranteService, IEntitableCli
     public Page<ResumenProjection> getAllRestaurantsWithFilters(
         String nombre, Double min, Double max,
         double lat, double lon, Integer radio,
-        Set<Long> alergenos, Pageable pageable
+        Set<Long> alergenos, Set<Long> categorias, Pageable pageable
     ) {
         return restauranteRepository
-            .getAllRestaurantsWithFilters(nombre, min, max, lat, lon, radio, alergenos, pageable);
-    }    
-    
+            .getAllRestaurantsWithFilters(nombre, min, max, lat, lon, radio, alergenos, categorias, pageable);
+    }
+
+    @Override
+    @Transactional
+    public void actualizarCategorias(Restaurante restaurante, List<Long> categoriaIds) {
+        List<Categoria> categorias = this.categoriaRepository.findAllById(categoriaIds);
+        restaurante.setCategorias(new HashSet<>(categorias));
+        restauranteRepository.save(restaurante);
+    }
+
+    public List<CategoriaDTO> getCategoriasFromRestaurante(Long restauranteId) {
+        Restaurante restaurante = restauranteRepository.findById(restauranteId)
+            .orElseThrow(() -> new EntityNotFoundException("Restaurante no encontrado"));
+        
+        return restaurante.getCategorias().stream()
+            .map(cat -> new CategoriaDTO(cat.getId(), cat.getSerialName()))
+            .toList();
+    }
+   
 }

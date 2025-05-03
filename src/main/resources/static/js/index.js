@@ -17,6 +17,9 @@ async function estimarTiempos(lista) {
   document.querySelectorAll('.tiempo').forEach(async (el, i) => {
     const r = lista[i];
 
+    console.log(r);
+    
+
     try {
       const url = `https://api.geoapify.com/v1/routing?waypoints=${origen.lat},${origen.lon}|${r.latitud},${r.longitud}&mode=drive&apiKey=${apiKey}`;
       const res = await fetch(url);
@@ -29,7 +32,7 @@ async function estimarTiempos(lista) {
       el.classList.remove("spinner-border", "spinner-border-sm", "text-secondary");
       el.removeAttribute("role");
       el.removeAttribute("aria-hidden");
-      el.textContent = `${totalMin == minutosEntrega ? "No disponible" : totalMin + "min." }`;
+      el.textContent = `${totalMin == minutosEntrega ? "No disponible" : totalMin + " min." }`;
     } catch (err) {
       el.classList.remove("spinner-border", "spinner-border-sm", "text-secondary");
       el.textContent = '—';
@@ -46,7 +49,7 @@ async function cargarRestaurantes() {
     spinner?.classList.remove("d-none");
     cardsZone.querySelectorAll(".card").forEach(card => card.remove());
 
-    const form = document.getElementById('filtroForm');
+    const form = document.getElementById('filtrosForm');
     const data = new URLSearchParams(new FormData(form));
     const origen = await fetch(`/api/direction/${document.body.dataset.direccionId}`, {
       headers: { "X-Requested-With": "XMLHttpRequest" }
@@ -81,8 +84,8 @@ function toggleFiltrosPanel() {
   // Cambiar el texto del botón según la visibilidad del panel
   const isPanelVisible = !filtrosPanel.classList.contains('d-none');
   toggleBtn.innerHTML = isPanelVisible ? 
-    '<i class="bi bi-x-lg me-1"></i> Ocultar filtros' : 
-    '<i class="bi bi-funnel me-1"></i> Mostrar filtros';
+    '<i class="bi bi-chevron-bar-left fs-5"></i>' : 
+    '<i class="bi bi-chevron-bar-right fs-5"></i>';
   
   // Ajustar la grilla a 3 columnas con panel visible o 4 columnas con panel oculto
   if (isPanelVisible) {
@@ -97,7 +100,7 @@ function toggleFiltrosPanel() {
 // Corrección para la función setupFilters
 function setupFilters() {
   document.getElementById('radioRange')?.addEventListener('input', updateRadioLabel);
-  document.getElementById('filtroForm')?.addEventListener('change', cargarRestaurantes);
+  document.getElementById('filtrosForm')?.addEventListener('change', cargarRestaurantes);
   
   // Setup para el botón de toggle
   const toggleBtn = document.getElementById('toggleFiltros');
@@ -123,37 +126,73 @@ function setupFilters() {
 // Corrección para la función renderCards para mejorar la visualización de las cards
 function renderCards(lista) {
   const cardsZone = document.getElementById("restaurant-cards");
+
   if (!lista.length) {
-    cardsZone.innerHTML = '<p class="text-muted">No hay restaurantes cerca.</p>';
+    cardsZone.className = "d-flex flex-column justify-content-center align-items-center text-center";
+    cardsZone.style.minHeight = "300px";
+  
+    cardsZone.innerHTML = `
+      <i class="bi bi-emoji-frown fs-1 text-muted"></i>
+      <p class="text-muted fs-6" style="min-width:70%">
+        No se han encontrado restaurantes que cumplan con los filtros seleccionados.<br>
+        Prueba a ajustar el radio de búsqueda, eliminar algún alérgeno o ampliar las categorías.
+      </p>
+    `;
     return;
+  } else {
+    cardsZone.className = "row row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-4";
+    cardsZone.style.minHeight = "";
   }
 
   cardsZone.innerHTML = lista.map(r => `
-  <div class="col mb-4">
-    <div class="card h-100 rest" style="cursor:pointer" data-id="${r.id}">
-      <div class="card-body">
-        <h5 class="card-title">${r.nombreComercial}</h5>
-        <p class="card-text mb-1">
-          <i class="bi bi-geo-alt"></i>
-          ${r.ciudad}
-        </p>
-        <p class="card-text mb-1">
-          ${
-            r.importeMinimo != null
-              ? `Pedido mínimo: €${Number.isInteger(r.importeMinimo) ? r.importeMinimo : r.importeMinimo.toFixed(2)}`
-              : 'Sin pedido mínimo'
-          }
-        </p>
-        <p class="card-text mb-1 text-muted">
-          Tiempo de entrega estimado: <span class="tiempo spinner-border spinner-border-sm text-secondary"
-          data-lat="${r.latitud}" data-lon="${r.longitud}"
-          role="status" aria-hidden="true"></span>
-        </p>
-      </div>
-    </div>
-  </div>`).join('');
+    <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-4 mb-4">
+    <a href="/restaurant/${r.id}" class="text-decoration-none text-reset">
+        <div class="card h-100 rest" style="cursor:pointer" data-id="${r.id}">
+          <div class="card-body">
+            <div class="placeholder-img bg-light mb-3 rounded" style="width: 100%; aspect-ratio: 4.5 / 1.8;"></div>
+            <h5 class="card-title">${r.nombreComercial}</h5>
+            <p class="card-text mb-1">
+              <i class="bi bi-geo-alt me-1"></i>
+              ${r.ciudad}
+            </p>
+            <p class="card-text mb-1">
+              ${
+                r.importeMinimo != null
+                  ? `Pedido mínimo: ${Number.isInteger(r.importeMinimo) ? r.importeMinimo : r.importeMinimo.toFixed(2)}€`
+                  : 'Sin pedido mínimo'
+              }
+            </p>
+            <p class="card-text mb-1 text-muted">
+              Tiempo de entrega estimado: <span class="tiempo spinner-border spinner-border-sm text-secondary"
+              data-lat="${r.latitud}" data-lon="${r.longitud}"
+              role="status" aria-hidden="true"></span>
+            </p>
+            <p class="card-text text-muted small mb-0">
+              <i class="bi bi-tags fs-6 me-1"></i>
+              <span id="cat-rest-${r.id}" class="text-muted fst-italic">Cargando categorías...</span>
+            </p>
+          </div>
+        </div>
+      </a>
+    </div>`).join('');
 
   estimarTiempos(lista);
+
+  lista.forEach(r => {
+    fetch(`/api/restaurant/${r.id}/categories`, { headers: { "X-Requested-With": "XMLHttpRequest" }})
+      .then(res => res.json())
+      .then(categorias => {
+        const span = document.getElementById(`cat-rest-${r.id}`);
+        if (span && categorias.length > 0) {
+          span.textContent = categorias.map(c => c.serialName).join(" • ");
+        } else if (span) {
+          span.textContent = "Sin categorías";
+        }
+      })
+      .catch(err => {
+        console.error("Error al cargar categorías:", err);
+      });
+  });
 }
 
 // --- Main

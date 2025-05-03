@@ -33,11 +33,11 @@ public class MenuDataLoader implements CommandLineRunner {
     private void cargarOpciones() {
         List<OpcionMenu> opciones = List.of(
             // --- Mi Cuenta ---
-            crearOpcion("Ajustes",             "/settings",         "Mi Cuenta",      1),
+            // crearOpcion("Ajustes",             "/settings",         "Mi Cuenta",      1),
             crearOpcion("Cerrar sesión",       "/logout",           "Mi Cuenta",      2),
-            crearOpcion("Historial de pedidos","/order-history",        "Mi Cuenta",      3),
-            crearOpcion("Pedidos",             "/orders",          "Mi Cuenta",      4),
-            crearOpcion("Rutas",               "/routes",            "Mi Cuenta",      5),
+            // crearOpcion("Historial de pedidos","/order-history",        "Mi Cuenta",      3),
+            // crearOpcion("Pedidos",             "/orders",          "Mi Cuenta",      4),
+            // crearOpcion("Rutas",               "/routes",            "Mi Cuenta",      5),
             crearOpcion("Administración",    "/admin",  "Mi Cuenta", 6),
         
             // --- Administración ---
@@ -61,10 +61,10 @@ public class MenuDataLoader implements CommandLineRunner {
             );
         }
 
-        asignarOpciones(NombreRol.ADMIN, "/settings", "/logout", "/order-history", "/admin", "/admin/dashboard", "/admin/plates", "/admin/cooks", "/admin/deliverymen", "/admin/schedule");
-        asignarOpciones(NombreRol.REPARTIDOR, "/settings", "/logout", "/order-history", "/routes");
-        asignarOpciones(NombreRol.COCINERO, "/settings", "/logout", "/order-history", "/orders");
-        asignarOpciones(NombreRol.CLIENTE, "/settings", "/logout", "/order-history");
+        asignarOpciones(NombreRol.ADMIN, "/logout", "/admin", "/admin/dashboard", "/admin/plates", "/admin/cooks", "/admin/deliverymen", "/admin/schedule");
+        asignarOpciones(NombreRol.REPARTIDOR, "/logout");
+        asignarOpciones(NombreRol.COCINERO, "/logout");
+        asignarOpciones(NombreRol.CLIENTE, "/logout");
     }
 
     private OpcionMenu crearOpcion(String nombre, String url, String seccion, int orden) {

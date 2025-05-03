@@ -1,18 +1,30 @@
 <header th:fragment="header">
-  <nav class="navbar navbar-expand-lg navbar-light header-nav">
+  <nav class="d-flex navbar navbar-expand-lg navbar-light header-nav">
     <a class="navbar-brand" th:href="@{/}" tabindex="-1">
       <img th:src="@{/img/logo.png}" alt="Logo de Eatelligence" height="80">
     </a>
 
-    <button class="navbar-toggler border-0 me-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+    <div class="ms-auto">
+      <div th:if="${session.usuario != null}" class="cesta-container mx-2 d-flex align-items-center justify-content-center position-relative flex-shrink-0">
+        <i class="bi bi-basket fs-4"></i>
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
+          0
+          <span class="visually-hidden">artículos en la cesta</span>
+        </span>
+      </div>
+    </div>
+    
+    <button class="navbar-toggler border-0 me-2 justify-self-end" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
-
-    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-      <div th:if="${session.usuario != null}" class="puntos-container">
-        <img th:src="@{/img/coin.png}" alt="Puntos" height="41" width="61" class="me-1">
-        <span th:text="${session.usuario.puntos}" class="ms-1 fs-4 fw-bold"></span>
-      </div>
+    
+    <div class="collapse navbar-collapse justify-content-end align-items-center" id="navbarNav">
+      <div class="d-flex align-items-center mt-1">
+        <div th:if="${session.usuario != null}" class="puntos-container flex-shrink-0">
+          <img th:src="@{/img/coin.png}" alt="Puntos" height="41" width="61" class="me-1">
+          <span th:text="${session.usuario.puntos}" class="ms-1 fs-4 fw-bold"></span>
+        </div>
+      </div>      
       <ul class="navbar-nav me-3">
         <li class="nav-item dropdown" th:if="${session.usuario != null}">
           <a class="nav-link dropdown-toggle d-flex align-items-center rounded fs-5 profile-toggle"
@@ -45,7 +57,7 @@
                              ${#strings.substring(opcion.url, 1)} + '-link'">
                              <i th:class="${'bi me-2 ' + 
                              (opcion.url == '/settings' ? 'bi-gear' : 
-                              opcion.url == '/order-history' ? 'bi-clock-history' : 
+                              opcion.url == '/order-history' ? 'bi-clock-history' :
                               opcion.url == '/admin' ? 'bi-sliders' : 
                               opcion.url == '/routes' ? 'bi-truck' : 
                               opcion.url == '/orders' ? 'bi-receipt' : 
@@ -63,11 +75,6 @@
             <i class="bi bi-person-plus"></i> Registrarse
           </a>
         </li>
-        <!-- <li class="nav-item" th:unless="${session.usuario != null}">
-          <a class="nav-link ps-1 fs-5 d-flex align-items-center gap-2" th:href="@{/login}">
-            <i class="bi bi-box-arrow-in-right"></i> Iniciar sesión
-          </a>
-        </li> -->
       </ul>
     </div>
   </nav>

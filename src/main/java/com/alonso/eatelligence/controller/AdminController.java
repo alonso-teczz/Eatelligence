@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -42,6 +44,8 @@ import jakarta.validation.Valid;
 @RequestMapping("/admin")
 public class AdminController {
 
+    // private static Logger logger = LogManager.getLogger(AdminController.class);
+
     @Autowired
     private IAlergenoService alergenoService;
 
@@ -63,7 +67,6 @@ public class AdminController {
     @Autowired
     private ICategoriaService categoriaService;
 
-
     @ModelAttribute
     public void addDashboardStats(
         Model model,
@@ -84,6 +87,7 @@ public class AdminController {
         model.addAttribute("totalRepartidores", totalRepartidores);
         model.addAttribute("pedidosHoy", pedidosHoy);
         model.addAttribute("categoriasDisponibles", this.categoriaService.getAll());
+        // logger.warn(this.categoriaService.getAll());
     }
 
     @GetMapping({"", "/", "/dashboard"})

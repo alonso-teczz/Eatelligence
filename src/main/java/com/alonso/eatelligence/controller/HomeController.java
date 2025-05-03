@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import com.alonso.eatelligence.model.entity.Usuario;
 import com.alonso.eatelligence.model.projection.ResumenProjection;
 import com.alonso.eatelligence.service.IAlergenoService;
+import com.alonso.eatelligence.service.ICategoriaService;
 import com.alonso.eatelligence.service.IDireccionService;
 import com.alonso.eatelligence.service.IRestauranteService;
 
@@ -31,6 +32,9 @@ public class HomeController {
     @Autowired
     private IAlergenoService alergenoService;
 
+    @Autowired
+    private ICategoriaService categoriaService;
+
     @GetMapping("/")
     public String goIndex(
         @RequestParam(required = false) String nombre,
@@ -42,7 +46,8 @@ public class HomeController {
         @RequestParam(required = false) Set<Long> excluirAlergenos,
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size,
-        @SessionAttribute(name = "usuario", required = false) Usuario usuario,
+        @RequestParam(required = false) Set<Long> categorias,
+        @SessionAttribute(required = false) Usuario usuario,
         Model model
     ) {
         
@@ -50,13 +55,14 @@ public class HomeController {
             Pageable pageable = PageRequest.of(page, size);
         
             Page<ResumenProjection> resultados = restauranteService.getAllRestaurantsWithFilters(
-                nombre, min, max, lat, lon, radio, excluirAlergenos, pageable
+                nombre, min, max, lat, lon, radio, excluirAlergenos, categorias, pageable
             );
         
-            model.addAttribute("alergenos", alergenoService.getAll());
+            model.addAttribute("alergenos", this.alergenoService.getAll());
+            model.addAttribute("categorias", this.categoriaService.getAll());
             model.addAttribute("restaurantes", resultados.getContent());
             model.addAttribute("pagina", resultados);
-            model.addAttribute("direcciones", direccionService.getDireccionesUsuario(usuario.getId()));
+            model.addAttribute("direcciones", this.direccionService.getDireccionesUsuario(usuario.getId()));
         }
     
         return "index";

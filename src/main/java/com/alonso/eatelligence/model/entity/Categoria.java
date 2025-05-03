@@ -37,9 +37,9 @@ public class Categoria {
         VEGETARIANO("Vegetariano"),
         MEDITERRANEO("Mediterráneo"),
         AMERICANO("Americano"), 
-        ESPAÑOL("Español"),
+        ESPANOL("Español"),
         ARABE("Árabe"),
-        TURCO("Turca"),
+        TURCO("Turco"),
         MARISQUERIA("Marisquería"),
         BRASERIA("Brasería");
     
@@ -48,9 +48,13 @@ public class Categoria {
         NombreCategoria(String serialName) {
             this.serialName = serialName;
         }
-    
+
         public String getSerialName() {
             return serialName;
         }
+    }
+
+    public String getSerialName() {
+        return this.nombre.getSerialName();
     }
 }
