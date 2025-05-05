@@ -6,8 +6,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -36,7 +34,7 @@ import jakarta.transaction.Transactional;
 @Service
 public class RestauranteServiceImp implements IRestauranteService, IEntitableClient {
 
-    private static Logger logger = LogManager.getLogger(RestauranteServiceImp.class);
+    // private static Logger logger = LogManager.getLogger(RestauranteServiceImp.class);
 
     @Autowired
     private IRestauranteRepository restauranteRepository;
@@ -169,7 +167,7 @@ public class RestauranteServiceImp implements IRestauranteService, IEntitableCli
             return;
         });
 
-        logger.warn("Se intentó actualizar el horario de un restaurante no encontrado");
+        // logger.warn("Se intentó actualizar el horario de un restaurante no encontrado");
         return;
     }
 

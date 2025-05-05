@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     switchRest.addEventListener('change', async () => {
       const activo = switchRest.checked;
       try {
-        const res = await fetch('/api/restaurant/active', {
+        const res = await fetch('/api/restaurants/active', {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
           body: JSON.stringify({ activo })
@@ -196,7 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
     input.classList.remove('is-invalid');
 
     try {
-      const res = await fetch('/api/restaurant/preptime', {
+      const res = await fetch('/api/restaurants/preptime', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
         body: JSON.stringify({ tiempoPreparacion: val })
@@ -248,7 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
       cancelButtonText: 'Cancelar'
     }).then(async res => {
       if (!res.isConfirmed) return;
-      const response = await fetch('/api/restaurant/amount', {
+      const response = await fetch('/api/restaurants/amount', {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -320,7 +320,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /* --- Llamada al backend ------------------------------------------------ */
     try {
-      const res = await fetch('/api/restaurant/amount', {
+      const res = await fetch('/api/restaurants/amount', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
         body: JSON.stringify({ importeMinimo: val })

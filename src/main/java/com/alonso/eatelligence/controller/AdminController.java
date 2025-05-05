@@ -5,8 +5,6 @@ import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Optional;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,7 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.alonso.eatelligence.email.EmailService;
 import com.alonso.eatelligence.model.dto.EmpleadoDTO;
-import com.alonso.eatelligence.model.dto.PlatoDTO;
+import com.alonso.eatelligence.model.dto.AltaPlatoDTO;
 import com.alonso.eatelligence.model.entity.NombreRol;
 import com.alonso.eatelligence.model.entity.RecruitmentToken;
 import com.alonso.eatelligence.model.entity.Restaurante;
@@ -96,8 +94,8 @@ public class AdminController {
     }
 
     @ModelAttribute("nuevoPlato")
-    public PlatoDTO registroPlato() {
-        return new PlatoDTO();
+    public AltaPlatoDTO registroPlato() {
+        return new AltaPlatoDTO();
     }
 
     @GetMapping("/plates")
@@ -110,7 +108,7 @@ public class AdminController {
     @PostMapping("/plates/add")
     public String guardarPlato(
         @SessionAttribute("restaurante") Restaurante restaurante,
-        @Valid @ModelAttribute("nuevoPlato") PlatoDTO nuevoPlato,
+        @Valid @ModelAttribute("nuevoPlato") AltaPlatoDTO nuevoPlato,
         BindingResult result,
         Model model
     ) {

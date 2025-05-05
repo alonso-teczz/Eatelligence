@@ -2,6 +2,7 @@ package com.alonso.eatelligence.utils;
 
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -47,17 +48,42 @@ public class ValidationUtils {
             || Enum.class.isAssignableFrom(type);
     }
 
-    public static Optional<FieldError> getFirstOrderedError(List<FieldError> errors, List<String> orderedFieldPaths) {
+    /**
+     * Devuelve, en el orden indicado, el primer error.
+     * 1) Errores globales (ObjectError) antes que FieldError.
+     * 2) Para FieldError se respeta el orden de los paths indicados.
+     * 3) A igualdad, se usa el orden de la anotación.
+     */
+    public static Optional<ObjectError> getFirstOrderedError(
+        List<ObjectError> errors,
+        List<String> orderedFieldPaths
+    ) {
         return errors.stream()
-            .sorted(Comparator
-                .comparingInt((FieldError fe) -> orderedFieldPaths.indexOf(fe.getField()))
-                .thenComparingInt(fe -> getAnnotationOrder(fe.getCode()))
-            ).findFirst();
+            .sorted(
+                Comparator
+                    .comparingInt((ObjectError oe) -> oe instanceof FieldError ? 1 : 0)
+                    .thenComparingInt(oe -> {
+                        if (oe instanceof FieldError fe) {
+                            return orderedFieldPaths.indexOf(fe.getField());
+                        }
+                        return -1;
+                    })
+                    .thenComparingInt(oe -> getAnnotationOrder(oe.getCode()))
+            )
+            .findFirst();
     }
 
-    public static Optional<FieldError> getFirstOrderedErrorFromBindingResult(BindingResult result, Class<?> dtoClass) {
+    /**
+     * Devuelve el primer error del BindingResult (global o de campo) respetando
+     * las prioridades definidas.
+     */
+    public static Optional<ObjectError> getFirstOrderedErrorFromBindingResult(
+        BindingResult result,
+        Class<?> dtoClass
+    ) {
         List<String> orderedFieldPaths = getFieldPathsInOrder(dtoClass);
-        return getFirstOrderedError(result.getFieldErrors(), orderedFieldPaths);
+        List<ObjectError> allErrors = new ArrayList<>(result.getAllErrors());
+        return getFirstOrderedError(allErrors, orderedFieldPaths);
     }
 
     private static int getAnnotationOrder(String code) {

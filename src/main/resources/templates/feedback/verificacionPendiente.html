@@ -55,7 +55,7 @@
           </button>
 
           <button type="button" class="btn btn-outline-primary btn-lg" id="btn-reenviar-propietario"
-                th:if="${tipo == 'RESTAURANTE' and !verificadoPropietario and tokenPropietario?.token != null}"
+                th:if="${tipo == 'RESTAURANTE' and !verificadoPropietario and tokenPropietario?.token == null}"
                 th:attr="data-token=${tokenPropietario.token}">
                 <i class="bi bi-envelope-fill me-1"></i> Reenviar verificación del propietario
             </button>  

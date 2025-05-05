@@ -29,7 +29,7 @@ public class DireccionController {
         Direccion direccion = direccionService.getById(direccionId).orElse(null);
 
         if (direccion == null) {
-            ra.addFlashAttribute("errorDireccion", "No se encontró la dirección seleccionada.");
+            ra.addFlashAttribute("errorDireccion", "Debes seleccionar una dirección");
         }
 
         model.addAttribute("direccionEnvioId", direccionId);

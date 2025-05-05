@@ -10,7 +10,7 @@ async function estimarTiempos(lista) {
   }).then(res => res.json())
     .then(data => data.apiKey);
 
-  const origen = await fetch(`/api/direction/${document.body.dataset.direccionId}`, {
+  const origen = await fetch(`/api/directions/${document.body.dataset.direccionId}`, {
     headers: { "X-Requested-With": "XMLHttpRequest" }
   }).then(res => res.json());
 
@@ -51,13 +51,13 @@ async function cargarRestaurantes() {
 
     const form = document.getElementById('filtrosForm');
     const data = new URLSearchParams(new FormData(form));
-    const origen = await fetch(`/api/direction/${document.body.dataset.direccionId}`, {
+    const origen = await fetch(`/api/directions/${document.body.dataset.direccionId}`, {
       headers: { "X-Requested-With": "XMLHttpRequest" }
     }).then(res => res.json());
     data.set("lat", origen.lat || "");
     data.set("lon", origen.lon || "");
 
-    const res = await fetch(`/api/restaurant?${data.toString()}`, {
+    const res = await fetch(`/api/restaurants?${data.toString()}`, {
       headers: { "X-Requested-With": "XMLHttpRequest" }
     });
 
@@ -146,7 +146,7 @@ function renderCards(lista) {
 
   cardsZone.innerHTML = lista.map(r => `
     <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-4 mb-4">
-    <a href="/restaurant/${r.id}" class="text-decoration-none text-reset">
+    <a href="/restaurants/${r.id}" class="text-decoration-none text-reset">
         <div class="card h-100 rest" style="cursor:pointer" data-id="${r.id}">
           <div class="card-body">
             <div class="placeholder-img bg-light mb-3 rounded" style="width: 100%; aspect-ratio: 4.5 / 1.8;"></div>
@@ -179,7 +179,7 @@ function renderCards(lista) {
   estimarTiempos(lista);
 
   lista.forEach(r => {
-    fetch(`/api/restaurant/${r.id}/categories`, { headers: { "X-Requested-With": "XMLHttpRequest" }})
+    fetch(`/api/restaurants/${r.id}/categories`, { headers: { "X-Requested-With": "XMLHttpRequest" }})
       .then(res => res.json())
       .then(categorias => {
         const span = document.getElementById(`cat-rest-${r.id}`);
@@ -197,6 +197,8 @@ function renderCards(lista) {
 
 // --- Main
 document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    .forEach(el => new bootstrap.Tooltip(el));
   setupFilters();
 
   const modalEl = document.getElementById('direccionModal');

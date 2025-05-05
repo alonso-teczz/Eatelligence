@@ -30,45 +30,51 @@
                     <!-- Métricas clave -->
                     <div class="row gx-3 gy-3">
                         <div class="col-lg-3 col-md-6">
-                            <div class="card bg-success text-white h-100">
-                                <div class="card-body d-flex align-items-center">
-                                    <div class="me-3 display-6">
-                                        <i class="fas fa-utensils"></i>
-                                    </div>
-                                    <div>
-                                        <div>Platos en tu menú</div>
-                                        <h3 class="mb-0" th:text="${totalPlatos}">0</h3>
+                            <a th:href="@{/admin/plates}" class="text-decoration-none d-block">
+                                <div class="card bg-success text-white h-100">
+                                    <div class="card-body d-flex align-items-center">
+                                        <div class="me-3 display-6">
+                                            <i class="fas fa-utensils"></i>
+                                        </div>
+                                        <div>
+                                            <div>Platos en tu menú</div>
+                                            <h3 class="mb-0" th:text="${totalPlatos}">0</h3>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
 
                         <div class="col-lg-3 col-md-6">
-                            <div class="card bg-danger text-white h-100">
-                                <div class="card-body d-flex align-items-center">
-                                    <div class="me-3 display-6">
-                                        <i class="fas fa-concierge-bell"></i>
-                                    </div>
-                                    <div>
-                                        <div>Cocineros</div>
-                                        <h3 class="mb-0" th:text="${totalCocineros}">0</h3>
+                            <a th:href="@{/admin/cooks}" class="text-decoration-none d-block">
+                                <div class="card bg-danger text-white h-100">
+                                    <div class="card-body d-flex align-items-center">
+                                        <div class="me-3 display-6">
+                                            <i class="fas fa-concierge-bell"></i>
+                                        </div>
+                                        <div>
+                                            <div>Cocineros</div>
+                                            <h3 class="mb-0" th:text="${totalCocineros}">0</h3>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
 
                         <div class="col-lg-3 col-md-6">
-                            <div class="card bg-warning text-white h-100">
-                                <div class="card-body d-flex align-items-center">
-                                    <div class="me-3 display-6">
-                                        <i class="fas fa-motorcycle"></i>
-                                    </div>
-                                    <div>
-                                        <div>Repartidores</div>
-                                        <h3 class="mb-0" th:text="${totalRepartidores}">0</h3>
+                            <a th:href="@{/admin/cooks}" class="text-decoration-none d-block">
+                                <div class="card bg-warning text-white h-100">
+                                    <div class="card-body d-flex align-items-center">
+                                        <div class="me-3 display-6">
+                                            <i class="fas fa-motorcycle"></i>
+                                        </div>
+                                        <div>
+                                            <div>Repartidores</div>
+                                            <h3 class="mb-0" th:text="${totalRepartidores}">0</h3>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
 
                         <div class="col-lg-3 col-md-6">
@@ -79,9 +85,7 @@
                                     </div>
                                     <div>
                                         <div>Pedidos de hoy</div>
-                                        <h3 class="mb-0" id="pedidosHoy" th:text="${pedidosHoy}">
-                                            0
-                                        </h3>
+                                        <h3 class="mb-0" id="pedidosHoy" th:text="${pedidosHoy}">0</h3>
                                     </div>
                                 </div>
                             </div>
@@ -165,13 +169,15 @@
                                         </p>
                                         <p class="form-text text-muted small mb-2" id="avisoTiempoText">
                                             <i class="bi bi-info-circle me-1"></i>
-                                            Este tiempo se sumará al cálculo automático de tiempo de entrega estimado del cliente.
+                                            Este tiempo se sumará al cálculo automático de tiempo de entrega estimado
+                                            del cliente.
                                         </p>
                                     </div>
                                     <p class="card-text fst-italic"
                                         th:if="${session.restaurante.tiempoPreparacionEstimado == null}">
                                         <i class="bi bi-exclamation-triangle-fill fs-5 text-warning me-2"></i>
-                                        Si no fijas un tiempo estimado de preparación, el tiempo de entrega estimado no podrá ser calculado,
+                                        Si no fijas un tiempo estimado de preparación, el tiempo de entrega estimado no
+                                        podrá ser calculado,
                                         por lo que aparecerá como “<b>No disponible</b>” para los usuarios.
                                     </p>
                                     <div class="text-center">
@@ -208,8 +214,7 @@
                                     <div id="listaCategorias">
                                         <span th:each="c : ${session.restaurante.categorias}"
                                             th:class="'badge categoria-' + ${#strings.toLowerCase(c.nombre.name()).replaceAll('_','-')} + ' me-1 mb-1'"
-                                            th:text="${c.serialName}"
-                                            th:attr="data-id=${c.id}">Vegano</span>
+                                            th:text="${c.serialName}" th:attr="data-id=${c.id}">Vegano</span>
                                     </div>
                                 </div>
                             </div>
@@ -446,4 +451,5 @@
     <script src="/js/admin/dashboard.js"></script>
     <script src="/js/admin/categorias.js"></script>
 </body>
+
 </html>

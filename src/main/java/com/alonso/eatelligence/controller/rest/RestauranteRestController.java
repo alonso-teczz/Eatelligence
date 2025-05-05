@@ -31,7 +31,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/restaurant")
+@RequestMapping("/api/restaurants")
 public class RestauranteRestController {
 
     @Autowired
@@ -54,7 +54,7 @@ public class RestauranteRestController {
     }
     
     /**
-     * GET  /api/restaurant/schedule
+     * GET  /api/restaurants/schedule
      * Ya no usamos @SessionAttribute("restaurante") Restaurante,
      * sino solo el ID en sesión para evitar entidades detached.
      */
@@ -93,7 +93,7 @@ public class RestauranteRestController {
     }
 
     /**
-     * PUT /api/restaurant/schedule
+     * PUT /api/restaurants/schedule
      * Actualiza los horarios recibiendo el mismo ID en sesión.
      */
     @PutMapping("/schedule")

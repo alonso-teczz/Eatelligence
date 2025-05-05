@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let diaEdit = null;    // Día que se está editando en el modal
 
     /* ──────────── Carga inicial ──────────── */
-    fetch('/api/restaurant/schedule', { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+    fetch('/api/restaurants/schedule', { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
         .then(r => r.json())
         .then(({ data }) => {
             data.forEach(h => horarios[h.dia] = { apertura: h.apertura, cierre: h.cierre });
@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const payload = EN.filter(d => horarios[d])
             .map(d => ({ dia: d, ...horarios[d] }));
 
-        fetch('/api/restaurant/schedule', {
+        fetch('/api/restaurants/schedule', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

@@ -147,15 +147,5 @@
       </div>
     </div>
   </div>
-
-  <div th:if="${session.usuario != null}" class="offcanvas offcanvas-end" tabindex="-1" id="cestaOffcanvas" aria-labelledby="cestaOffcanvasLabel">
-    <div class="offcanvas-header">
-      <h5 class="offcanvas-title" id="cestaOffcanvasLabel">Tu cesta</h5>
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
-    </div>
-    <div class="offcanvas-body">
-      <!-- Aquí va el contenido de la cesta -->
-      <p>No hay productos en tu cesta.</p>
-    </div>
-  </div>  
+  <div th:replace="~{fragments/home/cart :: cart}"></div>  
 </div>

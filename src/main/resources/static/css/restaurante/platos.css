@@ -1,0 +1,88 @@
+:root {
+    --color-principal: #abc294;
+    --color-principal-light: #d8e8d0;
+    --color-secundario: #1d6448;
+    --gris-claro: #f8f9fa;
+    --gris-intermedio: #6c757d;
+    --sombra: 0 0.5rem 1rem rgba(0, 0, 0, .08);
+    --radio: 1rem;
+    --trans: .25s ease;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--gris-claro);
+    color: #212529;
+}
+
+.rest-card {
+    border: 1px solid rgba(0, 0, 0, .05);
+    border-radius: var(--radio);
+    transition: transform var(--trans), box-shadow var(--trans);
+}
+
+.rest-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--sombra);
+}
+
+.rest-card .card-title {
+    color: var(--color-secundario);
+}
+
+.rest-card .card-text {
+    line-height: 1.4;
+}
+
+.price-pill {
+    font-weight: 600;
+    background: var(--color-principal-light);
+    color: var(--color-secundario);
+    padding: .25rem .6rem;
+    border-radius: .5rem;
+    font-size: .9rem;
+}
+
+.btn-add {
+    border: 2px solid var(--color-principal);
+    color: var(--color-secundario);
+    font-weight: 600;
+    transition: all var(--trans);
+    min-height: 36px;
+}
+
+.btn-add:hover,
+.btn-add:focus {
+    background: var(--color-principal);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.badge-alergeno {
+    font-size: .75rem;
+    font-weight: 500;
+    background: var(--gris-intermedio);
+    color: #fff;
+    border-radius: .35rem;
+    padding: .15rem .45rem;
+    margin: .1rem .15rem .1rem 0;
+}
+
+@media(max-width:576px) {
+    .price-pill {
+        display: block;
+        margin-top: .25rem;
+    }
+
+    .btn-add {
+        font-size: .9rem;
+    }
+}

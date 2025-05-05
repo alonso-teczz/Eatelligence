@@ -357,3 +357,25 @@ body {
     margin-left: 15px;
   }
 }
+
+/* Offcanvas – la body ya hace scroll con overflow-auto */
+.offcanvas-body {
+  max-height: calc(100vh - 140px); /* header  + footer aproximados */
+}
+
+.accordion-button:not(.collapsed) {
+  background:#e9f4e3;          /* suave verde a juego */
+  color:#2f4f2f;
+}
+
+.accordion-item {
+  border-radius: .6rem;
+  overflow: hidden;            /* esquinas redondeadas completas */
+  margin-bottom: .6rem;
+  border:1px solid rgba(0,0,0,.05);
+}
+
+.list-group-item {
+  border: 0;
+  padding: .5rem .25rem;
+}

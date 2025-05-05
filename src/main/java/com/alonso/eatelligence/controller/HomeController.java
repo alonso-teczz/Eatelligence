@@ -10,9 +10,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.alonso.eatelligence.model.cart.Cart;
 import com.alonso.eatelligence.model.entity.Usuario;
 import com.alonso.eatelligence.model.projection.ResumenProjection;
 import com.alonso.eatelligence.service.IAlergenoService;
@@ -21,6 +24,7 @@ import com.alonso.eatelligence.service.IDireccionService;
 import com.alonso.eatelligence.service.IRestauranteService;
 
 @Controller
+@SessionAttributes("cart")
 public class HomeController {
 
     @Autowired
@@ -34,6 +38,11 @@ public class HomeController {
 
     @Autowired
     private ICategoriaService categoriaService;
+
+    @ModelAttribute("cart")
+    public Cart cart() {
+        return new Cart();
+    }
 
     @GetMapping("/")
     public String goIndex(
@@ -68,5 +77,9 @@ public class HomeController {
         return "index";
     }
     
+    @GetMapping("/denied-access")
+    public String mostrarAccesoDenegado() {
+        return "error/accesoDenegado";
+    }
 
 }

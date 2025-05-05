@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.alonso.eatelligence.model.dto.PlatoDTO;
+import com.alonso.eatelligence.model.dto.AltaPlatoDTO;
 import com.alonso.eatelligence.model.entity.Plato;
 import com.alonso.eatelligence.service.IPlatoService;
 import com.alonso.eatelligence.utils.ValidationUtils;
@@ -30,11 +30,11 @@ public class PlatoRestController {
     @PutMapping("/{id}")
     public ResponseEntity<?> updatePlato(
         @PathVariable Long id,
-        @Valid @RequestBody PlatoDTO platoActualizado,
+        @Valid @RequestBody AltaPlatoDTO platoActualizado,
         BindingResult result
     ) {
         if (result.hasErrors()) {
-            return ResponseEntity.badRequest().body(ValidationUtils.getFirstOrderedErrorFromBindingResult(result, PlatoDTO.class).get().getDefaultMessage());
+            return ResponseEntity.badRequest().body(ValidationUtils.getFirstOrderedErrorFromBindingResult(result, AltaPlatoDTO.class).get().getDefaultMessage());
         }
         
         return ResponseEntity.ok(this.platoService.updateFromDTO(id, platoActualizado));
@@ -47,7 +47,7 @@ public class PlatoRestController {
     ) {
         if (json.has("activo")) {
             boolean activo = json.get("activo").asBoolean();
-            Plato p = this.platoService.findyById(id);
+            Plato p = this.platoService.findById(id).orElseThrow(() -> new RuntimeException("Plato no encontrado"));
             p.setActivo(activo);
             this.platoService.save(p);
         }

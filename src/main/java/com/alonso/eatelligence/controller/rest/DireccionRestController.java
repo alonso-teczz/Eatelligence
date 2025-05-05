@@ -14,7 +14,7 @@ import com.alonso.eatelligence.service.IDireccionService;
 
 
 @RestController
-@RequestMapping("/api/direction")
+@RequestMapping("/api/directions")
 public class DireccionRestController {
 
     @Autowired

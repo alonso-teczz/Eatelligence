@@ -3,6 +3,8 @@ package com.alonso.eatelligence.controller;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -33,6 +35,8 @@ import jakarta.validation.Valid;
 
 @Controller
 public class UsuarioController {
+
+    private static Logger logger = LogManager.getLogger(UsuarioController.class);
 
     @Autowired
     private UsuarioServiceImp usuarioService;
@@ -81,8 +85,12 @@ public class UsuarioController {
     
         if (result.hasErrors()) {
             ValidationUtils.getFirstOrderedErrorFromBindingResult(result, formCliente.getClass())
-                .ifPresent(error -> model.addAttribute("globalError", error.getDefaultMessage()));
-
+                .ifPresentOrElse(error -> {
+                    model.addAttribute("globalError", error.getDefaultMessage());
+                    logger.warn("Error en el formulario de registro", error.getDefaultMessage());
+                }, () -> {
+                    logger.warn("No se ha detectado ningún error");
+                });
             return "register";
         }
     
@@ -103,6 +111,7 @@ public class UsuarioController {
                 )
             );
         } catch (UnsupportedEncodingException | MessagingException e) {
+            logger.warn("Error al enviar el correo");
             correoUsuarioFallido = true;
         }
         
@@ -111,7 +120,7 @@ public class UsuarioController {
         ra.addFlashAttribute("email", u.getEmail());
         ra.addFlashAttribute("correoUsuarioFallido", correoUsuarioFallido);
 
-        return "redirect:/registro-exitoso";
+        return "redirect:/successful-register";
     }    
 
     @PostMapping("/validate-rest-reg")
@@ -178,7 +187,7 @@ public class UsuarioController {
         ra.addFlashAttribute("correoUsuarioFallido", correoUsuarioFallido);
         ra.addFlashAttribute("correoRestFallido", correoRestauranteFallido);
     
-        return "redirect:/registro-exitoso";
+        return "redirect:/successful-register";
     }
 
     @GetMapping("/successful-register")
@@ -190,11 +199,6 @@ public class UsuarioController {
         }
 
         return "feedback/registroExitoso";
-    }
-
-    @GetMapping("/denied-access")
-    public String mostrarAccesoDenegado() {
-        return "error/accesoDenegado";
     }
     
 }

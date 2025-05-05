@@ -49,7 +49,7 @@ public class SecurityConfig {
                     "/set-shipping-address"
                 )
                 .permitAll()
-                .requestMatchers("/settings", "/restaurant/**").authenticated()
+                .requestMatchers("/settings", "/restaurants/**", "/cart/**").authenticated()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 // .requestMatchers("/routes").hasRole("REPARTIDOR")
                 // .requestMatchers("/orders").hasRole("COCINERO")

@@ -1,19 +1,21 @@
 package com.alonso.eatelligence.service.imp;
 
-import com.alonso.eatelligence.model.dto.PlatoDTO;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.alonso.eatelligence.model.dto.AltaPlatoDTO;
 import com.alonso.eatelligence.model.entity.Alergeno;
 import com.alonso.eatelligence.model.entity.Plato;
 import com.alonso.eatelligence.model.entity.Restaurante;
 import com.alonso.eatelligence.repository.IAlergenoRepository;
 import com.alonso.eatelligence.repository.IPlatoRepository;
 import com.alonso.eatelligence.service.IPlatoService;
+
 import jakarta.persistence.EntityNotFoundException;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Set;
 
 @Service
 public class PlatoServiceImp implements IPlatoService {
@@ -30,18 +32,12 @@ public class PlatoServiceImp implements IPlatoService {
     }
 
     @Override
-    public Plato findyById(Long id) {
-        return this.platoRepository.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("Plato no encontrado con ID: " + id));
-    }
-
-    @Override
-    public Plato saveFromDTO(PlatoDTO plato, Restaurante restaurante) {
+    public Plato saveFromDTO(AltaPlatoDTO plato, Restaurante restaurante) {
         return this.platoRepository.save(this.mapToEntity(plato, restaurante));
     }
 
     @Override
-    public Plato updateFromDTO(Long id, PlatoDTO plato) {
+    public Plato updateFromDTO(Long id, AltaPlatoDTO plato) {
         Plato existente = this.platoRepository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Plato no encontrado con ID: " + id));
 
@@ -65,7 +61,7 @@ public class PlatoServiceImp implements IPlatoService {
         this.platoRepository.deleteById(id);
     }
 
-    private Plato mapToEntity(PlatoDTO plato, Restaurante restaurante) {
+    private Plato mapToEntity(AltaPlatoDTO plato, Restaurante restaurante) {
         Set<Alergeno> alergenos = this.alergenoRepository.findByIdIn(plato.getAlergenos());
 
         return Plato.builder()
@@ -93,5 +89,10 @@ public class PlatoServiceImp implements IPlatoService {
     public void save(Plato p) {
         this.platoRepository.save(p);
     }
-    
+
+    @Override
+    public Optional<Plato> findById(Long platoId) {
+        return this.platoRepository.findById(platoId);
+    }
+
 }

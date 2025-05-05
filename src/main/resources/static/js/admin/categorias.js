@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
       : [];
 
     try {
-      const res = await fetch('/api/restaurant/categories', {
+      const res = await fetch('/api/restaurants/categories', {
         method : 'PATCH',
         headers: {
           'Content-Type'    : 'application/json',

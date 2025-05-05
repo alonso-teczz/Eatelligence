@@ -6,10 +6,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -79,14 +83,21 @@ public class Usuario {
     @Builder.Default
     private List<Direccion> direcciones = new ArrayList<>();
 
-    @ManyToMany(cascade = CascadeType.MERGE)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @Builder.Default
     @JoinTable(
         name = "usuario_rol",
-        joinColumns = @JoinColumn(name = "usuario_id"),
-        inverseJoinColumns = @JoinColumn(name = "rol_id"),
-        uniqueConstraints = @UniqueConstraint(columnNames = { "usuario_id", "rol_id" })
+        joinColumns = @JoinColumn(
+            name = "usuario_id",
+            foreignKey = @ForeignKey(name = "fk_usuario_rol_usuario")
+        ),
+        inverseJoinColumns = @JoinColumn(
+            name = "rol_id",
+            foreignKey = @ForeignKey(name = "fk_usuario_rol_rol")
+        ),
+        uniqueConstraints  = @UniqueConstraint(columnNames = { "usuario_id", "rol_id" })
     )
-    @Builder.Default
     private Set<Rol> roles = new HashSet<>();
 
     @Column(nullable = false, columnDefinition = "TINYINT(1)")

@@ -343,7 +343,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       username: formActivo.querySelector(`[name$="${prefix ? prefix + ".username" : "username"}"]`),
       email: formActivo.querySelector(`[name$="${prefix ? prefix + ".email" : "email"}"]`),
       password: formActivo.querySelector(`[name$="${prefix ? prefix + ".password" : "password"}"]`),
-      repeatPass: formActivo.querySelector(`[name$=".repeatPass"]`),
+      repeatPass: formActivo.querySelector(`[name$="repeatPass"]`),
       telefonoMovil: formActivo.querySelector(`[name$="${prefix ? prefix + ".telefonoMovil" : "telefonoMovil"}"]`),
       calle: formActivo.querySelector(`[name$="${direccionPrefix}.calle"]`),
       ciudad: formActivo.querySelector(`[name$="${direccionPrefix}.ciudad"]`),
