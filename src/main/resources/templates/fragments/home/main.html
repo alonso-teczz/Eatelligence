@@ -138,7 +138,6 @@
           <p id="modalError" class="text-danger small mt-2 d-none"></p>
 
           <div class="text-end mt-4">
-            <div th:replace="~{fragments/csrf :: csrf-fields}"></div>
             <button type="submit" class="btn btn-success px-4">
               <i class="bi bi-check-circle me-1"></i> Confirmar
             </button>
@@ -147,5 +146,5 @@
       </div>
     </div>
   </div>
-  <div th:replace="~{fragments/home/cart :: cart}"></div>  
+  <div id="cart-container" th:replace="~{fragments/home/cart :: cart}"></div>  
 </div>

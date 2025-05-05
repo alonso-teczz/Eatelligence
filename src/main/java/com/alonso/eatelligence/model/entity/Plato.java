@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -22,6 +23,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(name = "platos")
@@ -55,7 +57,7 @@ public class Plato {
     @Builder.Default
     private Integer limiteUnidadesDiarias = null;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "plato_alergeno",
         joinColumns = @JoinColumn(name = "plato_id"),
@@ -67,9 +69,10 @@ public class Plato {
     @EqualsAndHashCode.Exclude
     private Set<Alergeno> alergenos = new HashSet<>();
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "restaurante_id")
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @JsonIgnore
     private Restaurante restaurante;
 }

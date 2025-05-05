@@ -44,12 +44,9 @@
                                     <span class="badge bg-primary rounded-pill me-2" th:text="${line.cantidad}">1</span>
                                     <div class="flex-grow-1">
                                         <span th:text="${line.plato.nombre}">Plato</span>
-                                        <div class="text-muted fst-italic" style="font-size: 0.8rem" th:text="${#strings.listJoin(
-                                  line.plato.alergenos.?[nombre.serialName],
-                                  ', '
-                                )}">
-                                            Alergenos
-                                        </div>
+                                        <span th:each="alergeno, iterStat : ${line.plato.alergenos}" class="text-muted fst-italic" style="font-size: 0.8rem"
+                                            th:text="${alergeno.nombre.serialName} + (iterStat.last ? '' : ', ')">
+                                        </span>
                                     </div>
                                     <span th:text="${session.cart != null ? #numbers.formatDecimal(session.cart.totalPrecio(), 1, 2) : '0.00'}"></span>
                                 </li>

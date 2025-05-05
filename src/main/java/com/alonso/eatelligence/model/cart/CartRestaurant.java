@@ -26,6 +26,18 @@ public class CartRestaurant {
         );
     }
 
+    public int getTotalPlatos() {
+        return this.lineas.values().stream()
+            .mapToInt(CartLine::getCantidad)
+            .sum();
+    }
+
+    public double totalPrecio() {
+        return this.lineas.values().stream()
+            .mapToDouble(linea -> linea.getPlato().getPrecio() * linea.getCantidad())
+            .sum();
+    }    
+
     public void removePlato(Long platoId) {
         this.lineas.remove(platoId);
     }

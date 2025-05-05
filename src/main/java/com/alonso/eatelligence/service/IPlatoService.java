@@ -16,4 +16,5 @@ public interface IPlatoService {
     long countAll();
     long countByRestaurante(Restaurante restaurante);
     void save(Plato p);
+    List<Plato> findByRestauranteId(Long id);
 }

@@ -95,4 +95,9 @@ public class PlatoServiceImp implements IPlatoService {
         return this.platoRepository.findById(platoId);
     }
 
+    @Override
+    public List<Plato> findByRestauranteId(Long id) {
+        return this.platoRepository.findByRestauranteId(id);
+    }
+
 }
