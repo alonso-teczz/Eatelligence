@@ -25,7 +25,9 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/**")
                 .access((authentication, context) -> {
-                    return new AuthorizationDecision("XMLHttpRequest".equals(context.getRequest().getHeader("X-Requested-With")));
+                    return new AuthorizationDecision("XMLHttpRequest".equals(
+                        context.getRequest().getHeader("X-Requested-With")
+                    ));
                 })
                 .requestMatchers(HttpMethod.GET,
                     "/",
@@ -47,10 +49,10 @@ public class SecurityConfig {
                     "/set-shipping-address"
                 )
                 .permitAll()
-                .requestMatchers("/settings", "/order-history").authenticated()
+                .requestMatchers("/settings", "/restaurant/**").authenticated()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
-                .requestMatchers("/routes").hasRole("REPARTIDOR")
-                .requestMatchers("/orders").hasRole("COCINERO")
+                // .requestMatchers("/routes").hasRole("REPARTIDOR")
+                // .requestMatchers("/orders").hasRole("COCINERO")
                 .requestMatchers(
                     "/css/**",
                     "/js/**",

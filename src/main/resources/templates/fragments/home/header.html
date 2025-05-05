@@ -4,8 +4,13 @@
       <img th:src="@{/img/logo.png}" alt="Logo de Eatelligence" height="80">
     </a>
 
-    <div class="ms-auto">
-      <div th:if="${session.usuario != null}" class="cesta-container mx-2 d-flex align-items-center justify-content-center position-relative flex-shrink-0">
+    <div class="ms-auto cesta-wrapper">
+      <div th:if="${session.usuario != null}"
+           role="button" tabindex="0"
+           class="cesta-container mt-1 mx-3 d-flex align-items-center justify-content-center position-relative flex-shrink-0"
+           data-bs-toggle="offcanvas"
+           data-bs-target="#cestaOffcanvas"
+           aria-controls="cestaOffcanvas">
         <i class="bi bi-basket fs-4"></i>
         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
           0
@@ -13,6 +18,7 @@
         </span>
       </div>
     </div>
+    
     
     <button class="navbar-toggler border-0 me-2 justify-self-end" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>

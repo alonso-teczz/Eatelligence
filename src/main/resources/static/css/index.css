@@ -3,7 +3,7 @@ body {
 }
 
 .header-nav {
-  justify-content: start !important;
+  justify-items: end !important;
   background-color: #abc294;
 }
 
@@ -35,7 +35,14 @@ body {
   border-radius: 0.7rem !important;
 }
 
+.dropdown-menu {
+  right: -10px !important;   /* pega el menú al borde derecho */
+  left:  auto !important; /* anula la alineación por la izquierda */
+}
+
 .profile-toggle {
+  max-width: 10.5rem;
+  padding-right: 0;
   transition: 0.4s ease;
 }
 
@@ -335,5 +342,18 @@ body {
 
   #filtros {
     max-width: 99vw;
+  }
+}
+
+@media (max-width: 265px) {
+  .cesta-container, .navbar-brand, .navbar-brand + div, .navbar-toggler {
+    margin: 0 !important;
+  }
+}
+
+@media (max-width: 224px) {
+  .navbar-toggler {
+    padding: 0;
+    margin-left: 15px;
   }
 }
