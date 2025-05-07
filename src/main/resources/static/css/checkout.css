@@ -146,4 +146,29 @@
       font-size: 1.1rem;
     }
   }
+
+  .payment-method-card {
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border-color 0.3s ease;
+  }
+  
+  .payment-method-card:hover {
+    border-color: #007bff;
+  }
+  
+  .payment-method-card.active {
+    border-color: #007bff;
+    background-color: #f0f8ff;
+  }
+  
+  .payment-method-card .icon {
+    font-size: 3rem;
+    color: #007bff;
+  }
+  
+  .payment-method-fields {
+    display: none;
+    margin-top: 1rem;
+  }
   
