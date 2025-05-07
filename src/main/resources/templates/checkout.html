@@ -73,6 +73,15 @@
           </table>
         </section>
 
+        <!-- Total del pedido -->
+        <section class="mb-5">
+          <h4>Total del pedido</h4>
+          <div class="d-flex justify-content-between">
+            <span class="fw-bold">Total general:</span>
+            <span class="fw-bold" th:text="${#numbers.formatDecimal(cart.totalPrecio,1,'POINT',2,'COMMA')} + ' €'">0.00 €</span>
+          </div>
+        </section>
+
         <!-- Selección de dirección válida -->
         <section class="mb-5">
           <h4>Selecciona dirección de envío</h4>

@@ -108,10 +108,15 @@ async function cargarRestaurantes() {
 
   } catch (e) {
     console.error(e);
-    cardsZone.className = "d-flex justify-content-center align-items-center text-center";
+    cardsZone.className =
+      "d-flex flex-column justify-content-center align-items-center text-center";
     cardsZone.style.minHeight = "300px";
-    cardsZone.innerHTML = `<i class="bi bi-emoji-frown fs-1 text-muted"></i>
-      <p class="text-muted">No hay restaurantes.</p>`;
+    cardsZone.innerHTML = `
+      <i class="bi bi-emoji-frown fs-1 text-muted"></i>
+      <p class="text-muted fs-6" style="min-width:70%">
+        No se han encontrado restaurantes que cumplan con los filtros seleccionados.<br>
+        Prueba a ajustar el radio de búsqueda, eliminar algún alérgeno o ampliar las categorías.
+      </p>`;
   } finally {
     spinner.classList.add("d-none");
   }
