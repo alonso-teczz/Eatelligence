@@ -9,6 +9,7 @@ import com.alonso.eatelligence.model.entity.Restaurante;
 
 public interface IPlatoService {
     List<Plato> getAll();
+    List<Plato> findAllByRestauranteId(Long restauranteId);
     Optional<Plato> findById(Long id);
     Plato saveFromDTO(AltaPlatoDTO dto, Restaurante restaurante);
     Plato updateFromDTO(Long id, AltaPlatoDTO dto);

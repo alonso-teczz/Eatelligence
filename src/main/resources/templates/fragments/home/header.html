@@ -12,13 +12,11 @@
            data-bs-target="#cestaOffcanvas"
            aria-controls="cestaOffcanvas">
         <i class="bi bi-basket fs-4"></i>
-        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
-          0
-          <span class="visually-hidden">artículos en la cesta</span>
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning"
+          th:text="${session.cart.distinctPlatoCount}">
         </span>
       </div>
     </div>
-    
     
     <button class="navbar-toggler border-0 me-2 justify-self-end" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>

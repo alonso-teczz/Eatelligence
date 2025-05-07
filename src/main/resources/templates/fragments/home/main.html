@@ -8,12 +8,13 @@
       class="p-3 position-relative"
     >
       <form id="filtrosForm" class="small h-100">
+        <input type="hidden" id="pageSize" name="size" th:value="${size}" />
         <div class="mb-3">
           <label class="form-label fw-semibold">Buscar por nombre</label>
           <input name="nombre" type="text" class="form-control" placeholder="Ej.: Bar Caballero"/>
         </div>
         <div class="mb-3">
-          <label class="form-label fw-semibold">Precio medio (€)</label>
+          <label class="form-label fw-semibold">Pedido mínimo</label>
           <div class="d-flex gap-2">
             <input name="min" type="number" class="form-control" placeholder="Mín."/>
             <input name="max" type="number" class="form-control" placeholder="Máx."/>
@@ -76,10 +77,23 @@
           </div>
           <p class="mt-2 fs-5">Buscando restaurantes...</p>
         </div>
-        
-        <!-- Grid de tarjetas de restaurantes -->
-        <div id="restaurant-cards" class="row row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-4">
-          <!-- Las tarjetas de restaurantes se agregarán aquí dinámicamente -->
+        <!-- Carrusel de paginación -->
+        <div id="carouselPaginas" class="mb-4">
+          <div class="carousel-inner" id="carousel-inner">
+            <div class="carousel-item active">
+              <div id="restaurant-cards" class="row row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-4">
+                <!-- aquí inyecta index.js tus cards -->
+              </div>
+            </div>
+          </div>
+          <div class="d-flex justify-content-center gap-2 mt-4">
+            <button id="prevPage" class="btn btn-outline-secondary">
+              <i class="bi bi-chevron-left"></i>
+            </button>
+            <button id="nextPage" class="btn btn-outline-secondary">
+              <i class="bi bi-chevron-right"></i>
+            </button>
+          </div>
         </div>
       </div>      
     </div>

@@ -31,7 +31,7 @@ public class Alergeno {
         CACAHUETES("Cacahuetes"),
         SOJA("Soja"),
         LACTEOS("Lácteos"),
-        FRUTOS_DE_CASCARA("Frutos de cáscara"),
+        FRUTOS_SECOS("Frutos secos"),
         APIO("Apio"),
         MOSTAZA("Mostaza"),
         SESAMO("Sésamo"),

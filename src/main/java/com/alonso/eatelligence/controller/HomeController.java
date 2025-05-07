@@ -1,6 +1,10 @@
 package com.alonso.eatelligence.controller;
 
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,26 +58,30 @@ public class HomeController {
         @RequestParam(required = false) Integer radio,
         @RequestParam(required = false) Set<Long> excluirAlergenos,
         @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "10") int size,
+        @RequestParam(defaultValue = "9") int size,
         @RequestParam(required = false) Set<Long> categorias,
         @SessionAttribute(required = false) Usuario usuario,
         Model model
     ) {
-        
         if (usuario != null) {
+            ZoneId zone = ZoneId.of("Europe/Madrid");
+            DayOfWeek dia   = LocalDate.now(zone).getDayOfWeek();
+            LocalTime hora  = LocalTime.now(zone);
+            
             Pageable pageable = PageRequest.of(page, size);
-        
-            Page<ResumenProjection> resultados = restauranteService.getAllRestaurantsWithFilters(
-                nombre, min, max, lat, lon, radio, excluirAlergenos, categorias, pageable
-            );
-        
+            Page<ResumenProjection> resultados =
+                restauranteService.getAllRestaurantsWithFilters(
+                    nombre, min, max, lat, lon, radio,
+                    excluirAlergenos, categorias,
+                    dia, hora, pageable
+                );
+            
             model.addAttribute("alergenos", this.alergenoService.getAll());
             model.addAttribute("categorias", this.categoriaService.getAll());
             model.addAttribute("restaurantes", resultados.getContent());
             model.addAttribute("pagina", resultados);
             model.addAttribute("direcciones", this.direccionService.getDireccionesUsuario(usuario.getId()));
         }
-    
         return "index";
     }
     

@@ -12,4 +12,6 @@ public interface ResumenProjection {
     Double getLatitud();
     Double getLongitud();
     Integer getTiempoPreparacion();
+    String  getHorarioDia();
+    Integer getAbiertoAhora();
 }

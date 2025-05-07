@@ -14,13 +14,15 @@
         <!-- Body – scrollable -------------------------------------------------- -->
         <div class="offcanvas-body p-3 overflow-auto">
             <!-- Si la cesta está vacía -->
-            <p th:if="${session.cart != null and #maps.isEmpty(session.cart.pedidos)}" class="text-muted text-center my-5">
+            <p th:if="${session.cart != null and #maps.isEmpty(session.cart.pedidos)}"
+                class="text-muted text-center my-5">
                 <i class="bi bi-emoji-frown fs-3 me-1"></i>
                 No hay productos en tu cesta.
             </p>
 
             <!-- Acordeón por restaurante --------------------------------------- -->
-            <div th:unless="${session.cart != null and #maps.isEmpty(session.cart.pedidos)}" class="accordion" id="cestaAccordion">
+            <div th:unless="${session.cart != null and #maps.isEmpty(session.cart.pedidos)}" class="accordion"
+                id="cestaAccordion">
                 <div class="accordion-item" th:each="cr,stat : ${session.cart.pedidos.values()}"
                     th:id="'rest-'+${cr.restaurante.id}">
                     <!-- Cabecera del restaurante -->
@@ -35,29 +37,43 @@
                     </h2>
 
                     <!-- Detalle de líneas ---------------------------------------- -->
-                    <div th:id="'collapse-'+${stat.index}" class="accordion-collapse collapse"
-                        th:classappend="${stat.index == 0}? 'show'">
+                    <div th:id="'collapse-'+${stat.index}" class="accordion-collapse collapse">
                         <div class="accordion-body p-2">
                             <ul class="list-group list-group-flush small">
-                                <li class="list-group-item d-flex align-items-center"
+                                <li class="list-group-item d-flex align-items-center justify-content-between"
                                     th:each="line : ${cr.lineas.values()}">
-                                    <span class="badge bg-primary rounded-pill me-2" th:text="${line.cantidad}">1</span>
-                                    <div class="flex-grow-1">
-                                        <span th:text="${line.plato.nombre}">Plato</span>
-                                        <span th:each="alergeno, iterStat : ${line.plato.alergenos}" class="text-muted fst-italic" style="font-size: 0.8rem"
-                                            th:text="${alergeno.nombre.serialName} + (iterStat.last ? '' : ', ')">
-                                        </span>
+                                    <!-- botón “–” -->
+                                    <form th:action="@{'/cart/' + ${cr.restaurante.id} + '/decrement'}" method="post"
+                                        class="me-2">
+                                        <input type="hidden" name="platoId" th:value="${line.plato.id}" />
+                                        <button type="submit" class="btn btn-sm btn-outline-secondary">−</button>
+                                    </form>
+                                    <!-- cantidad -->
+                                    <div class="input-group input-group-sm text-center me-2" style="width: 2.5rem;">
+                                        <input type="text" class="form-control ps-3" readonly
+                                            th:value="${line.cantidad}" />
                                     </div>
-                                    <span th:text="${session.cart != null ? #numbers.formatDecimal(session.cart.totalPrecio(), 1, 2) : '0.00'}"></span>
+                                    <!-- botón “+” -->
+                                    <form th:action="@{'/cart/' + ${cr.restaurante.id} + '/add'}" method="post"
+                                        class="me-2">
+                                        <input type="hidden" name="platoId" th:value="${line.plato.id}" />
+                                        <input type="hidden" name="cantidad" value="1" />
+                                        <button type="submit" class="btn btn-sm btn-outline-secondary">+</button>
+                                    </form>
+                                    <!-- nombre del plato -->
+                                    <div class="flex-grow-1">
+                                        <span th:text="${line.plato.nombre}">Nombre del plato</span>
+                                    </div>
+                                    <!-- subtotal de la línea -->
+                                    <span
+                                        th:text="${#numbers.formatDecimal(line.plato.precio * line.cantidad,1,2)} + '€'">0,00€</span>
                                 </li>
                             </ul>
 
                             <!-- Total del restaurante -->
                             <div class="d-flex justify-content-between fw-semibold mt-2">
                                 <span>Total</span>
-                                <span th:text="${#numbers.formatDecimal(cr.totalPrecio(),1,2)} + '€'">
-                                    0,00 €
-                                </span>
+                                <span th:text="${#numbers.formatDecimal(cr.totalPrecio(),1,2)} + '€'">0,00€</span>
                             </div>
                         </div>
                     </div>
@@ -70,33 +86,38 @@
 
         <!-- Footer ------------------------------------------------------------- -->
         <div class="offcanvas-footer border-top p-3">
-            <div class="d-flex justify-content-between fw-bold mb-2" th:if="${session.cart != null and #maps.isEmpty(session.cart.pedidos)}">
+            <div class="d-flex justify-content-between fw-bold mb-2"
+                th:if="${session.cart != null and !#maps.isEmpty(session.cart.pedidos)}">
                 <span>Total cesta:</span>
                 <span th:text="${#numbers.formatDecimal(session.cart.totalPrecio(),1,2)} + '€'">0,00 €</span>
             </div>
 
             <div class="d-flex gap-2">
                 <!-- Vaciar cesta -->
-                <form th:action="@{/cart/clear}" method="post" class="w-50">
-                    <button class="btn btn-outline-danger w-100" th:disabled="${session.cart == null or #maps.isEmpty(session.cart.pedidos)}">
+                <form th:action="@{'/cart/clear'}" method="post" class="w-50">
+                    <button class="btn btn-outline-danger w-100" th:disabled="${#maps.isEmpty(session.cart.pedidos)}">
                         <i class="bi bi-trash me-1"></i> Vaciar
                     </button>
                 </form>
 
                 <!-- Finalizar compra -->
-                <form th:action="@{/orders/checkout}" method="post" class="w-50">
-                    <button class="btn btn-success w-100 position-relative"
-                        th:disabled="${session.cart == null or #maps.isEmpty(session.cart.pedidos) || !session.usuario.verificado}"
-                        data-bs-toggle="tooltip" data-bs-placement="top" th:title="${!session.usuario.verificado ?
-                          'Debes verificar tu cuenta antes de finalizar la compra. ' :
-                          ''}">
-                        <i class="bi bi-credit-card me-1"></i> Finalizar
-                        <!-- link a verificación dentro del tooltip -->
-                        <span th:if="${!session.usuario.verificado}">
-                            <a th:href="@{/pending-verification}" class="text-warning fw-semibold">
-                                Verificar
-                            </a>
-                        </span>
+                <form th:action="@{'/orders/checkout'}" method="get" class="w-50">
+                    <!-- botón para usuario verificado: envía el formulario -->
+                    <button th:if="${session.usuario.verificado}"
+                            id="checkout-submit-btn"
+                            class="btn btn-success w-100"
+                            type="submit"
+                            th:disabled="${session.cart == null or #maps.isEmpty(session.cart.pedidos)}">
+                      <i class="bi bi-credit-card me-1"></i> Finalizar
+                    </button>
+                  
+                    <!-- botón para usuario NO verificado: sólo abre alerta -->
+                    <button th:if="${!session.usuario.verificado}"
+                            id="checkout-verify-btn"
+                            class="btn btn-success w-100"
+                            type="button"
+                            th:disabled="${session.cart == null or #maps.isEmpty(session.cart.pedidos)}">
+                      <i class="bi bi-credit-card me-1"></i> Finalizar
                     </button>
                 </form>
             </div>

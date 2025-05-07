@@ -1,5 +1,6 @@
 package com.alonso.eatelligence.model.entity;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -69,14 +70,14 @@ public class Restaurante {
     @Builder.Default
     private boolean activo = true;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "direccion_id", nullable = false)
     private Direccion direccion;
 
     @ElementCollection
     @CollectionTable(name = "horarios", joinColumns = @JoinColumn(name = "restaurante_id"))
-    private Set<Horario> horarios;
-
+    @Builder.Default
+    private List<Horario> horarios = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -87,10 +88,11 @@ public class Restaurante {
     @Builder.Default
     private Set<Categoria> categorias = new HashSet<>();
 
-    @OneToMany(mappedBy = "restaurante", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "restaurante", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    private Set<Plato> platos;
+    @Builder.Default
+    private Set<Plato> platos = new HashSet<>();
 
     @OneToMany(mappedBy = "restaurante", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<VerificationToken> tokens;

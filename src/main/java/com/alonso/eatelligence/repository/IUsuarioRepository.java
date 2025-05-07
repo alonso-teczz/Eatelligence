@@ -15,7 +15,7 @@ import com.alonso.eatelligence.model.entity.Usuario;
 @Repository
 public interface IUsuarioRepository extends JpaRepository<Usuario, Long> {
   boolean existsByUsername(String username);
-  Usuario findByUsername(String username);
+  Optional<Usuario> findByUsername(String username);
   Optional<Usuario> findByUsernameAndEmail(String username, String email);
   @Query("""
     SELECT COUNT(u) 

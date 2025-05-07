@@ -20,6 +20,11 @@
             <AppenderRef ref="UserFile"/>
             <AppenderRef ref="Console"/>
         </Logger>
+
+        <Logger name="com.alonso.eatelligence.security.RestauranteAccessFilter" level="debug" additivity="false">
+            <AppenderRef ref="AppFile"/>
+            <AppenderRef ref="Console"/>
+        </Logger>        
         
         <!-- Spring Security -->
         <Logger name="org.springframework.security" level="debug" additivity="false">

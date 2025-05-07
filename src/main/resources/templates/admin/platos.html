@@ -60,6 +60,7 @@
                                               <form
                                                 th:action="@{/api/plates/{id}(id=${plato.id})}"
                                                 class="d-inline-flex align-items-center text-nowrap form-eliminar-plato">
+                                                <div th:replace="~{fragments/csrf :: csrf-fields}"></div>
                                                 <button type="submit" class="btn btn-sm btn-danger">
                                                   <i class="fas fa-trash-alt"></i>
                                                 </button>

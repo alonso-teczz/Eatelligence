@@ -5,16 +5,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.alonso.eatelligence.model.entity.Direccion;
 import com.alonso.eatelligence.service.IDireccionService;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
-@SessionAttributes({
-    "direccionEnvioId"
-})
 public class DireccionController {
 
     @Autowired
@@ -24,6 +22,7 @@ public class DireccionController {
     public String establecerDireccionEnvio(
         @RequestParam("direccionId") Long direccionId,
         Model model,
+        HttpSession session,
         RedirectAttributes ra
     ) {
         Direccion direccion = direccionService.getById(direccionId).orElse(null);
@@ -32,7 +31,7 @@ public class DireccionController {
             ra.addFlashAttribute("errorDireccion", "Debes seleccionar una dirección");
         }
 
-        model.addAttribute("direccionEnvioId", direccionId);
+        session.setAttribute("direccionEnvioId", direccionId);
 
         return "redirect:/";
     }

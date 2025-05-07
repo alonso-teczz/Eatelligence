@@ -16,12 +16,18 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http, VerificationFilter verificationFilter) throws Exception {
+    SecurityFilterChain securityFilterChain(
+        HttpSecurity http,
+        VerificationFilter verificationFilter,
+        NoCacheFilter noCacheFilter,
+        RestauranteAccessFilter restauranteAccessFilter
+    ) throws Exception {
 
         http
             .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**"))
-            .addFilterBefore(new NoCacheFilter(), UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(noCacheFilter, UsernamePasswordAuthenticationFilter.class)
             .addFilterBefore(verificationFilter, UsernamePasswordAuthenticationFilter.class)
+            .addFilterAfter(restauranteAccessFilter, UsernamePasswordAuthenticationFilter.class)
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/**")
                 .access((authentication, context) -> {
@@ -49,7 +55,8 @@ public class SecurityConfig {
                     "/set-shipping-address"
                 )
                 .permitAll()
-                .requestMatchers("/settings", "/restaurants/**", "/cart/**").authenticated()
+                .requestMatchers("/restaurants/**").permitAll()
+                .requestMatchers("/orders/**", "/cart/**").authenticated()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 // .requestMatchers("/routes").hasRole("REPARTIDOR")
                 // .requestMatchers("/orders").hasRole("COCINERO")

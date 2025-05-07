@@ -1,5 +1,7 @@
 package com.alonso.eatelligence.service;
 
+import java.time.DayOfWeek;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -31,16 +33,18 @@ public interface IRestauranteService {
       Integer radio,
       Set<Long> alergenos,
       Set<Long> categorias,
+      DayOfWeek dia,
+      LocalTime hora,
       Pageable pageable
     );  
 
-    Set<HorarioDTO> obtenerHorarios(Long id);
+    List<HorarioDTO> obtenerHorarios(Long id);
 
     Restaurante save(Restaurante restaurante);
 
     void update(Restaurante restaurante);
     
-    void actualizarHorarios(Long id, Set<HorarioDTO> horarios);
+    void actualizarHorarios(Long id, List<HorarioDTO> horarios);
 
     void deleteById(Long id);
 

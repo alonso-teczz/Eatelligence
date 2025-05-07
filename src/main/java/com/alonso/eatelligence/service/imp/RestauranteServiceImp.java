@@ -1,5 +1,7 @@
 package com.alonso.eatelligence.service.imp;
 
+import java.time.DayOfWeek;
+import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -152,15 +154,15 @@ public class RestauranteServiceImp implements IRestauranteService, IEntitableCli
 
     @Override
     @Transactional
-    public void actualizarHorarios(Long restauranteId, Set<HorarioDTO> horario) {
+    public void actualizarHorarios(Long restauranteId, List<HorarioDTO> horario) {
         this.restauranteRepository.findById(restauranteId).ifPresent(r -> {
-            Set<Horario> nuevoHorario = horario.stream()
+            List<Horario> nuevoHorario = horario.stream()
                 .map(h -> Horario.builder()
                     .dia(h.getDia())
                     .apertura(h.getApertura())
                     .cierre(h.getCierre())
                     .build()
-                ).collect(Collectors.toSet());
+                ).collect(Collectors.toList());
     
             r.setHorarios(nuevoHorario);
             this.restauranteRepository.save(r);
@@ -173,21 +175,17 @@ public class RestauranteServiceImp implements IRestauranteService, IEntitableCli
 
     @Override
     @Transactional
-    public Set<HorarioDTO> obtenerHorarios(Long id) {
+    public List<HorarioDTO> obtenerHorarios(Long id) {
       Restaurante r = this.restauranteRepository.findById(id).get();
       return r.getHorarios().stream()
-        .map(h -> new HorarioDTO(h.getDia(),h.getApertura(),h.getCierre()))
-        .collect(Collectors.toSet());
-    }
-    
-    @Override
-    public Page<ResumenProjection> getAllRestaurantsWithFilters(
-        String nombre, Double min, Double max,
-        double lat, double lon, Integer radio,
-        Set<Long> alergenos, Set<Long> categorias, Pageable pageable
-    ) {
-        return restauranteRepository
-            .getAllRestaurantsWithFilters(nombre, min, max, lat, lon, radio, alergenos, categorias, pageable);
+        .map(h -> {
+            return HorarioDTO.builder()
+            .apertura(h.getApertura())
+            .cierre(h.getCierre())
+            .dia(h.getDia())
+            .build();
+        })
+        .collect(Collectors.toList());
     }
 
     @Override
@@ -205,6 +203,17 @@ public class RestauranteServiceImp implements IRestauranteService, IEntitableCli
         return restaurante.getCategorias().stream()
             .map(cat -> new CategoriaDTO(cat.getId(), cat.getSerialName()))
             .toList();
+    }
+
+    @Override
+    public Page<ResumenProjection> getAllRestaurantsWithFilters(String nombre, Double min, Double max, double lat,
+            double lon, Integer radio, Set<Long> alergenos, Set<Long> categorias, DayOfWeek dia, LocalTime hora,
+            Pageable pageable) {
+        return this.restauranteRepository.getAllRestaurantsWithFilters(nombre, min, max, lat, lon, radio, alergenos, categorias, dia, hora, pageable);
+    }
+
+    public boolean existsByNombreComercial(String nombreComercial) {
+        return this.restauranteRepository.findByNombreComercial(nombreComercial).isPresent();
     }
    
 }

@@ -36,9 +36,9 @@ public class VerificationFilter implements Filter {
         "/css/", "/js/", "/img/", "/assets/"
     );
 
+    // rutas que solo usuarios verificados pueden acceder
     private static final List<String> RUTAS_USUARIO_VERIFICADO = List.of(
-        "/settings",
-        "/order-history"
+        "/orders/checkout"
     );
 
     private static final List<String> RUTAS_RESTAURANTE_VERIFICADO = List.of(
@@ -46,8 +46,6 @@ public class VerificationFilter implements Filter {
         "/admin/",
         "/admin/dashboard",
         "/admin/plates",
-        // "/admin/charts",
-        // "/admin/tables",
         "/admin/cooks",
         "/admin/deliverymen"
     );
@@ -60,6 +58,7 @@ public class VerificationFilter implements Filter {
         HttpServletResponse res = (HttpServletResponse) response;
         String path = req.getRequestURI();
 
+        // deja pasar recursos públicos
         if (EXCLUDED_PATHS.stream().anyMatch(path::startsWith)) {
             chain.doFilter(request, response);
             return;
@@ -74,12 +73,14 @@ public class VerificationFilter implements Filter {
             boolean propietarioVerificado = restaurante != null && restaurante.getPropietario() != null
                 && restaurante.getPropietario().isVerificado();
 
+            // acceso a resumen de compra y confirmación solo usuarios verificados
             if (!usuarioVerificado &&
                 RUTAS_USUARIO_VERIFICADO.stream().anyMatch(path::startsWith)) {
                 res.sendRedirect("/pending-verification");
                 return;
             }
 
+            // acceso a panel admin solo restaurantes verificados
             if ((!restauranteVerificado || !propietarioVerificado) &&
                 RUTAS_RESTAURANTE_VERIFICADO.stream().anyMatch(path::startsWith)) {
                 res.sendRedirect("/pending-verification");

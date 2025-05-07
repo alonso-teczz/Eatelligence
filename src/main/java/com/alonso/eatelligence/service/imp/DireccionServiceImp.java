@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alonso.eatelligence.model.entity.Direccion;
+import com.alonso.eatelligence.model.entity.Usuario;
 import com.alonso.eatelligence.repository.IDireccionRepository;
 import com.alonso.eatelligence.service.IDireccionService;
 
@@ -24,5 +25,10 @@ public class DireccionServiceImp implements IDireccionService {
     @Override
     public Optional<Direccion> getById(Long id) {
         return direccionRepository.findById(id);
+    }
+
+    @Override
+    public List<Direccion> findAllByUsuario(Usuario usuario) {
+        return this.direccionRepository.findByUsuario(usuario);
     }
 }

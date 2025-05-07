@@ -297,6 +297,11 @@ body {
   overflow: hidden;
 }
 
+#carouselPaginas .carousel-inner,
+#carouselPaginas .carousel-item {
+  overflow: visible !important;
+}
+
 .rest:hover {
   transform: translateY(-5px);
   box-shadow: 0 0.7rem 1.5rem rgba(0, 0, 0, 0.15);
@@ -378,4 +383,16 @@ body {
 .list-group-item {
   border: 0;
   padding: .5rem .25rem;
+}
+
+/* Quita el anillo / sombra de foco en los headers del accordion */
+.accordion-button:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Si quieres mantener foco al navegar con teclado, pero quitarlo al hacer click: */
+.accordion-button:focus:not(:focus-visible) {
+  outline: none;
+  box-shadow: none;
 }

@@ -32,7 +32,7 @@ public class UserDataLoader implements CommandLineRunner {
     
     @Override
     public void run(String... args) {
-        if (this.usuarioService.findByUsername("alonso-admin") == null) {
+        if (this.usuarioService.findByUsername("alonso-admin").isEmpty()) {
             // Crear usuario y su dirección
             Usuario admin = Usuario.builder()
                 .username("alonso-admin")
@@ -88,7 +88,7 @@ public class UserDataLoader implements CommandLineRunner {
         }
     
         // Crear usuario cliente normal si no existe
-        if (this.usuarioService.findByUsername("cliente-demo") == null) {
+        if (this.usuarioService.findByUsername("cliente-demo").isEmpty()) {
             Usuario cliente = Usuario.builder()
                 .username("cliente-demo")
                 .password(this.usuarioService.encodePassword("cliente"))

@@ -99,8 +99,11 @@ public class AdminController {
     }
 
     @GetMapping("/plates")
-    public String goPlates(Model model) {
-        model.addAttribute("platos", this.platoService.getAll());
+    public String goPlates(
+        @SessionAttribute("restaurante") Restaurante restaurante,
+        Model model
+    ) {
+        model.addAttribute("platos", this.platoService.findAllByRestauranteId(restaurante.getId()));
         model.addAttribute("alergenosDisponibles", this.alergenoService.getAll());
         return "admin/platos";
     }
@@ -113,7 +116,7 @@ public class AdminController {
         Model model
     ) {
         if (result.hasErrors()) {
-            model.addAttribute("platos", this.platoService.getAll());
+            model.addAttribute("platos", this.platoService.findAllByRestauranteId(restaurante.getId()));
             model.addAttribute("alergenosDisponibles", this.alergenoService.getAll());
             ValidationUtils.getFirstOrderedErrorFromBindingResult(result, nuevoPlato.getClass())
                 .ifPresent(error -> model.addAttribute("globalError", error.getDefaultMessage()));

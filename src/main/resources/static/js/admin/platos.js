@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("load", () => {
   /* ------------------------------------------------------------------ */
   /* ---------------------- LISTAS DRAG & DROP NUEVO ------------------ */
   /* ------------------------------------------------------------------ */
@@ -179,6 +179,12 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
 
+    function getCsrf() {
+      const token  = document.querySelector('#csrfToken').getAttribute('content');
+      const header = document.querySelector('#csrfHeader').getAttribute('content');
+      return { header, token };
+    }
+
     // 1) Selecciona TODOS los formularios de borrado
     document.querySelectorAll('.form-eliminar-plato').forEach(form => {
       form.addEventListener('submit', async e => {
@@ -196,11 +202,14 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!isConfirmed) return;
 
         // 4) Llamada DELETE
+        const { header, token } = getCsrf();
         try {
           const res = await fetch(url, {
             method: "DELETE",
+            credentials: 'same-origin',
             headers: {
-              "X-Requested-With": "XMLHttpRequest"
+              "X-Requested-With": "XMLHttpRequest",
+              [header]: token
             },
           });
 
@@ -243,12 +252,15 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll('.checkbox-activo').forEach(chk => {
       chk.addEventListener('change', async () => {
         const platoId = chk.dataset.id;
+        const { header, token } = getCsrf();
         try {
           const res = await fetch(`/api/plates/${platoId}`, {
             method: 'PATCH',
+            credentials: 'same-origin',
             headers: {
               'Content-Type': 'application/json',
-              'X-Requested-With': 'XMLHttpRequest'
+              "X-Requested-With": "XMLHttpRequest",
+              [header]: token
             },
             body: JSON.stringify({ activo: chk.checked })
           });

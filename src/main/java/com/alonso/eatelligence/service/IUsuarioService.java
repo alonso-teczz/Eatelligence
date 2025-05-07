@@ -10,7 +10,7 @@ import com.alonso.eatelligence.model.entity.Usuario;
 public interface IUsuarioService {
 
     //? READ
-    Usuario findByUsername(String username);
+    Optional<Usuario> findByUsername(String username);
     Optional<Usuario> findById(Long id);
     Optional<Usuario> findByUsernameAndEmail(String username, String email);    
     List<Usuario> getAllUsers();

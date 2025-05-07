@@ -17,7 +17,7 @@ import com.alonso.eatelligence.service.IRolService;
 @Component
 @DependsOn("rolDataLoader")
 @Order(3)
-public class MenuDataLoader implements CommandLineRunner {
+public class OpcionMenuDataLoader implements CommandLineRunner {
 
     @Autowired
     private IMenuService menuService;

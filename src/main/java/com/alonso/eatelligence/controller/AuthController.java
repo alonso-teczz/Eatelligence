@@ -83,12 +83,14 @@ public class AuthController {
             return "login";
         }
         
-        Usuario u = this.usuarioService.findByUsername(formLogin.getUsername());
+        Optional<Usuario> optUser = this.usuarioService.findByUsername(formLogin.getUsername());
 
-        if (u == null || !this.usuarioService.checkPassword(u, formLogin.getPassword())) {
+        if (optUser.isEmpty() || !this.usuarioService.checkPassword(optUser.get(), formLogin.getPassword())) {
             model.addAttribute("globalError", "Usuario o contraseña incorrectos");
             return "login";
         }
+
+        Usuario u = optUser.get();
 
         Optional<Restaurante> r = this.restauranteService.findByUsuario(u);
 

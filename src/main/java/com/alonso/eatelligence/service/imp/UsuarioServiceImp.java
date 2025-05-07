@@ -103,7 +103,7 @@ public class UsuarioServiceImp implements IUsuarioService, IEntitableClient {
     }
 
     @Override
-    public Usuario findByUsername(String username) {
+    public Optional<Usuario> findByUsername(String username) {
         return this.usuarioRepository.findByUsername(username);
     }
 
@@ -119,15 +119,17 @@ public class UsuarioServiceImp implements IUsuarioService, IEntitableClient {
 
     @Transactional
     public void addRoleToUser(String username, NombreRol rolNombre) {
-        Usuario user = this.usuarioRepository.findByUsername(username);
+        Optional<Usuario> opt = this.usuarioRepository.findByUsername(username);
 
-        if (user == null) {
+        if (opt.isEmpty()) {
             throw new IllegalArgumentException("El usuario no existe");
         }
 
         Rol rol = this.rolService.findByNombre(rolNombre)
             .orElseThrow(() -> new IllegalArgumentException("Rol no existe"));
-    
+        
+        Usuario user = opt.get();
+
         if (user.getRoles().add(rol)) {
             this.usuarioRepository.save(user);
         }

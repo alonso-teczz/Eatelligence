@@ -8,13 +8,6 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/registroExitoso.css">
-  <style>
-    .swal2-confirm.swal2-styled:hover {
-        background-image: none !important;
-        background-color: transparent !important;
-        box-shadow: none !important;
-    }
-  </style>
 </head>
 <body class="bg-light"
       th:attr="
@@ -56,7 +49,7 @@
 
           <button type="button" class="btn btn-outline-primary btn-lg" id="btn-reenviar-propietario"
                 th:if="${tipo == 'RESTAURANTE' and !verificadoPropietario and tokenPropietario?.token == null}"
-                th:attr="data-token=${tokenPropietario.token}">
+                th:attr="data-token=${tokenPropietario?.token}">
                 <i class="bi bi-envelope-fill me-1"></i> Reenviar verificación del propietario
             </button>  
 

@@ -25,6 +25,11 @@ public class CartController {
     @Autowired
     private IPlatoService platoService;
 
+    @ModelAttribute("cart")
+    public Cart crearCarrito() {
+        return new Cart();
+    }
+
     @PostMapping("/{restauranteId}/add")
     public String addPlatoToCart(
         @PathVariable Long restauranteId,
@@ -41,6 +46,33 @@ public class CartController {
     
         return "redirect:/restaurants/" + restauranteId;
     }
-        
+
+    @PostMapping("/{restauranteId}/decrement")
+    public String decrementOneUnit(
+        @PathVariable Long restauranteId,
+        @RequestParam Long platoId,
+        @ModelAttribute("cart") Cart cart
+    ) {
+        cart.decrementPlato(restauranteId, platoId);
+        return "redirect:/restaurants/" + restauranteId;
+    }
+    
+    @PostMapping("/{restauranteId}/remove")
+    public String removeOne(
+        @PathVariable Long restauranteId,
+        @RequestParam Long platoId,
+        @ModelAttribute("cart") Cart cart
+    ) {
+        cart.removePlato(restauranteId, platoId);
+        return "redirect:/restaurants/" + restauranteId;
+    }
+
+    @PostMapping("/clear")
+    public String clearCart(
+        @ModelAttribute("cart") Cart cart
+    ) {
+        cart.clear();
+        return "redirect:/";
+    }
 
 }
