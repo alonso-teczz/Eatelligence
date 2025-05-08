@@ -172,6 +172,28 @@ public class RestauranteDataLoader implements CommandLineRunner {
                 plato("Pincho moruno",    3.00, "Brocheta de carne especiada",    List.of())
             )
         );
+
+        crearRestaurante(
+            "Restaurante El Mirador", "mirador-admin",
+            41.650000, -5.800000, // ±15 km al noreste
+            List.of(NombreCategoria.MEDITERRANEO, NombreCategoria.FUSION),
+            Set.of(NombreRol.CLIENTE),
+            List.of(
+                plato("Paella de marisco", 14.50, "Arroz con marisco fresco", List.of(NombreAlergeno.CRUSTACEOS)),
+                plato("Gazpacho andaluz",  5.00,  "Sopa fría de tomate",      List.of())
+            )
+        );
+
+        crearRestaurante(
+            "Taberna del Sur", "taberna-admin",
+            41.360000, -5.600000, // ±17 km al sureste
+            List.of(NombreCategoria.TRADICIONAL, NombreCategoria.CHINO),
+            Set.of(NombreRol.CLIENTE),
+            List.of(
+                plato("Ramen de cerdo",     11.00, "Caldo intenso con panceta", List.of(NombreAlergeno.SOJA, NombreAlergeno.GLUTEN)),
+                plato("Empanada gallega",    4.20, "Masa rellena de atún",      List.of(NombreAlergeno.GLUTEN, NombreAlergeno.PESCADO))
+            )
+);
     }
 
     // método getOrCreateOwner, plato(...) y crearRestaurante(...) sin cambios...

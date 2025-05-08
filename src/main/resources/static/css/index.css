@@ -234,6 +234,11 @@ body {
   transform: scale(1.05);
 }
 
+#total-cesta > .badge {
+  background-color: #c2d6a5;
+  color: #2f4f2f;
+}
+
 #btnIniciarSesion:hover {
   --btn-cyan: #00c1f3;
   color: white;
@@ -336,6 +341,12 @@ body {
 
   #filtros {
     max-width: 1000px !important;
+  }
+}
+
+@media (max-width: 476px) {
+  .cesta-container {
+    margin-left: 0 !important;
   }
 }
 

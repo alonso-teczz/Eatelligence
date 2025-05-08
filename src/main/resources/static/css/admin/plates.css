@@ -98,3 +98,7 @@ form label {
     background-color: #157548 !important;
     border-color: #157548 !important;
 }
+
+#alergenosDisponibles, #alergenosSeleccionados, [id^="edit-seleccionados-"], [id^="edit-disponibles-"] {
+    cursor: grab;
+}

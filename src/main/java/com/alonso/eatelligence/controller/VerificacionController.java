@@ -83,7 +83,7 @@ public class VerificacionController {
                             ? (segundosRestantes / 60) + " minutos" 
                             : "1 minuto") 
                         : "menos de un minuto") + 
-                    " para solicitar otro correo de verificación.");
+                    " para solicitar otro correo de verificación. Revisa tu bandeja de entrada.");
         }        
     
         Integer intentos = oldVT.getIntentosReenvio();
@@ -101,7 +101,7 @@ public class VerificacionController {
                             ? (segundosRestantes / 60) + " minutos" 
                             : "1 minuto") 
                         : "menos de un minuto") + 
-                    " para solicitar otro correo de verificación.");
+                    " para solicitar otro correo de verificación. Revisa tu bandeja de entrada.");
         }
     
         try {
@@ -155,7 +155,7 @@ public class VerificacionController {
                 }
             }
     
-            return ResponseEntity.ok("Correo de verificación reenviado correctamente. Podrás solicitar otro en " + (minutosEspera * 2) + " minutos.");
+            return ResponseEntity.ok("Correo de verificación reenviado correctamente. Podrás solicitar el siguiente en " + (minutosEspera * 2) + " minutos.");
     
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Error al reenviar el correo: " + e.getMessage());

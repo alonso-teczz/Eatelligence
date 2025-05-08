@@ -44,6 +44,7 @@ public class Restaurante {
 
     @OneToOne(optional = false, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "usuario_id", unique = true)
+    @ToString.Exclude
     private Usuario propietario;    
 
     @Column(length = 500)
@@ -72,6 +73,7 @@ public class Restaurante {
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "direccion_id", nullable = false)
+    @ToString.Exclude
     private Direccion direccion;
 
     @ElementCollection

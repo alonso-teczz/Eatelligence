@@ -61,5 +61,6 @@ public class Direccion {
     private Usuario usuario;
 
     @OneToOne(mappedBy = "direccion")
+    @ToString.Exclude
     private Restaurante restaurante;
 }
