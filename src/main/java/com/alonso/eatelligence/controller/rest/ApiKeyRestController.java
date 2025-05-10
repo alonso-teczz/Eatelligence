@@ -11,7 +11,7 @@ import java.util.Map;
 @RequestMapping("/api/apikeys")
 public class ApiKeyRestController {
 
-    @Value("${GEOAPIFY_API_KEY}")
+    @Value("${geoapify.api.key}")
     private String geoapifyKey;
 
     @GetMapping("/geoapify")
