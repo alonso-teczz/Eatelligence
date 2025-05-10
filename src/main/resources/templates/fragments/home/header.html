@@ -68,10 +68,7 @@
                              ${#strings.substring(opcion.url, 1)} + '-link'">
                              <i th:class="${'bi me-2 ' + 
                              (opcion.url == '/settings' ? 'bi-gear' : 
-                              opcion.url == '/order-history' ? 'bi-clock-history' :
                               opcion.url == '/admin' ? 'bi-sliders' : 
-                              opcion.url == '/routes' ? 'bi-truck' : 
-                              opcion.url == '/orders' ? 'bi-receipt' : 
                               'bi-link')}"></i>
                   <span th:text="${opcion.nombre}"></span>
                 </a>

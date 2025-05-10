@@ -158,7 +158,7 @@
         <!-- Selección de dirección válida -->
         <section class="mb-5">
           <h4>Selecciona dirección de envío</h4>
-          <form th:action="@{/orders/confirm}" method="post">
+          <form action="#" method="post">
             <div class="list-group mb-4">
               <th:block th:each="dir, iterStat : ${validAddresses}">
                 <label class="list-group-item d-flex justify-content-between align-items-start">

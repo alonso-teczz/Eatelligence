@@ -29,7 +29,6 @@ public class PedidoController {
         @SessionAttribute("usuario") Usuario usuario,
         Model model
     ) {
-
         // obtenemos todas las direcciones del usuario
         List<Direccion> todas = direccionService.findAllByUsuario(usuario);
 
