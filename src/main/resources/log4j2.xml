@@ -44,7 +44,7 @@
         
         <Root level="info">
             <AppenderRef ref="Console"/>
-            <AppenderRef ref="AppFile"/>
+            <!-- <AppenderRef ref="AppFile"/> -->
         </Root>
     </Loggers>
 </Configuration>
