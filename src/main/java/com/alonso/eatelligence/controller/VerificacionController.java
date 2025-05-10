@@ -122,7 +122,7 @@ public class VerificacionController {
                         "verificacion",
                         Map.of(
                             "nombre", u.getNombre(),
-                            "urlVerificacion", "http://localhost:8080/verify?token=" + newVT.getToken(),
+                            "urlVerificacion", "https://eatelligence.up.railway.app/verify?token=" + newVT.getToken(),
                             "proximoIntento", minutosEspera * 2 + " minutos"
                         )
                     );
@@ -144,7 +144,7 @@ public class VerificacionController {
                         "verificacion",
                         Map.of(
                             "nombre", r.getNombreComercial(),
-                            "urlVerificacion", "http://localhost:8080/verify?token=" + newVT.getToken(),
+                            "urlVerificacion", "https://eatelligence.up.railway.app/verify?token=" + newVT.getToken(),
                             "proximoIntento", minutosEspera * 2 + " minutos"
                         )
                     );

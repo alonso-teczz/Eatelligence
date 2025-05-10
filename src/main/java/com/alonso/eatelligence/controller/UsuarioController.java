@@ -104,7 +104,7 @@ public class UsuarioController {
                 "verificacion",
                 Map.of(
                     "nombre", u.getNombre(),
-                    "urlVerificacion", "http://localhost:8080/verify?token=" + vt.getToken(),
+                    "urlVerificacion", "https://eatelligence.up.railway.app/verify?token=" + vt.getToken(),
                     "proximoIntento", this.tokenService.formatearTiempoEspera(this.tokenService.calcularTiempoBloqueoSegundos(vt.getIntentosReenvio()))
                 )
             );
@@ -155,7 +155,7 @@ public class UsuarioController {
                 "verificacion",
                 Map.of(
                     "nombre", r.getPropietario().getNombre(),
-                    "urlVerificacion", "http://localhost:8080/verify?token=" + usuarioVT.getToken(),
+                    "urlVerificacion", "https://eatelligence.up.railway.app/verify?token=" + usuarioVT.getToken(),
                     "proximoIntento", this.tokenService.formatearTiempoEspera(this.tokenService.calcularTiempoBloqueoSegundos(usuarioVT.getIntentosReenvio()))
                 )
             );
@@ -170,7 +170,7 @@ public class UsuarioController {
                 "verificacion",
                 Map.of(
                     "nombre", r.getNombreComercial(),
-                    "urlVerificacion", "http://localhost:8080/verify?token=" + restauranteVT.getToken(),
+                    "urlVerificacion", "https://eatelligence.up.railway.app/verify?token=" + restauranteVT.getToken(),
                     "proximoIntento", this.tokenService.formatearTiempoEspera(this.tokenService.calcularTiempoBloqueoSegundos(restauranteVT.getIntentosReenvio()))
                 )
             );

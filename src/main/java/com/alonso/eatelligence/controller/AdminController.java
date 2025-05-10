@@ -191,7 +191,7 @@ public class AdminController {
                     "username", nuevoEmpleado.getUsername(),
                     "restaurantName", restaurante.getNombreComercial(),
                     "role", nuevoEmpleado.getRol().toLowerCase(),
-                    "invitationUrl", "http://localhost:8080/recruit?token=" + rt.getToken()
+                    "invitationUrl", "https://eatelligence.up.railway.app/recruit?token=" + rt.getToken()
                 )
             );
         } catch (UnsupportedEncodingException | MessagingException e) {
