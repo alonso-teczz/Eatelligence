@@ -17,6 +17,13 @@ window.addEventListener("load", () => {
     });
   }
 
+/**
+ * Actualiza el valor del input oculto con una lista separada por comas
+ * de los IDs de los alérgenos seleccionados en el elemento sortable.
+ * Esta función se activa en los eventos de agregar, remover o ordenar
+ * elementos en la lista de alérgenos seleccionados.
+ */
+
   function actualizarHiddenNuevo() {
     const ids = Array.from(seleccionados.children).map((li) => li.dataset.id);
     hiddenNuevo.value = ids.join(",");
@@ -42,6 +49,14 @@ window.addEventListener("load", () => {
     new Sortable(lista, { group: "alergenos-edit", animation: 150 });
   });
 
+
+  /*************  ✨ Windsurf Command ⭐  *************/
+  /**
+   * Actualiza el valor del input oculto asociado a un plato específico con
+   * una lista separada por comas de los IDs de los alérgenos seleccionados.
+   * @param {string} platoId - El ID del plato para el cual se actualiza el input oculto.
+  */
+ 
   function actualizarHiddenEdit(platoId) {
     const ul     = document.getElementById(`seleccionados-${platoId}`);
     const hidden = document.getElementById(`inputAlergenos-${platoId}`);
@@ -72,6 +87,12 @@ window.addEventListener("load", () => {
   document.querySelectorAll('[id^="edit-disponibles-"]').forEach((lista) => {
     new Sortable(lista, { group: "alergenos-edit", animation: 150 });
   });
+
+/**
+ * Actualiza el valor del input hidden asociado a un plato específico con
+ * una lista separada por comas de los IDs de los alérgenos seleccionados.
+ * @param {string} platoId - El ID del plato para el cual se actualiza el input oculto.
+ */
 
   function actualizarEditInput(platoId) {
     const ul     = document.getElementById(`edit-seleccionados-${platoId}`);

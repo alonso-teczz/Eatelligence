@@ -58,6 +58,12 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
   }
   
+  
+  /**
+   * Copia el valor y el estado de validación de un campo de formulario a otro.
+   * @param {HTMLElement} inputOrigen - El campo de origen.
+   * @param {HTMLElement} inputDestino - El campo de destino.
+   */
   function copiarEstadoValidacion(inputOrigen, inputDestino) {
     // Copiar clases de validación
     inputDestino.classList.remove("is-valid", "is-invalid");
@@ -137,6 +143,15 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
   }
   
+  /**
+   * Aplica la visibilidad de la contraseña en un formulario.
+   * Busca el campo de contraseña y el icono de toggle de visibilidad
+   * en el formulario y aplica la visibilidad actual de la contraseña.
+   * Si passwordVisible es true, muestra la contraseña como texto,
+   * de lo contrario la oculta.
+   * @param {HTMLFormElement} form Formulario que contiene el campo de contraseña
+   *   y el icono de toggle de visibilidad.
+   */
   function aplicarVisibilidadPassword(form) {
     const password = form.querySelector('[name$="password"]');
     const icono = form.querySelector("#iconoPassword");
@@ -240,6 +255,15 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
   }
 
+  /**
+   * Configura la comprobación en vivo de la disponibilidad de un username en los
+   * formularios de registro de usuario y de propietario de restaurante.
+   *
+   * Escucha el evento "input" en los campos de texto con id "username" y
+   * "propietario.username", y muestra un feedback visual según si el username
+   * ya existe o no. Si el username tiene menos de 6 caracteres, no se muestra
+   * ningún feedback.
+   */
   function configurarComprobacionUsername() {
     const inputs = [document.getElementById("username"), document.getElementById("propietario.username")];
   
@@ -278,6 +302,15 @@ document.addEventListener("DOMContentLoaded", async function () {
       });
     });
   
+    /**
+     * Muestra un feedback de error en el input y oculta el feedback de éxito.
+     * Agrega la clase "is-invalid" al input y la clase "d-none" al feedback de éxito.
+     * Quita la clase "is-valid" del input y la clase "d-none" del feedback de error.
+     * Si hay un feedback estático con clase "validation-static", lo oculta.
+     * @param {HTMLInputElement} input - El input a mostrar el feedback
+     * @param {HTMLElement} [error] - El elemento de feedback de error
+     * @param {HTMLElement} [success] - El elemento de feedback de éxito
+     */
     function mostrarError(input, error, success) {
       input.classList.add("is-invalid");
       input.classList.remove("is-valid");
@@ -289,6 +322,12 @@ document.addEventListener("DOMContentLoaded", async function () {
       if (staticMsgErr) staticMsgErr.classList.add("d-none");
     }
     
+    /**
+     * Muestra el feedback de éxito para el input dado
+     * @param {HTMLInputElement} input - Campo de texto que ha superado la validación
+     * @param {HTMLElement} [success] - Elemento que contiene el mensaje de éxito
+     * @param {HTMLElement} [error] - Elemento que contiene el mensaje de error
+     */
     function mostrarSuccess(input, success, error) {
       input.classList.remove("is-invalid");
       input.classList.add("is-valid");
@@ -299,6 +338,15 @@ document.addEventListener("DOMContentLoaded", async function () {
       if (staticMsgErr) staticMsgErr.classList.add("d-none");
     }
     
+  /**
+   * Oculta el feedback de validación para el input dado.
+   * Quita las clases "is-valid" y "is-invalid" del input, y muestra el feedback
+   * estático con clase "validation-static" si existe. Si se proporcionan los
+   * elementos de feedback de éxito y error, los oculta.
+   * @param {HTMLInputElement} input - Campo de texto que se va a ocultar el feedback
+   * @param {HTMLElement} [success] - Elemento que contiene el mensaje de éxito
+   * @param {HTMLElement} [error] - Elemento que contiene el mensaje de error
+   */
     function ocultarFeedback(input, success, error) {
       input.classList.remove("is-valid", "is-invalid");
       if (success) success.classList.add("d-none");

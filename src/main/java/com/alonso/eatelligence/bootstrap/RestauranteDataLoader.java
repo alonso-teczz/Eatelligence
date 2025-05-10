@@ -238,9 +238,21 @@ public class RestauranteDataLoader implements CommandLineRunner {
         return p;
     }
 
-    private void crearRestaurante(String comercial, String username, double lat, double lon,
-                                  List<NombreCategoria> categorias, Set<NombreRol> roles,
-                                  List<Plato> platos) {
+    /**
+     * Creates and preloads a restaurant entity into the system if it does not already exist.
+     *
+     * @param comercial   the commercial name of the restaurant
+     * @param username    the username of the restaurant owner
+     * @param lat         the latitude of the restaurant's location
+     * @param lon         the longitude of the restaurant's location
+     * @param categorias  a list of categories the restaurant belongs to
+     * @param roles       a set of roles assigned to the restaurant owner
+     * @param platos      a list of dishes offered by the restaurant
+     */
+    private void crearRestaurante(
+        String comercial, String username, double lat, double lon,
+        List<NombreCategoria> categorias, Set<NombreRol> roles, List<Plato> platos
+    ) {
         if (restauranteService.existsByNombreComercial(comercial)) {
             log.info("   → Restaurante '{}' ya existe, omitiendo creación", comercial);
             return;

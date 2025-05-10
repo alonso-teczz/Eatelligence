@@ -24,6 +24,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  /**
+   * Actualiza el valor del input hidden con los ids de las categorías
+   * seleccionadas en el sortable. Se llama en cada evento de
+   * reordenamiento o cambio de selección.
+   */
   function actualizarHidden() {
     const ids = Array.from(sel.children).map(li => li.dataset.id);
     input.value = ids.join(',');

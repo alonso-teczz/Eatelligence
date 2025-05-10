@@ -113,7 +113,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const fixed2 = n => Number(n).toFixed(2);
   const same = v => currentImporte !== null && Math.abs(toNum(v) - currentImporte) < 0.01;
 
-  /* Render card */
+  /**
+   * Renderiza la card de importe mínimo de pedido.
+   * Si currentImporte es nulo, muestra un mensaje de aviso y un botón para fijar el importe.
+   * Si currentImporte no es nulo, muestra el valor actual y un botón para editar el importe.
+   * @return {void}
+   */
   const pintaCard = () => {
     if (currentImporte !== null) {
       cardText.innerHTML =
@@ -138,12 +143,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const formEditarTiempo = document.getElementById('formEditarTiempo');
   const inputFijarTiempo = document.getElementById('tiempoEstimado');
   const inputEditarTiempo = document.getElementById('tiempoEstimadoEdit');  
-
+  
   let currentTiempo = (() => {
     const span = document.getElementById('tiempoActual');
     return span ? parseInt(span.textContent) : null;
   })();
 
+  /**
+   * Renderiza la card de tiempo estimado de preparación.
+   * Si currentTiempo es nulo, muestra un mensaje de aviso y un botón para fijar el tiempo.
+   * Si currentTiempo no es nulo, muestra el valor actual y un botón para editar el tiempo.
+   */
   const pintaTiempo = () => {
     if (currentTiempo !== null) {
       tiempoCardText.classList.remove("fst-italic");
@@ -219,6 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* Botón Eliminar */
   let btnDelete = document.getElementById('btnDeleteImporte');
+
   const toggleBtnDelete = show => {
     if (show) {
       if (!btnDelete) {
@@ -302,7 +313,14 @@ document.addEventListener('DOMContentLoaded', () => {
   /* Validación personalizada (sin tooltips nativos) */
   [formFijar, formEditar].forEach(f => f.setAttribute('novalidate', ''));
 
-  /* --- Validación y envío ------------------------------------------------- */
+  /**
+   * Procesa el importe introducido en el formulario.
+   * - Valida que sea un número mayor o igual a 1.
+   * - Valida que sea distinto al actual.
+   * - Llama al backend para guardar el nuevo importe.
+   * - Actualiza el estado local y muestra un mensaje de éxito o error.
+   * @param {HTMLInputElement} input El input del formulario que contiene el importe.
+   */
   const procesa = async (input) => {
     const val = toNum(input.value);
     let msg = '';

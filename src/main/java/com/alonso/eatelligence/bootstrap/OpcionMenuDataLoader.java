@@ -30,6 +30,12 @@ public class OpcionMenuDataLoader implements CommandLineRunner {
         cargarOpciones();
     }
 
+    /**
+     * Carga las opciones del menú en la base de datos, si no existen.
+     * Las opciones se definen en una lista y se recorren para verificar si
+     * existen en la base de datos. Si no existen, se crean.
+     * Después de cargar las opciones, se asignan a los roles correspondientes.
+     */
     private void cargarOpciones() {
         List<OpcionMenu> opciones = List.of(
             // --- Mi Cuenta ---
@@ -67,6 +73,15 @@ public class OpcionMenuDataLoader implements CommandLineRunner {
         asignarOpciones(NombreRol.CLIENTE, "/logout");
     }
 
+    /**
+     * Crea una opción de menú con los datos dados.
+     *
+     * @param nombre nombre de la opción de menú
+     * @param url    ruta correspondiente a la opción
+     * @param seccion sección donde se encuentra la opción
+     * @param orden   orden de aparición en la sección
+     * @return una opción de menú con los datos dados
+     */
     private OpcionMenu crearOpcion(String nombre, String url, String seccion, int orden) {
         return OpcionMenu.builder()
             .nombre(nombre)
@@ -77,6 +92,12 @@ public class OpcionMenuDataLoader implements CommandLineRunner {
             .build();
     }
 
+    /**
+     * Asigna las opciones de menú correspondientes a un rol.
+     * 
+     * @param rolNombre nombre del rol al que se asignarán las opciones
+     * @param rutas     rutas de las opciones de menú a asignar
+     */
     private void asignarOpciones(NombreRol rolNombre, String... rutas) {
         Rol rol = this.rolService.findByNombreConOpciones(rolNombre)
             .orElseThrow(() -> new RuntimeException("Rol no encontrado: " + rolNombre));

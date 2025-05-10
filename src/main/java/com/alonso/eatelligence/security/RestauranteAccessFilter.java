@@ -27,6 +27,19 @@ public class RestauranteAccessFilter extends OncePerRequestFilter {
   @Autowired private IDireccionService direccionService;
   @Autowired private IRestauranteService restauranteService;
 
+  /**
+   * Filtro que se encarga de verificar que el usuario tenga una
+   * dirección de envío establecida en la sesión y que la distancia
+   * entre la dirección de envío y el restaurante sea inferior a 15 km.
+   * Si no se cumple esta condición, se redirige al usuario a la página
+   * de inicio.
+   *
+   * @param req   la petición HTTP
+   * @param res   la respuesta HTTP
+   * @param chain el encadenamiento de filtros
+   * @throws ServletException si se produce un error al procesar la petición
+   * @throws IOException       si se produce un error al enviar la respuesta
+   */
   @Override
   protected void doFilterInternal(
     HttpServletRequest req,

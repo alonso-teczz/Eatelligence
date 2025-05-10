@@ -22,6 +22,17 @@ public class EmailService {
     @Autowired
     private TemplateEngine emailTemplateEngine;
 
+    /**
+     * Envia un correo a la dirección proporcionada con el asunto y el contenido
+     * definidos por el template y los datos pasados como par metro.
+     *
+     * @param to       la dirección del destinatario
+     * @param subject  el asunto del correo
+     * @param template el nombre del template de Thymeleaf para el correo
+     * @param data     los datos para reemplazar en el template
+     * @throws MessagingException   si ocurre un error al enviar el correo
+     * @throws UnsupportedEncodingException si el nombre del remitente no se puede codificar
+     */
     public void sendEmail(String to, String subject, String template, Map<String, Object> data) throws MessagingException, UnsupportedEncodingException {
         Context context = new Context();
         context.setVariables(data);

@@ -28,26 +28,8 @@ public class PedidoServiceImp implements IPedidoService {
 
     private final Map<Long, Long> pedidosHoyCache = new ConcurrentHashMap<>();
 
-        /** Devuelve el nº de pedidos de HOY para un restaurante (desde la caché) */
+    /** Devuelve el nº de pedidos de HOY para un restaurante (desde la caché) */
     public long getPedidosHoy(Restaurante restaurante) {
         return pedidosHoyCache.getOrDefault(restaurante.getId(), 0L);
     }
-
-    /* ---------- Tarea programada ---------- */    
-
-    /**  
-     * Se ejecuta en el segundo 0 de cada minuto.
-     * Recalcula y refresca la caché pedidosHoyCache.
-     */
-    // public void refreshPedidosHoy() {
-
-    //     LocalDateTime inicio = LocalDate.now().atStartOfDay();
-    //     LocalDateTime fin = inicio.plusDays(1);
-
-    //     this.restauranteService.findAll().forEach(r -> {
-    //         long total = this.pedidoRepository
-    //             .countByRestauranteAndFechaRealizadoBetween(r, inicio, fin);
-    //         pedidosHoyCache.put(r.getId(), total);
-    //     });
-    // }
 }

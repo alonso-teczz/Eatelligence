@@ -50,6 +50,25 @@ public class VerificationFilter implements Filter {
         "/admin/deliverymen"
     );
 
+    /**
+     * Verifica si el usuario y su restaurante (si lo tiene) están verificados
+     * antes de permitir el acceso a ciertas rutas.
+     *
+     * <ul>
+     * <li>Las rutas <code>/orders/checkout</code> solo pueden ser accedidas por
+     * usuarios verificados.</li>
+     * <li>Las rutas del panel de administración solo pueden ser accedidas por
+     * restaurantes verificados y su propietario.</li>
+     * </ul>
+     * Si el usuario no cumple con las condiciones, se redirige a la página de
+     * verificación pendiente.
+     *
+     * @param request  el objeto de solicitud HTTP.
+     * @param response el objeto de respuesta HTTP.
+     * @param chain    el objeto de filtrado.
+     * @throws IOException      si ocurre un error de E/S.
+     * @throws ServletException si ocurre un error en el filtrado.
+     */
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
         throws IOException, ServletException {

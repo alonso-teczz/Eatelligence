@@ -1,15 +1,23 @@
-let pageLinks = {}; // enlaces de paginación
+let pageLinks = {};
 
-/* ——————————————————————————————————————————————————————— */
-/* -----------------  ACTUALIZA EL RANGE ------------------ */
-/* ——————————————————————————————————————————————————————— */
+/**
+ * Actualiza el texto del <span> que muestra el valor del
+ * deslizador de radio de búsqueda en la página principal.
+ * @param {Event} e - Evento que contiene el valor actual del
+ *                    deslizador.
+ */
 function updateRadioLabel(e) {
   document.getElementById("radioLabel").textContent = e.target.value;
 }
 
-/* ——————————————————————————————————————————————————————— */
-/* -------------  ESTIMAR TIEMPOS (GEOAPIFY) -------------- */
-/* ——————————————————————————————————————————————————————— */
+/**
+ * Estima el tiempo de entrega a cada uno de los restaurantes de la
+ * lista dada y muestra el resultado en la interfaz de usuario.
+ * @param {Array} lista - Arreglo de restaurantes con sus
+ *                        propiedades latitud y longitud.
+ * @return {Promise} Promesa que se resuelve cuando se han
+ *                   estimado los tiempos de entrega.
+ */
 async function estimarTiempos(lista) {
   const apiKey = await fetch("/api/apikeys/geoapify", {
     headers: { "X-Requested-With": "XMLHttpRequest" },
@@ -61,7 +69,14 @@ let currentPage = 0;
 let totalPages  = 1;
 
 /**
- * Carga restaurantes según filtros, page y size.
+ * Carga la lista de restaurantes visible en la interfaz, teniendo en cuenta
+ * los filtros de categorías, alérgenos, radio, importe y horario. La
+ * función primero obtiene la latitud y longitud de la dirección actual
+ * y luego construye la petición GET para obtener la lista de restaurantes
+ * que cumplen los filtros.
+ *
+ * @async
+ * @returns {Promise<void>}
  */
 async function cargarRestaurantes() {
   const spinner   = document.getElementById("spinnerCargando");
@@ -142,9 +157,12 @@ document.getElementById("nextPage").addEventListener("click", e => {
 });
 
 
-/* ——————————————————————————————————————————————————————— */
-/* -----------  TOGGLE PANEL / AJUSTE DE GRID -------------- */
-/* ——————————————————————————————————————————————————————— */
+/**
+ * Alterna la visibilidad del panel de filtros en la interfaz de usuario.
+ * Actualiza el botón de alternancia para reflejar el estado actual del panel
+ * de filtros y ajusta el diseño de las tarjetas de restaurantes según la
+ * visibilidad del panel.
+ */
 function toggleFiltrosPanel() {
   const filtrosPanel = document.getElementById("filtros");
   const restaurantCards = document.getElementById("restaurant-cards");
@@ -165,6 +183,20 @@ function toggleFiltrosPanel() {
   }
 }
 
+
+/**
+ * Configura los eventos de los controles de filtrado en la interfaz de usuario
+ * para recargar la lista de restaurantes según sea necesario.
+ * Algunos controles se manejan de forma diferente según su tipo:
+ * - El slider de radio de búsqueda se actualiza en vivo según el usuario
+ *   cambia el valor, y se recarga la lista al soltar.
+ * - Los cambios en checkboxes o numéricos generales se recargan inmediatamente.
+ * - El input de texto de búsqueda por nombre se recarga solo cuando se
+ *   pierde el foco y el valor ha cambiado.
+ * - El botón para mostrar/ocultar el panel de filtros ajusta el diseño de
+ *   las tarjetas según sea necesario.
+ * @returns {void}
+ */
 function setupFilters() {
   const form            = document.getElementById('filtrosForm');
   const filtrosPanel    = document.getElementById('filtros');
@@ -223,9 +255,15 @@ function setupFilters() {
   }
 }
 
-/* ——————————————————————————————————————————————————————— */
-/* --------------------  PINTAR CARDS  --------------------- */
-/* ——————————————————————————————————————————————————————— */
+/**
+ * Renderiza una lista de restaurantes en el contenedor especificado.
+ * Si no se proporciona el contenedor, se utiliza el elemento con id
+ * "restaurant-cards".
+ *
+ * @param {Array<Restaurant>} lista - Arreglo de objetos Restaurant
+ * @param {HTMLElement} [container=document.getElementById("restaurant-cards")]
+ * @returns {void}
+ */
 function renderCards(lista, container = null) {
   const cardsZone = container ?? document.getElementById("restaurant-cards");
 
@@ -333,9 +371,13 @@ function renderCards(lista, container = null) {
   });
 }
 
-/* ——————————————————————————————————————————————————————— */
-/* -----------------  Paginación (prev/next) --------------- */
-/* ——————————————————————————————————————————————————————— */
+/**
+ * Actualiza los enlaces de paginación prev/next y sus estilos.
+ * @param {object} links - Contiene las propiedades `prev` y `next` que
+ *   indican si hay una página previa o siguiente, respectivamente.
+ *   Dichas propiedades se usan para habilitar/deshabilitar los botones
+ *   de la paginación.
+ */
 function updatePageLinks(links) {
   pageLinks = links;
   document

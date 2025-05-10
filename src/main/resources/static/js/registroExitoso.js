@@ -47,6 +47,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let tiempoRestante = tiempoBloqueo;
 
+  /**
+   * Actualiza el texto de #cuentaAtrasTexto con el tiempo restante
+   * para reenviar el correo.
+   *
+   * @private
+   */
     const actualizarCuentaAtras = () => {
       const horas = Math.floor(tiempoRestante / 3600);
       const minutos = Math.floor((tiempoRestante % 3600) / 60);

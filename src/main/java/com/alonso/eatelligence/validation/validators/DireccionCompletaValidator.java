@@ -8,6 +8,14 @@ import jakarta.validation.ConstraintValidatorContext;
 
 public class DireccionCompletaValidator implements ConstraintValidator<DireccionCompleta, DireccionOpcionalDTO> {
 
+    /**
+     * Valida que si se ha rellenado alguno de los campos de la dirección, se
+     * hayan rellenado todos. Si no se ha rellenado ninguno, se considera válido.
+     * 
+     * @param direccion la dirección a validar
+     * @param context   contexto de validación
+     * @return true si es válido, false en caso contrario
+     */
     @Override
     public boolean isValid(DireccionOpcionalDTO direccion, ConstraintValidatorContext context) {
         if (direccion == null) return true;

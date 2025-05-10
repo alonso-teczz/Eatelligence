@@ -29,7 +29,13 @@ document.addEventListener('DOMContentLoaded', () => {
             renderTable();
         });
 
-    /* ──────────── Render de la tabla ──────────── */
+    
+    /**
+     * Renderiza la tabla de horarios, con filas vacías si no hay franjas
+     * y botones de edición y borrado para cada franja.
+     *
+     * @return {void}
+     */
     function renderTable() {
         tbody.innerHTML = '';
         EN.forEach((en, i) => {

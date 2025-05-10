@@ -6,6 +6,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const csrfToken = document.getElementById("csrfToken")?.value;
   const csrfHeader = document.getElementById("csrfHeader")?.value;
 
+/**
+ * Reenvía un correo de verificación.
+ * 
+ * @param {string} token Token de verificación.
+ * @param {string} tipo Tipo de verificación (RESTAURANTE o USUARIO).
+ * @param {HTMLElement} button Botón que activó esta función.
+ */
   function reenviarVerificacion(token, tipo, button) {
     button.disabled = true;
 

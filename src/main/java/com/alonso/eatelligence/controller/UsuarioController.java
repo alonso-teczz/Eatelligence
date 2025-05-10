@@ -3,8 +3,6 @@ package com.alonso.eatelligence.controller;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -36,7 +34,7 @@ import jakarta.validation.Valid;
 @Controller
 public class UsuarioController {
 
-    private static Logger logger = LogManager.getLogger(UsuarioController.class);
+    //private static Logger logger = LogManager.getLogger(UsuarioController.class);
 
     @Autowired
     private UsuarioServiceImp usuarioService;
@@ -87,9 +85,9 @@ public class UsuarioController {
             ValidationUtils.getFirstOrderedErrorFromBindingResult(result, formCliente.getClass())
                 .ifPresentOrElse(error -> {
                     model.addAttribute("globalError", error.getDefaultMessage());
-                    logger.warn("Error en el formulario de registro", error.getDefaultMessage());
+                    // logger.warn("Error en el formulario de registro", error.getDefaultMessage());
                 }, () -> {
-                    logger.warn("No se ha detectado ningún error");
+                    // logger.warn("No se ha detectado ningún error");
                 });
             return "register";
         }
@@ -111,7 +109,7 @@ public class UsuarioController {
                 )
             );
         } catch (UnsupportedEncodingException | MessagingException e) {
-            logger.warn("Error al enviar el correo");
+            // logger.warn("Error al enviar el correo");
             correoUsuarioFallido = true;
         }
         
