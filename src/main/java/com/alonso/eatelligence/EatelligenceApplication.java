@@ -2,6 +2,9 @@ package com.alonso.eatelligence;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.context.WebServerInitializedEvent;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class EatelligenceApplication {
@@ -11,7 +14,14 @@ public class EatelligenceApplication {
         // dotenv.entries().forEach(entry ->
         //     System.setProperty(entry.getKey(), entry.getValue())
         // );
+        System.out.println(">> APP STARTING <<");
         SpringApplication.run(EatelligenceApplication.class, args);
+    }
+
+    @Bean
+    ApplicationListener<WebServerInitializedEvent> webServerListener() {
+        return event -> System.out.println(">> WEB SERVER LISTENER: port=" 
+            + event.getWebServer().getPort());
     }
 
 	//! Ejecuta el navegador automáticamente cuando se inicie la aplicacion
