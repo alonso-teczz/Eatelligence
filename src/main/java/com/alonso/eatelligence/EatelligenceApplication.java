@@ -2,9 +2,9 @@ package com.alonso.eatelligence;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.context.WebServerInitializedEvent;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.annotation.Bean;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext;
+import org.springframework.context.event.EventListener;
 
 @SpringBootApplication
 public class EatelligenceApplication {
@@ -18,10 +18,15 @@ public class EatelligenceApplication {
         SpringApplication.run(EatelligenceApplication.class, args);
     }
 
-    @Bean
-    ApplicationListener<WebServerInitializedEvent> webServerListener() {
-        return event -> System.out.println(">> WEB SERVER LISTENER: port=" 
-            + event.getWebServer().getPort());
+    @EventListener
+    public void onReady(ApplicationReadyEvent event) {
+        var ctx = event.getApplicationContext();
+        if (ctx instanceof ServletWebServerApplicationContext serverCtx) {
+            int port = serverCtx.getWebServer().getPort();
+            System.out.println(">> APPLICATION READY ON PORT: " + port);
+        } else {
+            System.out.println(">> APPLICATION READY, but not a WebServerApplicationContext");
+        }
     }
 
 	//! Ejecuta el navegador automáticamente cuando se inicie la aplicacion
