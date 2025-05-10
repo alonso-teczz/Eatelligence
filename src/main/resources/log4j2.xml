@@ -1,22 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="DEBUG">
     <Appenders>
-        <!-- Consola -->
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="[%d{HH:mm:ss}] [%t] %-5level %logger{36} - %msg%n" charset="UTF-8"/>
         </Console>
-        <!-- Archivo: logs de trackeo de usuarios -->
-        <File name="UserFile" fileName="logs/user.log" append="true">
+        <!-- <File name="UserFile" fileName="logs/user.log" append="true">
             <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss}] %-5level %logger{36} - %msg%n" charset="UTF-8"/>
         </File>
-        <!-- Logs del servidor -->
         <File name="AppFile" fileName="logs/app.log" append="false">
             <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss}] %-5level %logger{36} - %msg%n" charset="UTF-8"/>
-        </File>
+        </File> -->
     </Appenders>
     <Loggers>
-        <!-- Logs de controladores: van a user.log -->
-        <Logger name="com.alonso.eatelligence.controller" level="info" additivity="true">
+        <!-- <Logger name="com.alonso.eatelligence.controller" level="info" additivity="true">
             <AppenderRef ref="UserFile"/>
             <AppenderRef ref="Console"/>
         </Logger>
@@ -26,31 +22,26 @@
             <AppenderRef ref="Console"/>
         </Logger>        
         
-        <!-- Spring Security -->
         <Logger name="org.springframework.security" level="debug" additivity="false">
             <AppenderRef ref="AppFile"/>
             <AppenderRef ref="Console"/>
         </Logger>
         
-        <!-- Spring Web -->
         <Logger name="org.springframework.web" level="debug" additivity="false">
             <AppenderRef ref="AppFile"/>
             <AppenderRef ref="Console"/>
         </Logger>
         
-        <!-- Thymeleaf - solo errores -->
         <Logger name="org.thymeleaf" level="error" additivity="false">
             <AppenderRef ref="AppFile"/>
             <AppenderRef ref="Console"/>
         </Logger>
         
-        <!-- Thymeleaf Layout Dialect - solo errores -->
         <Logger name="nz.net.ultraq.thymeleaf" level="error" additivity="false">
             <AppenderRef ref="AppFile"/>
             <AppenderRef ref="Console"/>
-        </Logger>
+        </Logger> -->
         
-        <!-- Logs globales (servidor): van a consola + app.log -->
         <Root level="info">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="AppFile"/>
