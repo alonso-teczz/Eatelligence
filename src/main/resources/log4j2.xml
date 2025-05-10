@@ -6,13 +6,13 @@
             <PatternLayout pattern="[%d{HH:mm:ss}] [%t] %-5level %logger{36} - %msg%n" charset="UTF-8"/>
         </Console>
         <!-- Archivo: logs de trackeo de usuarios -->
-        <!-- <File name="UserFile" fileName="logs/user.log" append="true">
+        <File name="UserFile" fileName="logs/user.log" append="true">
             <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss}] %-5level %logger{36} - %msg%n" charset="UTF-8"/>
-        </File> -->
+        </File>
         <!-- Logs del servidor -->
-        <!-- <File name="AppFile" fileName="logs/app.log" append="false">
+        <File name="AppFile" fileName="logs/app.log" append="false">
             <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss}] %-5level %logger{36} - %msg%n" charset="UTF-8"/>
-        </File> -->
+        </File>
     </Appenders>
     <Loggers>
         <!-- Logs de controladores: van a user.log -->
