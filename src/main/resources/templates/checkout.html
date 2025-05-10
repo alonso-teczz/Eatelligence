@@ -116,7 +116,7 @@
                 </div>
               </div>
               <div id="bizumFields" class="payment-method-fields">
-                <label for="numeroBizum" class="mb-1">Número de Bizum:</label>
+                <label for="numeroBizum" class="mb-1">Número de teléfono:</label>
                 <input type="text" id="numeroBizum" class="form-control">
               </div>
             </div>
@@ -130,7 +130,7 @@
                 </div>
               </div>
               <div id="paypalFields" class="payment-method-fields">
-                <label for="emailPaypal" class="mb-1">Correo electrónico de Paypal:</label>
+                <label for="emailPaypal" class="mb-1">Correo electrónico:</label>
                 <input type="email" id="emailPaypal" class="form-control">
               </div>
             </div>
@@ -158,7 +158,7 @@
         <!-- Selección de dirección válida -->
         <section class="mb-5">
           <h4>Selecciona dirección de envío</h4>
-          <form action="#" method="post">
+          <form action="@{/orders/confirm}" method="post">
             <div class="list-group mb-4">
               <th:block th:each="dir, iterStat : ${validAddresses}">
                 <label class="list-group-item d-flex justify-content-between align-items-start">
@@ -191,7 +191,7 @@
             </div>
 
             <div class="text-end mt-4">
-              <button type="submit" class="btn btn-primary btn-lg">
+              <button type="button" class="btn btn-primary btn-lg">
                 <i class="bi bi-cart-check text-white me-2"></i>
                 Confirmar pedido
               </button>
