@@ -1,8 +1,6 @@
 package com.alonso.eatelligence.model.entity;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.CascadeType;
@@ -16,19 +14,20 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 @Entity
 @Table(name = "roles")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -38,7 +37,6 @@ public class Rol {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include
     private Long id;
 
     @EqualsAndHashCode.Include
@@ -46,9 +44,9 @@ public class Rol {
     @Column(nullable = false, unique = true)
     private NombreRol nombre;
 
-    @OneToMany(mappedBy = "rol", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToMany(mappedBy = "roles")
     @Builder.Default
-    private List<UsuarioRol> usuarios = new ArrayList<>();
+    private Set<Usuario> usuarios = new HashSet<>();
 
     @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(

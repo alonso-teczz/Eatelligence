@@ -24,7 +24,6 @@ import com.alonso.eatelligence.model.entity.Horario;
 import com.alonso.eatelligence.model.entity.NombreRol;
 import com.alonso.eatelligence.model.entity.Restaurante;
 import com.alonso.eatelligence.model.entity.Usuario;
-import com.alonso.eatelligence.model.entity.UsuarioRol;
 import com.alonso.eatelligence.model.projection.ResumenProjection;
 import com.alonso.eatelligence.repository.ICategoriaRepository;
 import com.alonso.eatelligence.repository.IRestauranteRepository;
@@ -68,12 +67,11 @@ public class RestauranteServiceImp implements IRestauranteService, IEntitableCli
             .email(cliente.getEmail())
             .telefonoMovil(cliente.getTelefonoMovil())
             .password(this.encodePassword(cliente.getPassword()))
+            .roles(Set.of(
+                this.rolService.findByNombre(NombreRol.CLIENTE).orElseThrow(),
+                this.rolService.findByNombre(NombreRol.ADMIN).orElseThrow()
+            ))
             .build();
-
-            usuario.setRoles(List.of(
-                UsuarioRol.builder().usuario(usuario).rol(this.rolService.findByNombre(NombreRol.ADMIN).orElseThrow()).build(),
-                UsuarioRol.builder().usuario(usuario).rol(this.rolService.findByNombre(NombreRol.CLIENTE).orElseThrow()).build()
-            ));
 
         if (cliente.getDireccion() != null) {
             usuario.getDirecciones().add(

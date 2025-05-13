@@ -12,15 +12,14 @@ import com.alonso.eatelligence.model.entity.NombreRol;
 
 @Repository
 public interface IRolRepository extends JpaRepository<Rol, Long> {
-  Optional<Rol> findByNombre(NombreRol nombre);
-  @Query("SELECT r FROM Rol r LEFT JOIN FETCH r.opciones WHERE r.nombre = :nombre")
-  Optional<Rol> findByNombreConOpciones(NombreRol nombre);
+    Optional<Rol> findByNombre(NombreRol nombre);
+    @Query("SELECT r FROM Rol r LEFT JOIN FETCH r.opciones WHERE r.nombre = :nombre")
+    Optional<Rol> findByNombreConOpciones(NombreRol nombre);
 
     @Query("""
       SELECT r
       FROM Rol r
-      LEFT JOIN FETCH r.usuarios ur
-      LEFT JOIN FETCH ur.usuario u
+      LEFT JOIN FETCH r.usuarios u
       WHERE r.nombre = :nombre
     """)
     Optional<Rol> findByNombreConUsuarios(@Param("nombre") NombreRol nombre);

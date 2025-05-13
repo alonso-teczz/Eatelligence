@@ -111,11 +111,11 @@ public class AuthController {
             u,
             null,
             u.getRoles().stream()
-                .map(ur -> new SimpleGrantedAuthority("ROLE_" + ur.getRol().getNombre().name()))
+                .map(rol -> new SimpleGrantedAuthority("ROLE_" + rol.getNombre().name()))
                 .toList()
         );
-
         SecurityContextHolder.getContext().setAuthentication(auth);
+
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(auth);
         SecurityContextHolder.setContext(context);
