@@ -56,7 +56,7 @@ logs/
 # --- Archivos de entorno/local ---
 .env
 *.env
-/src/main/resources/application.properties
+# /src/main/resources/application.properties
 application.yml
 application-local.properties
 application-local.yml
