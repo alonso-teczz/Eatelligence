@@ -19,7 +19,7 @@ public interface IRolRepository extends JpaRepository<Rol, Long> {
   @Query("""
     SELECT r
     FROM Rol r
-    LEFT JOIN FETCH r.usuarioRoles ur
+    LEFT JOIN FETCH r.usuarios ur
     LEFT JOIN FETCH ur.usuario
     WHERE r.nombre = :nombre
   """)

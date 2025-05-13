@@ -157,7 +157,7 @@ public class UsuarioServiceImp implements IUsuarioService, IEntitableClient {
 
     @Override
     public List<Usuario> findAllByRestauranteAsignadoAndRol(Restaurante restaurante, NombreRol rol) {
-        return this.usuarioRepository.findAllByRestauranteAsignadoAndUsuarioRolesRolNombre(restaurante, rol);
+        return this.usuarioRepository.findAllByRestauranteAsignadoAndRolesRolNombre(restaurante, rol);
     }
 
 }

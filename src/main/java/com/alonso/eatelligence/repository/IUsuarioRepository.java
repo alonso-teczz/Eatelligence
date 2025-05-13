@@ -20,7 +20,7 @@ public interface IUsuarioRepository extends JpaRepository<Usuario, Long> {
   @Query("""
     SELECT COUNT(u)
     FROM Usuario u
-    JOIN u.usuarioRoles ur
+    JOIN u.roles ur
     JOIN ur.rol r
     WHERE u.restauranteAsignado = :restaurante
       AND r.nombre = :rol
@@ -30,5 +30,5 @@ public interface IUsuarioRepository extends JpaRepository<Usuario, Long> {
     @Param("rol") NombreRol rol
   );
 
-  List<Usuario> findAllByRestauranteAsignadoAndUsuarioRolesRolNombre(Restaurante rest, NombreRol rol);
+  List<Usuario> findAllByRestauranteAsignadoAndRolesRolNombre(Restaurante rest, NombreRol rol);
 }

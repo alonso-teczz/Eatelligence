@@ -16,7 +16,7 @@ public interface IMenuRepository extends CrudRepository<OpcionMenu, Long> {
     SELECT DISTINCT om
     FROM OpcionMenu om
     JOIN om.roles r
-    JOIN r.usuarioRoles ur
+    JOIN r.usuarios ur
     JOIN ur.usuario u
     WHERE u.username = :username
         AND om.activo = true
