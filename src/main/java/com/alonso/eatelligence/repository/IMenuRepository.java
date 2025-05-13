@@ -13,11 +13,14 @@ import org.springframework.stereotype.Repository;
 public interface IMenuRepository extends CrudRepository<OpcionMenu, Long> {
 
     @Query("""
-        SELECT DISTINCT om FROM OpcionMenu om
-        JOIN om.roles r
-        JOIN r.usuarios u
-        WHERE u.username = :username AND om.activo = true
-        ORDER BY om.seccion ASC, om.orden ASC
+    SELECT DISTINCT om
+    FROM OpcionMenu om
+    JOIN om.roles r
+    JOIN r.usuarioRoles ur
+    JOIN ur.usuario u
+    WHERE u.username = :username
+        AND om.activo = true
+    ORDER BY om.seccion, om.orden
     """)
     List<OpcionMenu> findOpcionesByUsername(String username);
 

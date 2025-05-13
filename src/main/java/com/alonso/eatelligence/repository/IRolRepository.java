@@ -16,11 +16,12 @@ public interface IRolRepository extends JpaRepository<Rol, Long> {
     @Query("SELECT r FROM Rol r LEFT JOIN FETCH r.opciones WHERE r.nombre = :nombre")
     Optional<Rol> findByNombreConOpciones(NombreRol nombre);
 
-    @Query("""
-      SELECT r
-      FROM Rol r
-      LEFT JOIN FETCH r.usuarios u
-      WHERE r.nombre = :nombre
-    """)
-    Optional<Rol> findByNombreConUsuarios(@Param("nombre") NombreRol nombre);
+  @Query("""
+    SELECT r
+    FROM Rol r
+    LEFT JOIN FETCH r.usuarioRoles ur
+    LEFT JOIN FETCH ur.usuario
+    WHERE r.nombre = :nombre
+  """)
+  Optional<Rol> findByNombreConUsuarios(@Param("nombre") NombreRol nombre);
 }

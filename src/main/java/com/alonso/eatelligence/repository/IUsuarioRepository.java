@@ -18,16 +18,17 @@ public interface IUsuarioRepository extends JpaRepository<Usuario, Long> {
   Optional<Usuario> findByUsername(String username);
   Optional<Usuario> findByUsernameAndEmail(String username, String email);
   @Query("""
-    SELECT COUNT(u) 
-    FROM Usuario u 
-    JOIN u.roles r 
-    WHERE u.restauranteAsignado = :restaurante 
-    AND r.nombre = :rol
+    SELECT COUNT(u)
+    FROM Usuario u
+    JOIN u.usuarioRoles ur
+    JOIN ur.rol r
+    WHERE u.restauranteAsignado = :restaurante
+      AND r.nombre = :rol
   """)
   long countByRestauranteAsignadoAndRol(
-    @Param("restaurante") Restaurante restaurante,
+    @Param("restaurante") Restaurante r,
     @Param("rol") NombreRol rol
   );
 
-  List<Usuario> findAllByRestauranteAsignadoAndRolesNombre(Restaurante restauranteAsignado, NombreRol rol);
+  List<Usuario> findAllByRestauranteAsignadoAndUsuarioRolesRolNombre(Restaurante rest, NombreRol rol);
 }

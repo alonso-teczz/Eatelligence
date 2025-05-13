@@ -129,7 +129,6 @@ public class UsuarioServiceImp implements IUsuarioService, IEntitableClient {
         
         Usuario user = opt.get();
 
-        // Verificar si ya tiene ese rol
         boolean hasRole = user.getRoles().stream()
             .anyMatch(ur -> ur.getRol().equals(rol));
 
@@ -158,7 +157,7 @@ public class UsuarioServiceImp implements IUsuarioService, IEntitableClient {
 
     @Override
     public List<Usuario> findAllByRestauranteAsignadoAndRol(Restaurante restaurante, NombreRol rol) {
-        return this.usuarioRepository.findAllByRestauranteAsignadoAndRolesNombre(restaurante, rol);
+        return this.usuarioRepository.findAllByRestauranteAsignadoAndUsuarioRolesRolNombre(restaurante, rol);
     }
 
 }
