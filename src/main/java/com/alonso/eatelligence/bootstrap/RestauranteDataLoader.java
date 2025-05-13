@@ -17,7 +17,9 @@ import com.alonso.eatelligence.model.entity.Direccion;
 import com.alonso.eatelligence.model.entity.Horario;
 import com.alonso.eatelligence.model.entity.Plato;
 import com.alonso.eatelligence.model.entity.Restaurante;
+import com.alonso.eatelligence.model.entity.Rol;
 import com.alonso.eatelligence.model.entity.Usuario;
+import com.alonso.eatelligence.model.entity.UsuarioRol;
 import com.alonso.eatelligence.model.entity.NombreRol;
 import com.alonso.eatelligence.service.imp.AlergenoServiceImp;
 import com.alonso.eatelligence.service.imp.CategoriaServiceImp;
@@ -208,12 +210,22 @@ public class RestauranteDataLoader implements CommandLineRunner {
                     .verificado(true)
                     .build();
 
-            roles.forEach(r ->
-                u.getRoles().add(
-                    rolService.findByNombre(r)
-                              .orElseThrow(() -> new IllegalStateException("Rol " + r + " no existe"))
-                )
-            );
+            roles.forEach(r -> {
+                Rol rol = rolService.findByNombre(r)
+                    .orElseThrow(() -> new IllegalStateException("Rol " + r + " no existe"));
+
+                boolean hasRole = u.getRoles().stream()
+                    .anyMatch(ur -> ur.getRol().equals(rol));
+
+                if (!hasRole) {
+                    UsuarioRol usuarioRol = UsuarioRol.builder()
+                        .usuario(u)
+                        .rol(rol)
+                        .build();
+
+                    u.getRoles().add(usuarioRol);
+                }
+            });
 
             return usuarioService.save(u);
         });

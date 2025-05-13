@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alonso.eatelligence.model.entity.NombreRol;
+import com.alonso.eatelligence.model.entity.Rol;
 import com.alonso.eatelligence.service.IRolService;
 import com.alonso.eatelligence.service.IUsuarioService;
 
@@ -29,7 +30,9 @@ public class EmpleadoRestController {
         this.usuarioService.findById(id).ifPresent(u -> {
             u.setRestauranteAsignado(null);
             u.setFechaReclutamiento(null);
-            u.getRoles().remove(this.rolService.findByNombre(NombreRol.COCINERO).orElseThrow());
+            Rol rolCocinero = this.rolService.findByNombre(NombreRol.COCINERO)
+                .orElseThrow(() -> new IllegalStateException("Rol COCINERO no existe"));
+            u.getRoles().removeIf(ur -> ur.getRol().equals(rolCocinero));
             this.usuarioService.save(u);
         });
         return ResponseEntity.noContent().build();
@@ -40,7 +43,10 @@ public class EmpleadoRestController {
         this.usuarioService.findById(id).ifPresent(u -> {
             u.setRestauranteAsignado(null);
             u.setFechaReclutamiento(null);
-            u.getRoles().remove(this.rolService.findByNombre(NombreRol.REPARTIDOR).orElseThrow());
+            Rol rolRepartidor = this.rolService.findByNombre(NombreRol.REPARTIDOR)
+                .orElseThrow(() -> new IllegalStateException("Rol REPARTIDOR no existe"));
+
+            u.getRoles().removeIf(ur -> ur.getRol().equals(rolRepartidor));
             this.usuarioService.save(u);
         });
         return ResponseEntity.noContent().build();

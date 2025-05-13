@@ -2,7 +2,6 @@ package com.alonso.eatelligence.service.imp;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,6 +13,7 @@ import com.alonso.eatelligence.model.entity.NombreRol;
 import com.alonso.eatelligence.model.entity.Restaurante;
 import com.alonso.eatelligence.model.entity.Rol;
 import com.alonso.eatelligence.model.entity.Usuario;
+import com.alonso.eatelligence.model.entity.UsuarioRol;
 import com.alonso.eatelligence.repository.IUsuarioRepository;
 import com.alonso.eatelligence.service.IEntitableClient;
 import com.alonso.eatelligence.service.IUsuarioService;
@@ -49,12 +49,11 @@ public class UsuarioServiceImp implements IUsuarioService, IEntitableClient {
             .email(cliente.getEmail())
             .telefonoMovil(cliente.getTelefonoMovil())
             .password(this.encodePassword(cliente.getPassword()))
-            .roles(
-                Set.of(
-                    this.rolService.findByNombre(NombreRol.CLIENTE).orElseThrow()
-                )
-            )
             .build();
+
+            usuario.setRoles(List.of(
+                UsuarioRol.builder().usuario(usuario).rol(this.rolService.findByNombre(NombreRol.CLIENTE).orElseThrow()).build()
+            ));
 
         usuario.getDirecciones().add(
             Direccion.builder()
@@ -130,9 +129,20 @@ public class UsuarioServiceImp implements IUsuarioService, IEntitableClient {
         
         Usuario user = opt.get();
 
-        if (user.getRoles().add(rol)) {
+        // Verificar si ya tiene ese rol
+        boolean hasRole = user.getRoles().stream()
+            .anyMatch(ur -> ur.getRol().equals(rol));
+
+        if (!hasRole) {
+            UsuarioRol usuarioRol = UsuarioRol.builder()
+                .usuario(user)
+                .rol(rol)
+                .build();
+
+            user.getRoles().add(usuarioRol);
             this.usuarioRepository.save(user);
         }
+
     }
 
     @Override

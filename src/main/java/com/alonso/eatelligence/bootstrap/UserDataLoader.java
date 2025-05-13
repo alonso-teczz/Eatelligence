@@ -1,6 +1,6 @@
 package com.alonso.eatelligence.bootstrap;
 
-import java.util.Set;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -9,9 +9,10 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import com.alonso.eatelligence.model.entity.Direccion;
-import com.alonso.eatelligence.model.entity.Restaurante;
 import com.alonso.eatelligence.model.entity.NombreRol;
+import com.alonso.eatelligence.model.entity.Restaurante;
 import com.alonso.eatelligence.model.entity.Usuario;
+import com.alonso.eatelligence.model.entity.UsuarioRol;
 import com.alonso.eatelligence.service.imp.RestauranteServiceImp;
 import com.alonso.eatelligence.service.imp.RolServiceImp;
 import com.alonso.eatelligence.service.imp.UsuarioServiceImp;
@@ -42,12 +43,13 @@ public class UserDataLoader implements CommandLineRunner {
                 .apellidos("Diez Garcia")
                 .telefonoMovil("666666666")
                 .verificado(true)
-                .roles(Set.of(
-                    this.rolService.findByNombre(NombreRol.ADMIN).orElseThrow(),
-                    this.rolService.findByNombre(NombreRol.CLIENTE).orElseThrow()
-                ))
                 .build();
-    
+
+            admin.setRoles(List.of(
+                UsuarioRol.builder().usuario(admin).rol(this.rolService.findByNombre(NombreRol.ADMIN).orElseThrow()).build(),
+                UsuarioRol.builder().usuario(admin).rol(this.rolService.findByNombre(NombreRol.CLIENTE).orElseThrow()).build()
+            ));
+
             Direccion direccionUsuario = Direccion.builder()
                 .calle("Calle San Blas")
                 .numCalle("2")
@@ -97,11 +99,12 @@ public class UserDataLoader implements CommandLineRunner {
                 .apellidos("Gómez Pérez")
                 .telefonoMovil("644444444")
                 .verificado(true)
-                .roles(Set.of(
-                    this.rolService.findByNombre(NombreRol.CLIENTE).orElseThrow()
-                ))
                 .build();
-    
+            
+            cliente.setRoles(List.of(
+                UsuarioRol.builder().usuario(cliente).rol(this.rolService.findByNombre(NombreRol.CLIENTE).orElseThrow()).build()
+            ));
+
             Direccion direccionCliente = Direccion.builder()
                 .calle("Calle de Arcenillas")
                 .numCalle("5")
