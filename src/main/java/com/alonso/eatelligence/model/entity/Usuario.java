@@ -118,8 +118,8 @@ public class Usuario {
 
     @PreRemove
     private void preRemoveUsuario() {
-        tokens.clear();
-        roles.clear();
+        this.tokens.clear();
+        this.roles.clear();
     }   
 
 }
