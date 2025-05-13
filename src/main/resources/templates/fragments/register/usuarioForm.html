@@ -1,0 +1,143 @@
+<!-- Formulario de registro de usuario -->
+<div th:fragment="clientUserFields">
+  <div th:if="${globalError}" id="global-error" class="alert alert-danger" role="alert">
+    <i class="bi bi-exclamation-circle me-2"></i>
+    <span th:text="${globalError}"></span>
+  </div>
+
+  <div class="row g-3">
+    <!-- Nombre -->
+    <div class="col-md-6">
+      <label for="nombre" class="form-label">Nombre</label>
+      <input type="text" th:field="*{nombre}" class="form-control" id="nombre" placeholder="Ej. Carlos" minlength="3" maxlength="20" required>
+      <div class="invalid-feedback">El nombre es obligatorio y debe tener de 3 a 20 caracteres</div>
+    </div>
+
+    <!-- Apellidos -->
+    <div class="col-md-6">
+      <label for="apellidos" class="form-label">Apellidos</label>
+      <input type="text" th:field="*{apellidos}" class="form-control" id="apellidos" placeholder="Ej. García Pérez" minlength="6" maxlength="30" required>
+      <div class="invalid-feedback">Los apellidos son obligatorios y deben tener de 6 a 30 caracteres</div>
+    </div>
+  </div>
+
+  <div class="row g-3 mt-2">
+    <!-- Username -->
+    <div class="col-md-6">
+      <label for="username" class="form-label">Nombre de usuario</label>
+      <input type="text" th:field="*{username}" class="form-control" id="username" required placeholder="Ej. carlosgp_98" minlength="6" maxlength="20">
+      <div class="valid-feedback d-none" id="username-feedback-success">¡Nombre de usuario disponible!</div>
+      <div class="invalid-feedback d-none" id="username-feedback-error">Nombre de usuario no disponible</div>
+      <div class="invalid-feedback validation-static">El nombre de usuario es obligatorio y debe tener de 6 a 20 caracteres</div>
+    </div>
+
+    <!-- Email -->
+    <div class="col-md-6">
+      <label for="email" class="form-label">Correo electrónico</label>
+      <input type="email" th:field="*{email}" class="form-control" id="email" required pattern="^[a-zA-Z0-9_.+\-]+@[a-zA-Z0-9\-]+\.[a-zA-Z0-9.]+$" placeholder="Ej. carlos.garpe@gmail.com">
+      <div class="invalid-feedback">Introduce un correo válido</div>
+    </div>
+  </div>
+
+  <div class="row g-3 mt-2">
+    <!-- Contraseña -->
+    <div class="col-md-3 position-relative">
+      <label for="password" class="form-label">Contraseña</label>
+      <div class="input-group">
+        <input type="password" th:field="*{password}" class="form-control" id="password" required pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}">
+        <span class="input-group-text rounded-end" id="togglePassword">
+          <i class="bi bi-eye" id="iconoPassword"></i>
+        </span>
+        <div class="invalid-feedback">La contraseña debe tener mínimo 8 caracteres, con 1 mayúscula, 1 minúscula, 1 número y 1 carácter especial</div>
+      </div>
+    </div>
+
+    <!-- Repetir contraseña -->
+    <div class="col-md-3">
+      <label for="repeatPass" class="form-label">Repetir contraseña</label>
+      <input type="password" th:field="*{repeatPass}" id="repeatPass" class="form-control" placeholder="Repite tu contraseña" required>
+      <div class="invalid-feedback">Las contraseñas no coinciden</div>
+    </div>
+
+    <!-- Teléfono -->
+    <div class="col-md-6">
+      <label for="telefonoMovil" class="form-label">Teléfono</label>
+      <input type="text" th:field="*{telefonoMovil}" class="form-control" id="telefonoMovil" placeholder="Ej. 689907011" required pattern="^[67]\d{8}$">
+      <div class="invalid-feedback">El teléfono móvil debe tener 9 dígitos y empezar por 6 ó 7</div>
+    </div>
+  </div>
+
+  <h5 class="mt-4 mb-3 border-bottom pb-2 text-success fw-semibold">Dirección personal</h5>
+  <div class="mt-4">
+    <div th:replace="~{fragments/register/direccionForm :: direccionFields('direccion')}"></div>
+  </div>
+
+  <input type="hidden" name="latitud" id="latitud">
+  <input type="hidden" name="longitud" id="longitud">
+</div>
+
+<!--+ Fragmento para el formulario de registro de restaurante -->
+<div th:fragment="restaurantUserFields(prefix)">
+  <div th:if="${globalError}" id="global-error" class="alert alert-danger" role="alert">
+    <i class="bi bi-exclamation-circle me-2"></i>
+    <span th:text="${globalError}"></span>
+  </div>
+  <div class="row g-3">
+    <div class="col-md-6">
+      <label th:for="${prefix + '.nombre'}" class="form-label">Nombre</label>
+      <input type="text" th:field="*{__${prefix}__.nombre}" class="form-control" th:id="${prefix + '.nombre'}" required placeholder="Ej. Carlos" minlength="3" maxlength="20">
+      <div class="invalid-feedback">El nombre es obligatorio y debe tener de 3 a 20 caracteres</div>
+    </div>
+
+    <div class="col-md-6">
+      <label th:for="${prefix + '.apellidos'}" class="form-label">Apellidos</label>
+      <input type="text" th:field="*{__${prefix}__.apellidos}" class="form-control" th:id="${prefix + '.apellidos'}" required placeholder="Ej. García Pérez" minlength="6" maxlength="30">
+      <div class="invalid-feedback">Los apellidos son obligatorios y deben tener de 6 a 30 caracteres</div>
+    </div>
+
+    <div class="col-md-6">
+      <label th:for="${prefix + '.username'}" class="form-label">Nombre de usuario</label>
+      <input type="text" th:field="*{__${prefix}__.username}" class="form-control" th:id="${prefix + '.username'}" required placeholder="Ej. carlosgp_98" minlength="6" maxlength="20">
+      <div class="valid-feedback d-none" th:id="${prefix + '.username-feedback-success'}">¡Nombre de usuario disponible!</div>
+      <div class="invalid-feedback d-none" th:id="${prefix + '.username-feedback-error'}">Nombre de usuario no disponible</div>
+      <div class="invalid-feedback validation-static">El nombre de usuario es obligatorio y debe tener de 6 a 20 caracteres</div>
+    </div>
+
+    <div class="col-md-6">
+      <label th:for="${prefix + '.email'}" class="form-label">Correo electrónico</label>
+      <input type="email" th:field="*{__${prefix}__.email}" class="form-control" th:id="${prefix + '.email'}" required placeholder="Ej. carlos.garpe@gmail.com" pattern="^[a-zA-Z0-9_.+\-]+@[a-zA-Z0-9\-]+\.[a-zA-Z0-9.]+$">
+      <div class="invalid-feedback">Introduce un correo válido</div>
+    </div>
+  </div>
+
+  <div class="row g-3 mt-2">
+    <div class="col-md-3 position-relative">
+      <label th:for="${prefix + '.password'}" class="form-label">Contraseña</label>
+      <div class="input-group">
+        <input type="password" th:field="*{__${prefix}__.password}" class="form-control" th:id="${prefix + '.password'}" required pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}">
+        <span class="input-group-text rounded-end" id="togglePassword">
+          <i class="bi bi-eye" id="iconoPassword"></i>
+        </span>
+        <div class="invalid-feedback">La contraseña debe tener mínimo 8 caracteres, con 1 mayúscula, 1 minúscula, 1 número y 1 carácter especial</div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <label th:for="${prefix + '.repeatPass'}" class="form-label">Repetir contraseña</label>
+      <input type="password" th:field="*{__${prefix}__.repeatPass}" th:id="${prefix + '.repeatPass'}" class="form-control" placeholder="Repite tu contraseña" required>
+      <div class="invalid-feedback">Las contraseñas no coinciden</div>
+    </div>
+
+    <div class="col-md-6">
+      <label th:for="${prefix + '.telefonoMovil'}" class="form-label">Teléfono</label>
+      <input type="text" th:field="*{__${prefix}__.telefonoMovil}" class="form-control" th:id="${prefix + '.telefonoMovil'}" pattern="^[67]\d{8}$" placeholder="Ej. 612345678" required>
+      <div class="invalid-feedback">El teléfono móvil debe tener 9 dígitos y empezar por 6 ó 7</div>
+    </div>
+  </div>
+
+  <h5 class="mt-4 mb-3 border-bottom pb-2 text-success fw-semibold">Dirección personal</h5>
+  <div th:replace="~{fragments/register/direccionForm :: direccionFields(${prefix + '.direccion'})}"></div>
+
+  <input type="hidden" th:field="*{__${prefix}__.direccion.latitud}" th:id="${prefix + '.direccion.latitud'}">
+  <input type="hidden" th:field="*{__${prefix}__.direccion.longitud}" th:id="${prefix + '.direccion.longitud'}">
+</div>

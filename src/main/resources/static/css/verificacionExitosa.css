@@ -1,0 +1,9 @@
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+.btn-success:hover {
+    background-color: transparent !important;
+    color: #198754 !important; /* Color de Bootstrap success */
+    border: 1px solid #198754 !important;
+}

@@ -1,0 +1,4 @@
+<div th:fragment="csrf-fields">
+    <input type="hidden" id="csrfToken" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+    <input type="hidden" id="csrfHeader" th:name="${_csrf_header}" th:value="${_csrf.headerName}" />
+</div>  

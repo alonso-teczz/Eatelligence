@@ -1,0 +1,59 @@
+<div th:fragment="restaurantFields">
+  <div class="accordion mt-3" id="acordeon-restaurante">
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingRestaurante">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+          data-bs-target="#contenido-acordeon-restaurante" aria-expanded="false"
+          aria-controls="contenido-acordeon-restaurante">
+          Datos del restaurante
+        </button>
+      </h2>
+      <div id="contenido-acordeon-restaurante" class="accordion-collapse collapse show"
+        aria-labelledby="headingRestaurante" data-bs-parent="#acordeon-restaurante">
+        <div class="accordion-body">
+          
+          <!-- Nombre comercial -->
+          <div class="mb-3">
+            <label for="nombreComercial" class="form-label">Nombre comercial</label>
+            <input type="text" th:field="*{nombreComercial}" class="form-control" id="nombreComercial"
+              placeholder="Ej. Restaurante La Parrilla" minlength="6" maxlength="50" pattern=".{6,}" required>
+            <div class="invalid-feedback">El nombre comercial debe tener al menos 6 caracteres</div>
+          </div>
+
+          <!-- Descripción -->
+          <div class="mb-3">
+            <label for="descripcion" class="form-label">Descripción del restaurante</label>
+            <textarea th:field="*{descripcion}" class="form-control" id="descripcion" rows="4"
+              placeholder="Describe brevemente tu restaurante, tipo de comida, ambiente, etc." minlength="6"></textarea>
+            <div class="invalid-feedback">La descripción debe tener al menos 6 caracteres.</div>
+          </div>
+
+          <div class="row">
+            <!-- Email de empresa -->
+            <div class="col-md-6">
+              <label for="emailEmpresa" class="form-label">Correo de empresa</label>
+              <input type="email" th:field="*{emailEmpresa}" class="form-control" id="emailEmpresa" required
+                placeholder="Ej. laparrilla@gmail.com" pattern="^[a-zA-Z0-9_.+\-]+@[a-zA-Z0-9\-]+\.[a-zA-Z0-9.]+$">
+              <div class="invalid-feedback">Introduce un correo válido</div>
+            </div>
+
+            <!-- Teléfono fijo -->
+            <div class="col-md-6 mb-3">
+              <label for="telefonoFijo" class="form-label">Teléfono fijo (opcional)</label>
+              <input type="text" th:field="*{telefonoFijo}" class="form-control" id="telefonoFijo"
+                pattern="^[89]\\d{8}$" placeholder="Ej. 980213188">
+              <div class="invalid-feedback">El teléfono móvil debe tener 9 dígitos y empezar por 8 ó 9</div>
+            </div>
+          </div>
+
+          <!-- Dirección del restaurante -->
+          <hr class="my-4">
+          <h5 class="mt-4 mb-3 border-bottom pb-2 text-success fw-semibold">
+            Dirección del restaurante
+          </h5>
+          <div th:replace="~{fragments/register/direccionForm :: direccionFields('direccionRestaurante')}"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
