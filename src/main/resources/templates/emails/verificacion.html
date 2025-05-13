@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>Verifica tu cuenta</title>
+</head>
+<body style="background-color: #f8f9fa; padding: 20px; font-family: Arial, sans-serif;">
+
+  <div style="max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); overflow: hidden;">
+    
+    <div style="background-color: #abc294; padding: 20px; text-align: center;">
+      <h2 style="color: white; margin: 0;">¡Verifica tu cuenta en Eatelligence!</h2>
+    </div>
+
+    <div style="padding: 30px;">
+      <p>Hola <span th:text="${nombre}"></span>,</p>
+
+      <p>Gracias por confiar en nosotros para registrarte en <strong>Eatelligence</strong>. Solo falta un paso para activar tu cuenta.</p>
+
+      <p style="text-align: center; margin: 30px 0;">
+        <a th:href="${urlVerificacion}" target="_blank"
+           style="background-color: #1d6448; color: white; padding: 12px 25px; text-decoration: none; border-radius: 6px; display: inline-block;">
+          Verificar cuenta
+        </a>
+      </p>
+
+      <p>Si el botón no funciona, también puedes copiar y pegar este enlace en tu navegador:</p>
+
+      <div style="background-color: #f1f1f1; border: 1px solid #ddd; padding: 15px; border-radius: 6px; word-break: break-all; margin: 20px 0;">
+        <a th:text="${urlVerificacion}" th:href="${urlVerificacion}" style="color: #1d6448; text-decoration: none;">
+        </a>
+      </div>
+
+      <table role="presentation" style="width:100%; margin-top: 20px;">
+        <tr>
+          <td style="padding: 15px; background-color: #e7f1ff; border: 1px solid #b6d4fe; border-radius: 5px; color: #084298; font-family: sans-serif; font-size: 15px;">
+            <p th:if="${proximoIntento != null}" style="margin: 0;">
+              🕒 <span th:text="'Podrás volver a solicitar otro correo en ' + ${proximoIntento} + '.'"></span>
+            </p>
+          </td>
+        </tr>
+      </table>
+      
+      <hr style="margin: 30px 0; border: none; border-top: 1px solid #ccc;">
+
+      <p style="font-size: 12px; color: gray;">
+        Si no solicitaste esta cuenta, puedes ignorar este mensaje.
+      </p>
+    </div>
+  </div>
+</body>
+</html>
