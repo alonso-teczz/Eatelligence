@@ -1,0 +1,104 @@
+.alergeno-gluten {
+    background-color: #f94144;
+}
+
+.alergeno-crustaceos {
+    background-color: #f3722c;
+}
+
+.alergeno-huevos {
+    background-color: #f9c74f;
+}
+
+.alergeno-pescado {
+    background-color: #90be6d;
+}
+
+.alergeno-cacahuetes {
+    background-color: #43aa8b;
+}
+
+.alergeno-soja {
+    background-color: #577590;
+}
+
+.alergeno-lacteos {
+    background-color: #277da1;
+}
+
+.alergeno-frutos-secos {
+    background-color: #9b5de5;
+}
+
+.alergeno-apio {
+    background-color: #f15bb5;
+}
+
+.alergeno-mostaza {
+    background-color: #fee440;
+}
+
+.alergeno-sesamo {
+    background-color: #00bbf9;
+}
+
+.alergeno-sulfitos {
+    background-color: #00f5d4;
+}
+
+.alergeno-altramuces {
+    background-color: #ff006e;
+}
+
+.alergeno-moluscos {
+    background-color: #8338ec;
+}
+
+.datatable-top {
+    margin-bottom: 10px !important;
+}
+
+.datatable-bottom {
+    margin-top: 10px !important;
+}
+
+.datatable-selector {
+    padding-right: 2rem !important;
+    width: 60px !important;
+    height: 38px !important;
+}
+
+/* Aplica estilo tradicional de tabla dentro del contenedor generado */
+.datatable-container table {
+    border-collapse: collapse !important;
+    width: 100% !important;
+    border: 1px solid #dee2e6 !important;
+}
+
+.datatable-container table thead {
+    background-color: #f8f9fa !important;
+}
+
+.datatable-container table th,
+.datatable-container table td {
+    border: 1px solid #dee2e6 !important;
+    padding: 0.75rem !important;
+    vertical-align: middle;
+    background-color: #fff !important;
+    color: #212529 !important;
+}
+
+form label {
+    color: #157548 !important;
+    font-weight: bold !important;
+    margin-bottom: 0.5rem !important;
+}
+
+.checkbox-activo:checked, #chk-aplicar-todos:checked {
+    background-color: #157548 !important;
+    border-color: #157548 !important;
+}
+
+#alergenosDisponibles, #alergenosSeleccionados, [id^="edit-seleccionados-"], [id^="edit-disponibles-"] {
+    cursor: grab;
+}

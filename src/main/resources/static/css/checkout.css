@@ -1,0 +1,174 @@
+/* Hoja de estilos para la vista Resumen de compra */
+
+:root {
+    --color-principal: #abc294;
+    --color-secundario: #1d6448;
+    --color-fondo: #f8f9fa;
+    --color-carta: #ffffff;
+    --color-encabezado-tabla: #f8f9fa;
+    --sombra-suave: rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Reset y fuentes */
+  body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--color-fondo);
+    color: #333;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Contenedor principal */
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+  
+  /* Tarjeta de resumen */
+  .card-resumen {
+    background-color: var(--color-carta);
+    border: none;
+    border-radius: 1rem;
+    box-shadow: 0 2px 6px var(--sombra-suave);
+  }
+  .card-resumen .card-body {
+    padding: 2rem;
+  }
+  
+  /* Títulos */
+  h2, h4 {
+    color: var(--color-secundario);
+    margin-bottom: 1rem;
+  }
+  h2 {
+    font-size: 2rem;
+    font-weight: 600;
+  }
+  h4 {
+    font-size: 1.25rem;
+    font-weight: 500;
+    border-bottom: 2px solid var(--color-principal);
+    padding-bottom: 0.5rem;
+  }
+  
+  /* Definiciones (dl) */
+  dl.row {
+    margin-bottom: 1.5rem;
+  }
+  dt.col-sm-3 {
+    font-weight: 600;
+    color: var(--color-secundario);
+  }
+  dd.col-sm-9 {
+    margin-bottom: 0.75rem;
+  }
+  
+  /* Tabla de resumen */
+  .table-resumen {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+  .table-resumen thead {
+    background-color: var(--color-encabezado-tabla);
+  }
+  .table-resumen th,
+  .table-resumen td {
+    padding: 0.75rem;
+    vertical-align: middle;
+  }
+  .table-resumen th {
+    font-weight: 600;
+    color: var(--color-secundario);
+  }
+  .table-resumen .table-light td {
+    background-color: #fafafa;
+    font-weight: 500;
+  }
+  .table-resumen .fw-semibold {
+    font-weight: 600 !important;
+  }
+  
+  /* Lista de direcciones (list-group) */
+  .list-group-item {
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  .list-group-item:hover {
+    background-color: #f1f1f1;
+  }
+  .list-group-item input[type="radio"] {
+    cursor: pointer;
+  }
+  
+  /* Sistema de puntos */
+  .alert-success {
+    background-color: #e6f4ea;
+    border-color: #d1e9db;
+    color: #1e4620;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+  }
+  .alert-success i {
+    font-size: 1.5rem;
+    color: var(--color-principal);
+    margin-right: 0.5rem;
+  }
+  
+  /* Botón confirmar */
+  .btn-confirmar {
+    background-color: var(--color-principal);
+    border-color: var(--color-principal);
+    color: #fff;
+    font-size: 1.1rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    transition: background-color 0.3s ease;
+  }
+  .btn-confirmar:hover {
+    background-color: var(--color-secundario);
+    border-color: var(--color-secundario);
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .container {
+      padding: 1rem;
+    }
+    h2 {
+      font-size: 1.5rem;
+    }
+    h4 {
+      font-size: 1.1rem;
+    }
+  }
+
+  .payment-method-card {
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border-color 0.3s ease;
+  }
+  
+  .payment-method-card:hover {
+    border-color: #007bff;
+  }
+  
+  .payment-method-card.active {
+    border-color: #007bff;
+    background-color: #f0f8ff;
+  }
+  
+  .payment-method-card .icon {
+    font-size: 3rem;
+    color: #007bff;
+  }
+  
+  .payment-method-fields {
+    display: none;
+    margin-top: 1rem;
+  }
+  
