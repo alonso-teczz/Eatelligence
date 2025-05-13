@@ -208,14 +208,13 @@ public class VerificacionController {
             VerificationToken lastToken = tokenService.findByUsuario(usuario).orElse(null);
     
             model.addAttribute("tipo", "USUARIO");
-            model.addAttribute("verificadoUsuario", false); // útil si lo quieres en vista
+            model.addAttribute("verificadoUsuario", false);
     
             if (lastToken != null) model.addAttribute("lastToken", lastToken);
     
             return "feedback/verificacionPendiente";
         }
     
-        // Fallback (no debería alcanzarse)
         return "redirect:/login";
     }    
 
