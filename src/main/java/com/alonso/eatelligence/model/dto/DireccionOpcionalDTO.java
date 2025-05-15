@@ -19,4 +19,9 @@ public class DireccionOpcionalDTO {
     private String codigoPostal;
     private Double latitud;
     private Double longitud;
+
+    @Override
+    public String toString() {
+        return calle + ", " + numCalle + ", " + ciudad + ", " + provincia + ", " + codigoPostal;
+    }
 }
