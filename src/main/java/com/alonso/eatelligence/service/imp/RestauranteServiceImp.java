@@ -29,6 +29,7 @@ import com.alonso.eatelligence.repository.ICategoriaRepository;
 import com.alonso.eatelligence.repository.IRestauranteRepository;
 import com.alonso.eatelligence.service.IEntitableClient;
 import com.alonso.eatelligence.service.IRestauranteService;
+import com.alonso.eatelligence.utils.ValidationUtils;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -67,15 +68,13 @@ public class RestauranteServiceImp implements IRestauranteService, IEntitableCli
             .email(cliente.getEmail())
             .telefonoMovil(cliente.getTelefonoMovil())
             .password(this.encodePassword(cliente.getPassword()))
-            .roles(
-                Set.of(
-                    this.rolService.findByNombre(NombreRol.CLIENTE).orElseThrow(),
-                    this.rolService.findByNombre(NombreRol.ADMIN).orElseThrow()
-                )
-            )
+            .roles(Set.of(
+                this.rolService.findByNombre(NombreRol.CLIENTE).orElseThrow(),
+                this.rolService.findByNombre(NombreRol.ADMIN).orElseThrow()
+            ))
             .build();
 
-        if (cliente.getDireccion() != null) {
+        if (!ValidationUtils.isDireccionVacia(cliente.getDireccion())) {
             usuario.getDirecciones().add(
                 Direccion.builder()
                 .calle(cliente.getDireccion().getCalle())

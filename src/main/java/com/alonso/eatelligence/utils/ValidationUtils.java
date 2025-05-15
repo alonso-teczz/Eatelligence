@@ -1,12 +1,22 @@
 package com.alonso.eatelligence.utils;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Stream;
+
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.util.*;
+import com.alonso.eatelligence.model.dto.DireccionOpcionalDTO;
 
 public class ValidationUtils {
 
@@ -96,5 +106,19 @@ public class ValidationUtils {
             }
         } catch (Exception ignored) {}
         return Integer.MAX_VALUE;
+    }
+
+    public static boolean isDireccionVacia(DireccionOpcionalDTO direccion) {
+        if (direccion == null) return true;
+
+        return Stream.of(
+            direccion.getCalle(),
+            direccion.getNumCalle(),
+            direccion.getCiudad(),
+            direccion.getProvincia(),
+            direccion.getCodigoPostal(),
+            direccion.getLatitud(),
+            direccion.getLongitud()
+        ).allMatch(Objects::isNull);
     }
 }
