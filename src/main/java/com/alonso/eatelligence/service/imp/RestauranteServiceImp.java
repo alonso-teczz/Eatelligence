@@ -74,7 +74,7 @@ public class RestauranteServiceImp implements IRestauranteService, IEntitableCli
             ))
             .build();
 
-        if (!ValidationUtils.isDireccionVacia(cliente.getDireccion())) {
+        if (ValidationUtils.isDireccionVacia(cliente.getDireccion())) {
             System.out.println("************************** Dirección recibida del propietario: " + cliente.getDireccion().toString());
             usuario.getDirecciones().add(
                 Direccion.builder()
