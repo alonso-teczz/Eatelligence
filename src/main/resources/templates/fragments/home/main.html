@@ -123,6 +123,7 @@
                 <input class="form-check-input" type="radio" name="direccionId" id="restaurante-dir" value="REST" />
                 <label class="form-check-label" for="restaurante-dir">
                   Usar la dirección del restaurante:
+                  <br>
                   <span
                     th:text="${session.restaurante.direccion.calle + ' ' + session.restaurante.direccion.numCalle + ', ' + session.restaurante.direccion.ciudad}"></span>
                 </label>
