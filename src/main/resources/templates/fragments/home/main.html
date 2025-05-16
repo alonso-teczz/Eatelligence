@@ -92,7 +92,9 @@
   </div>
 
   <!-- ▸ Modal de selección de dirección -->
-  <div th:if="${session.usuario != null and (session.direccionEnvioId == null or #lists.size(direcciones) > 1)}"
+  <div th:if="${session.usuario != null 
+      and (session.direccionEnvioId == null or #lists.size(direcciones) > 1) 
+      and direccionOmitida == null}"
     class="modal fade" id="direccionModal" tabindex="-1" aria-labelledby="direccionModalLabel" aria-hidden="true"
     data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
@@ -116,13 +118,13 @@
             </div>
 
             <!-- Dirección del restaurante -->
-            <div class="card p-3 border shadow-sm" style="cursor: pointer;" th:if="${restauranteDireccion != null}">
+            <div class="card p-3 border shadow-sm" style="cursor: pointer;" th:if="${session.restaurante != null}">
               <div class="form-check">
                 <input class="form-check-input" type="radio" name="direccionId" id="restaurante-dir" value="REST" />
                 <label class="form-check-label" for="restaurante-dir">
                   Usar la dirección del restaurante:
                   <span
-                    th:text="${restauranteDireccion.calle + ' ' + restauranteDireccion.numCalle + ', ' + restauranteDireccion.ciudad}"></span>
+                    th:text="${session.restaurante.direccion.calle + ' ' + session.restaurante.direccion.numCalle + ', ' + session.restaurante.direccion.ciudad}"></span>
                 </label>
               </div>
             </div>

@@ -35,7 +35,8 @@ public class DireccionController {
     ) {
         switch (direccionId) {
             case "NONE":
-                session.removeAttribute("direccionEnvioId");
+                session.setAttribute("direccionEnvioId", null);
+                ra.addFlashAttribute("direccionOmitida", true);
                 break;
 
             case "REST":
