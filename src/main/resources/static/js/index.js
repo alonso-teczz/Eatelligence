@@ -146,6 +146,7 @@ document.getElementById("prevPage").addEventListener("click", e => {
     });
   }
 });
+
 document.getElementById("nextPage").addEventListener("click", e => {
   e.preventDefault();
   if (currentPage < totalPages - 1) {
@@ -155,7 +156,6 @@ document.getElementById("nextPage").addEventListener("click", e => {
     });
   }
 });
-
 
 /**
  * Alterna la visibilidad del panel de filtros en la interfaz de usuario.

@@ -2,62 +2,54 @@
   <div class="container-fluid d-flex p-0 position-relative main-container" style="min-height:100vh">
 
     <!-- ▸ Panel de filtros (solo si hay sesión) -->
-    <aside
-      th:if="${session.usuario != null}"
-      id="filtros"
-      class="p-3 position-relative"
-    >
+    <aside th:if="${session.usuario != null}" id="filtros" class="p-3 position-relative">
       <form id="filtrosForm" class="small h-100">
         <input type="hidden" id="pageSize" name="size" th:value="${size}" />
         <div class="mb-3">
           <label class="form-label fw-semibold">Buscar por nombre</label>
-          <input name="nombre" type="text" class="form-control" placeholder="Ej.: Bar Caballero"/>
+          <input name="nombre" type="text" class="form-control" placeholder="Ej.: Bar Caballero" />
         </div>
         <div class="mb-3">
           <label class="form-label fw-semibold">Pedido mínimo</label>
           <div class="d-flex gap-2">
-            <input name="min" type="number" class="form-control" placeholder="Mín."/>
-            <input name="max" type="number" class="form-control" placeholder="Máx."/>
+            <input name="min" type="number" class="form-control" placeholder="Mín." />
+            <input name="max" type="number" class="form-control" placeholder="Máx." />
           </div>
         </div>
         <div class="mb-3">
           <label for="radioRange" class="form-label fw-semibold">Radio de búsqueda</label>
-          <input id="radioRange" name="radio" type="range" class="form-range" min="1" max="15" step="1" value="15"/>
+          <input id="radioRange" name="radio" type="range" class="form-range" min="1" max="15" step="1" value="15" />
           <div class="text-end"><span id="radioLabel">15</span> km</div>
         </div>
         <div class="mb-2">
           <span class="fw-semibold d-block mb-2">Excluir alérgenos</span>
           <div class="form-check" th:each="a : ${alergenos}">
-            <input class="form-check-input" type="checkbox"
-                   th:id="'alg-'+${a.id}" th:value="${a.id}"
-                   name="excluirAlergenos"/>
+            <input class="form-check-input" type="checkbox" th:id="'alg-'+${a.id}" th:value="${a.id}"
+              name="excluirAlergenos" />
             <label th:for="'alg-'+${a.id}" th:text="${a.serialName}" class="form-check-label">Huevo</label>
           </div>
         </div>
         <div class="mb-2">
           <span class="fw-semibold d-block mb-2">Filtrar por categorías</span>
           <div class="form-check" th:each="c : ${categorias}">
-            <input class="form-check-input"
-                   type="checkbox"
-                   th:id="'cat-'+${c.id}"
-                   th:value="${c.id}"
-                   name="categorias"/>
-            <label class="form-check-label"
-                   th:for="'cat-'+${c.id}"
-                   th:text="${c.serialName}">Vegano</label>
+            <input class="form-check-input" type="checkbox" th:id="'cat-'+${c.id}" th:value="${c.id}"
+              name="categorias" />
+            <label class="form-check-label" th:for="'cat-'+${c.id}" th:text="${c.serialName}">Vegano</label>
           </div>
-        </div>      
+        </div>
       </form>
     </aside>
     <!-- Botón para mostrar/ocultar filtros con mejor posicionamiento -->
-    <button th:if="${session.usuario != null}" id="toggleFiltros" class="btn btn-outline-secondary align-self-start mt-1 p-3">
+    <button th:if="${session.usuario != null}" id="toggleFiltros"
+      class="btn btn-outline-secondary align-self-start mt-1 p-3">
       <i class="bi bi-chevron-bar-left fs-5"></i>
     </button>
-    
+
     <!-- ▸ Zona de resultados / invitación a login -->
     <div class="flex-grow-1 d-flex flex-column bg-white" style="min-height: 100vh; padding: 20px;">
       <!-- Mensaje de inicio de sesión si no hay usuario -->
-      <div th:if="${session.usuario == null}" class="d-flex flex-column align-items-center text-center p-5 border border-info rounded-4 bg-info-subtle mx-auto shadow-sm w-75 mt-4">
+      <div th:if="${session.usuario == null}"
+        class="d-flex flex-column align-items-center text-center p-5 border border-info rounded-4 bg-info-subtle mx-auto shadow-sm w-75 mt-4">
         <div>
           <i class="bi bi-info-circle text-info" style="font-size: 5rem;"></i>
         </div>
@@ -67,7 +59,7 @@
           <i class="bi bi-box-arrow-in-right me-2"></i> Iniciar sesión
         </a>
       </div>
-  
+
       <!-- Contenedor principal de restaurantes con grid explícito -->
       <div th:if="${session.usuario != null}" class="container-fluid" id="content-container">
         <!-- Spinner de carga -->
@@ -95,58 +87,66 @@
             </button>
           </div>
         </div>
-      </div>      
+      </div>
     </div>
   </div>
 
   <!-- ▸ Modal de selección de dirección -->
-  <div
-    th:if="${session.usuario != null and (session.direccionEnvioId == null or #lists.size(direcciones) > 1)}"
-    class="modal fade"
-    id="direccionModal"
-    tabindex="-1"
-    aria-labelledby="direccionModalLabel"
-    aria-hidden="true"
-    data-bs-backdrop="static"
-    data-bs-keyboard="false"
-  >
+  <div th:if="${session.usuario != null and (session.direccionEnvioId == null or #lists.size(direcciones) > 1)}"
+    class="modal fade" id="direccionModal" tabindex="-1" aria-labelledby="direccionModalLabel" aria-hidden="true"
+    data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content p-4">
         <div class="text-center mb-3">
           <i class="bi bi-geo-alt-fill text-primary" style="font-size: 2.5rem;"></i>
           <h5 id="direccionModalLabel" class="mt-2 fw-bold">¿Dónde quieres que te lleguen los pedidos?</h5>
           <p class="text-muted small mb-0">
-            Mostraremos los restaurantes disponibles cerca de la dirección que elijas. Podrás cambiarla más adelante si lo necesitas.
+            Mostraremos los restaurantes disponibles cerca de la dirección que elijas. Podrás cambiarla más adelante si
+            lo necesitas.
           </p>
         </div>
 
         <form method="post" th:action="@{/set-shipping-address}">
           <div class="d-flex flex-column gap-2">
+
+            <!-- Error -->
             <div th:if="${errorDireccion}" class="alert alert-danger p-2 small d-flex align-items-center">
               <i class="bi bi-exclamation-circle me-2"></i>
               <span th:text="${errorDireccion}"></span>
             </div>
 
-            <div
-              th:each="d : ${direcciones}"
-              class="card p-3 border shadow-sm"
-              style="cursor: pointer;"
-            >
+            <!-- Dirección del restaurante -->
+            <div class="card p-3 border shadow-sm" style="cursor: pointer;" th:if="${restauranteDireccion != null}">
               <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="direccionId"
-                  th:id="'dir-'+${d.id}"
-                  th:value="${d.id}"
-                />
-                <label
-                  class="form-check-label"
-                  th:for="'dir-'+${d.id}"
-                  th:text="${d.calle + ' ' + d.numCalle + ', ' + d.ciudad}"
-                ></label>
+                <input class="form-check-input" type="radio" name="direccionId" id="restaurante-dir" value="REST" />
+                <label class="form-check-label" for="restaurante-dir">
+                  Usar la dirección del restaurante:
+                  <span
+                    th:text="${restauranteDireccion.calle + ' ' + restauranteDireccion.numCalle + ', ' + restauranteDireccion.ciudad}"></span>
+                </label>
               </div>
             </div>
+
+            <!-- Direcciones personales existentes -->
+            <div th:each="d : ${direcciones}" class="card p-3 border shadow-sm" style="cursor: pointer;">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="direccionId" th:id="'dir-'+${d.id}"
+                  th:value="${d.id}" />
+                <label class="form-check-label" th:for="'dir-'+${d.id}"
+                  th:text="${d.calle + ' ' + d.numCalle + ', ' + d.ciudad}"></label>
+              </div>
+            </div>
+
+            <!-- Opción de no usar ninguna por ahora -->
+            <div class="card p-3 border shadow-sm" style="cursor: pointer;">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="direccionId" id="ninguna-dir" value="NONE" />
+                <label class="form-check-label" for="ninguna-dir">
+                  No establecer una dirección por ahora
+                </label>
+              </div>
+            </div>
+
           </div>
 
           <p id="modalError" class="text-danger small mt-2 d-none"></p>
@@ -160,5 +160,5 @@
       </div>
     </div>
   </div>
-  <div id="cart-container" th:replace="~{fragments/home/cart :: cart}"></div>  
+  <div id="cart-container" th:replace="~{fragments/home/cart :: cart}"></div>
 </div>

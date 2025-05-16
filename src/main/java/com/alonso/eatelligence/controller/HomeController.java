@@ -82,6 +82,7 @@ public class HomeController {
             model.addAttribute("pagina", resultados);
             model.addAttribute("direcciones", this.direccionService.getDireccionesUsuario(usuario.getId()));
         }
+        
         return "index";
     }
     
