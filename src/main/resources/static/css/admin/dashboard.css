@@ -427,6 +427,10 @@
   border-color: var(--color-secundario);
 }
 
+#catDisponibles:hover, #catSeleccionadas:hover {
+  cursor: grab;
+}
+
 /* ---------- Badges de CATEGORÍAS ---------- */
 .categoria-comida-rapida      { background-color:#d62828; color:#fff; }
 .categoria-tradicional        { background-color:#f7830c; color:#fff; }
