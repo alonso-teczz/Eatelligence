@@ -39,20 +39,21 @@ public class DireccionController {
                 break;
 
             case "REST":
-                Usuario usuario = (Usuario) session.getAttribute("usuario");
-                Optional<Restaurante> optRest = restauranteService.findByUsuario(usuario);
+                Optional<Restaurante> optRest = this.restauranteService
+                    .findByUsuario((Usuario) session.getAttribute("usuario"));
 
                 if (optRest.isPresent() && optRest.get().getDireccion() != null) {
                     session.setAttribute("direccionEnvioId", optRest.get().getDireccion().getId());
                 } else {
                     ra.addFlashAttribute("errorDireccion", "No se encontró la dirección del restaurante.");
                 }
+
                 break;
 
             default:
                 try {
                     Long id = Long.parseLong(direccionId);
-                    Optional<Direccion> direccionOpt = direccionService.getById(id);
+                    Optional<Direccion> direccionOpt = this.direccionService.getById(id);
 
                     if (direccionOpt.isPresent()) {
                         session.setAttribute("direccionEnvioId", id);
@@ -62,6 +63,7 @@ public class DireccionController {
                 } catch (NumberFormatException e) {
                     ra.addFlashAttribute("errorDireccion", "Dirección seleccionada no válida.");
                 }
+
                 break;
         }
 
