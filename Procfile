@@ -1,1 +1,1 @@
-web: java -Xmx300m -jar target/eatelligence-0.0.1-SNAPSHOT.jar
+web: java -Xmx256m -jar target/eatelligence-0.0.1-SNAPSHOT.jar
