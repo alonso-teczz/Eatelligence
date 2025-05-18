@@ -1,1 +1,1 @@
-web: java -Xmx256m -jar target/eatelligence-0.0.1-SNAPSHOT.jar
+web: java -Xmx384m -Dserver.port=${PORT} -jar target/eatelligence-0.0.1-SNAPSHOT.jar
